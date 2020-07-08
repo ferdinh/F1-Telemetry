@@ -67,7 +67,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Engine temperature (celsius)
         /// </summary>
-        public UInt16[] EngineTemperature;
+        public UInt16 EngineTemperature;
 
         /// <summary>
         /// Tyres pressure (PSI)
