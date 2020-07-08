@@ -52,7 +52,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Brakes temperature (celsius)
         /// </summary>
-        public UInt16 BrakesTemperature;
+        public UInt16[] BrakesTemperature;
 
         /// <summary>
         /// Tyres surface temperature (celsius)
