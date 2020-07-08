@@ -1,8 +1,9 @@
-﻿using System;
+﻿using F12020Telemetry.Packet;
+using System;
 
 namespace F12020Telemetry.Data
 {
-    internal struct LapData
+    public struct LapData
     {
         /// <summary>
         /// Last lap time in seconds
@@ -144,5 +145,5 @@ namespace F12020Telemetry.Data
         /// 6 = retired
         /// </summary>
         public byte ResultStatus;
-    };
+    }
 }
