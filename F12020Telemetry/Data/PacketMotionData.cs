@@ -91,5 +91,12 @@ namespace F12020Telemetry.Data
         /// Current front wheels angle in radians
         /// </summary>
         public float FrontWheelsAngle;
+        private PacketHeader packetHeader;
+
+        public PacketMotionData(PacketHeader packetHeader) : this()
+        {
+            this.packetHeader = packetHeader;
+            this.CarMotionData = new CarMotionData[22];
+        }
     }
 }

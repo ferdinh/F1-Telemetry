@@ -29,5 +29,15 @@ namespace F12020Telemetry.Packet
         /// 0 if no gear suggested
         /// </summary>
         public sbyte SuggestedGear;
+
+        public PacketCarTelemetryData(PacketHeader packetHeader)
+        {
+            Header = packetHeader;
+            CarTelemetryData = new CarTelemetryData[22];
+            ButtonStatus = 0;
+            MfdPanelIndex = 0;
+            MfdPanelIndexSecondaryPlayer = 0;
+            SuggestedGear = 0;
+        }
     }
 }

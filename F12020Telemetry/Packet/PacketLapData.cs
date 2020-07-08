@@ -10,5 +10,11 @@ namespace F12020Telemetry.Packet
         ///  Lap data for all cars on track
         /// </summary>
         public LapData[] LapData;
+
+        public PacketLapData(PacketHeader header)
+        {
+            Header = header;
+            LapData = new LapData[22];
+        }
     };
 }

@@ -112,5 +112,31 @@ namespace F12020Telemetry.Packet
         /// Array of weather forecast samples
         /// </summary>
         public WeatherForecastSample[] WeatherForecastSamples;
+
+        public PacketSessionData(PacketHeader packetHeader)
+        {
+            Header = packetHeader;
+            Weather = 0;
+            TrackTemperature = 0;
+            AirTemperature = 0;
+            TotalLaps = 0;
+            TrackLength = 0;
+            SessionType = 0;
+            TrackId = 0;
+            Formula = 0;
+            SessionTimeLeft = 0;
+            SessionDuration = 0;
+            PitSpeedLimit = 0;
+            GamePaused = 0;
+            IsSpectating = 0;
+            SpectatorCarIndex = 0;
+            SliProNativeSupport = 0;
+            NumMarshalZones = 0;
+            MarshalZones = new MarshalZone[21];
+            SafetyCarStatus = 0;
+            NetworkGame = 0;
+            NumWeatherForecastSamples = 0;
+            WeatherForecastSamples = new WeatherForecastSample[20];
+        }
     }
 }
