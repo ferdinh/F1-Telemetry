@@ -3,9 +3,9 @@ using System;
 
 namespace F12020Telemetry.Packet
 {
-    public struct PacketCarTelemetryData
+    public struct PacketCarTelemetryData : IPacket
     {
-        public PacketHeader Header;
+        public PacketHeader Header { get; set; }
 
         public CarTelemetryData[] CarTelemetryData;
 

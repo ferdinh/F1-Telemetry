@@ -3,9 +3,9 @@ using System;
 
 namespace F12020Telemetry.Packet
 {
-    internal struct PacketSessionData
+    internal struct PacketSessionData : IPacket
     {
-        public PacketHeader Header;
+        public PacketHeader Header { get; set; }
 
         /// <summary>
         /// Weather - 0 = clear, 1 = light cloud, 2 = overcast

@@ -2,9 +2,9 @@
 
 namespace F12020Telemetry.Data
 {
-    internal struct PacketMotionData
+    internal struct PacketMotionData : IPacket
     {
-        public PacketHeader Header;
+        public PacketHeader Header { get; set; }
 
         /// <summary>
         /// Data for all cars on track
