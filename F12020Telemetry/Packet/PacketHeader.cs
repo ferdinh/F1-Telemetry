@@ -8,10 +8,12 @@ namespace F12020Telemetry.Packet
         /// 2020
         /// </summary>
         public UInt16 PacketFormat;
+
         /// <summary>
         /// Game major version - "X.00"
         /// </summary>
         public byte GameMajorVersion;
+
         /// <summary>
         /// Game minor version - "1.XX"
         /// </summary>
