@@ -4,7 +4,6 @@ using F12020Telemetry.Util.Extensions;
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Resources;
 
 namespace F12020Telemetry
 {
@@ -16,22 +15,6 @@ namespace F12020Telemetry
         {
             StartListener();
         }
-
-        private static string[] surfaceTypes =
-        {
-            "Tarmac",
-            "Rumble Strip",
-            "Concrete",
-            "Rock",
-            "Gravel",
-            "Mud",
-            "Sand",
-            "Grass",
-            "Water",
-            "Cobblestone",
-            "Metal",
-            "Ridged",
-        };
 
         private static void StartListener()
         {
@@ -65,9 +48,11 @@ namespace F12020Telemetry
                         case PacketLapData pLapData:
                             LapData = pLapData;
                             break;
+
                         case PacketMotionData pMotionData:
                             packetCarMotionData = pMotionData;
                             break;
+
                         default:
                             break;
                     }
@@ -107,7 +92,6 @@ namespace F12020Telemetry
                     }
 
                     Console.WriteLine(telemetry.EngineRPM + "          ");
-
                 }
             }
             catch (SocketException e)
