@@ -158,5 +158,52 @@ namespace F12020Telemetry
 
             return packetSessionData;
         }
+
+        private static IPacket Lap(PacketHeader packetHeader, BinaryReader reader)
+        {
+            var packetLapData = new PacketLapData(packetHeader);
+
+            for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
+            {
+                packetLapData.LapData[i].LastLapTime = reader.ReadSingle();
+                packetLapData.LapData[i].CurrentLapTime = reader.ReadSingle();
+
+                packetLapData.LapData[i].Sector1TimeInMS = reader.ReadUInt16();
+                packetLapData.LapData[i].Sector2TimeInMS = reader.ReadUInt16();
+
+                packetLapData.LapData[i].BestLapTime = reader.ReadSingle();
+                packetLapData.LapData[i].BestLapNum = reader.ReadByte();
+
+                packetLapData.LapData[i].BestLapSector1TimeInMS = reader.ReadUInt16();
+                packetLapData.LapData[i].BestLapSector2TimeInMS = reader.ReadUInt16();
+                packetLapData.LapData[i].BestLapSector3TimeInMS = reader.ReadUInt16();
+
+                packetLapData.LapData[i].BestOverallSector1TimeInMS = reader.ReadUInt16();
+                packetLapData.LapData[i].BestOverallSector1LapNum = reader.ReadByte();
+
+                packetLapData.LapData[i].BestOverallSector2TimeInMS = reader.ReadUInt16();
+                packetLapData.LapData[i].BestOverallSector2LapNum = reader.ReadByte();
+
+                packetLapData.LapData[i].BestOverallSector3TimeInMS = reader.ReadUInt16();
+                packetLapData.LapData[i].BestOverallSector3LapNum = reader.ReadByte();
+
+                packetLapData.LapData[i].LapDistance = reader.ReadSingle();
+                packetLapData.LapData[i].TotalDistance = reader.ReadSingle();
+
+                packetLapData.LapData[i].SafetyCarDelta = reader.ReadSingle();
+                packetLapData.LapData[i].CarPosition = reader.ReadByte();
+
+                packetLapData.LapData[i].CurrentLapNum = reader.ReadByte();
+                packetLapData.LapData[i].PitStatus = reader.ReadByte();
+                packetLapData.LapData[i].Sector = reader.ReadByte();
+                packetLapData.LapData[i].CurrentLapInvalid = reader.ReadByte();
+                packetLapData.LapData[i].Penalties = reader.ReadByte();
+                packetLapData.LapData[i].GridPosition = reader.ReadByte();
+                packetLapData.LapData[i].DriverStatus = reader.ReadByte();
+                packetLapData.LapData[i].ResultStatus = reader.ReadByte();
+            }
+
+            return packetLapData;
+        }
     }
 }
