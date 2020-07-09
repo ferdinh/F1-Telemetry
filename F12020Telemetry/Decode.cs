@@ -205,5 +205,65 @@ namespace F12020Telemetry
 
             return packetLapData;
         }
+
+        private static IPacket CarTelemetry(PacketHeader packetHeader, BinaryReader reader)
+        {
+            var packetCarTelemetryData = new PacketCarTelemetryData(packetHeader);
+
+            for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
+            {
+                packetCarTelemetryData.CarTelemetryData[i].Speed = reader.ReadUInt16();
+                packetCarTelemetryData.CarTelemetryData[i].Throttle = reader.ReadSingle();
+                packetCarTelemetryData.CarTelemetryData[i].Steer = reader.ReadSingle();
+                packetCarTelemetryData.CarTelemetryData[i].Brake = reader.ReadSingle();
+                packetCarTelemetryData.CarTelemetryData[i].Clutch = reader.ReadByte();
+                packetCarTelemetryData.CarTelemetryData[i].Gear = reader.ReadSByte();
+                packetCarTelemetryData.CarTelemetryData[i].EngineRPM = reader.ReadUInt16();
+                packetCarTelemetryData.CarTelemetryData[i].Drs = reader.ReadByte();
+                packetCarTelemetryData.CarTelemetryData[i].RevLightsPercent = reader.ReadByte();
+
+                packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature = new UInt16[NumberOfTyres];
+                packetCarTelemetryData.CarTelemetryData[i].TyresSurfaceTemperature = new byte[NumberOfTyres];
+                packetCarTelemetryData.CarTelemetryData[i].TyresInnerTemperature = new byte[NumberOfTyres];
+                packetCarTelemetryData.CarTelemetryData[i].TyresPressure = new float[NumberOfTyres];
+                packetCarTelemetryData.CarTelemetryData[i].SurfaceType = new byte[NumberOfTyres];
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature[j] = reader.ReadUInt16();
+                }
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    packetCarTelemetryData.CarTelemetryData[i].TyresSurfaceTemperature[j] = reader.ReadByte();
+                }
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    packetCarTelemetryData.CarTelemetryData[i].TyresInnerTemperature[j] = reader.ReadByte();
+                }
+
+                packetCarTelemetryData.CarTelemetryData[i].EngineTemperature = reader.ReadUInt16();
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    packetCarTelemetryData.CarTelemetryData[i].TyresPressure[j] = reader.ReadSingle();
+                }
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    packetCarTelemetryData.CarTelemetryData[i].SurfaceType[j] = reader.ReadByte();
+                }
+            }
+
+            packetCarTelemetryData.ButtonStatus = reader.ReadUInt32();
+
+            packetCarTelemetryData.MfdPanelIndex = reader.ReadByte();
+            packetCarTelemetryData.MfdPanelIndexSecondaryPlayer = reader.ReadByte();
+
+            packetCarTelemetryData.SuggestedGear = reader.ReadSByte();
+
+            return packetCarTelemetryData;
+        }
     }
 }
