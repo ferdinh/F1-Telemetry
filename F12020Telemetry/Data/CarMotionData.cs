@@ -30,7 +30,7 @@ namespace F12020Telemetry.Data
         public float WorldVelocityY;
 
         /// <summary>
-        ///  Velocity in world space Z
+        /// Velocity in world space Z
         /// </summary>
         public float WorldVelocityZ;
 
