@@ -66,6 +66,12 @@ namespace F12020Telemetry
                 packetCarMotionData.CarMotionData[i].Roll = reader.ReadSingle();
             }
 
+            packetCarMotionData.SuspensionPosition = new float[NumberOfTyres];
+            packetCarMotionData.SuspensionVelocity = new float[NumberOfTyres];
+            packetCarMotionData.SuspensionAcceleration = new float[NumberOfTyres];
+            packetCarMotionData.WheelSpeed = new float[NumberOfTyres];
+            packetCarMotionData.WheelSlip = new float[NumberOfTyres];
+
             // Extra player data
             for (int j = 0; j < NumberOfTyres; j++)
             {
