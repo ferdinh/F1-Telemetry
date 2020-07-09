@@ -9,7 +9,8 @@ namespace F12020Telemetry
     {
         private static readonly int MaxNumberOfCarsOnTrack = 22;
         private static readonly int NumberOfTyres = 4;
-        private static readonly int NumberOfWeatherSamples = 20;
+        private static readonly int MaxNumberOfWeatherSamples = 20;
+        public static readonly int MaxNumberOfMarshalZones = 21;
 
         /// <summary>
         /// Decode header packet.
@@ -129,12 +130,11 @@ namespace F12020Telemetry
             packetSessionData.PitSpeedLimit = reader.ReadByte();
             packetSessionData.GamePaused = reader.ReadByte();
             packetSessionData.IsSpectating = reader.ReadByte();
-            packetSessionData.GamePaused = reader.ReadByte();
             packetSessionData.SpectatorCarIndex = reader.ReadByte();
             packetSessionData.SliProNativeSupport = reader.ReadByte();
             packetSessionData.NumMarshalZones = reader.ReadByte();
 
-            for (int j = 0; j < 21; j++)
+            for (int j = 0; j < MaxNumberOfMarshalZones; j++)
             {
                 packetSessionData.MarshalZones[j].ZoneStart = reader.ReadSingle();
                 packetSessionData.MarshalZones[j].ZoneFlag = reader.ReadSByte();
@@ -145,7 +145,7 @@ namespace F12020Telemetry
             packetSessionData.NetworkGame = reader.ReadByte();
             packetSessionData.NumWeatherForecastSamples = reader.ReadByte();
 
-            for (int j = 0; j < NumberOfWeatherSamples; j++)
+            for (int j = 0; j < MaxNumberOfWeatherSamples; j++)
             {
                 packetSessionData.WeatherForecastSamples[j].SessionType = reader.ReadByte();
 
