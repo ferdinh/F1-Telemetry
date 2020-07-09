@@ -77,6 +77,6 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Driving surface, see appendices
         /// </summary>
-        public byte[] SurfaceType;
+        public SurfaceTypes[] SurfaceType;
     }
 }

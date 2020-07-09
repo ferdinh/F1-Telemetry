@@ -232,7 +232,7 @@ namespace F12020Telemetry
                 packetCarTelemetryData.CarTelemetryData[i].TyresSurfaceTemperature = new byte[NumberOfTyres];
                 packetCarTelemetryData.CarTelemetryData[i].TyresInnerTemperature = new byte[NumberOfTyres];
                 packetCarTelemetryData.CarTelemetryData[i].TyresPressure = new float[NumberOfTyres];
-                packetCarTelemetryData.CarTelemetryData[i].SurfaceType = new byte[NumberOfTyres];
+                packetCarTelemetryData.CarTelemetryData[i].SurfaceType = new SurfaceTypes[NumberOfTyres];
 
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
@@ -258,7 +258,7 @@ namespace F12020Telemetry
 
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
-                    packetCarTelemetryData.CarTelemetryData[i].SurfaceType[j] = reader.ReadByte();
+                    packetCarTelemetryData.CarTelemetryData[i].SurfaceType[j] = (SurfaceTypes) reader.ReadByte();
                 }
             }
 
