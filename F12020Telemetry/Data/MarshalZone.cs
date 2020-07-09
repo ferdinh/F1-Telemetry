@@ -10,6 +10,6 @@
         /// <summary>
         /// -1 = invalid/unknown, 0 = none, 1 = green, 2 = blue, 3 = yellow, 4 = red
         /// </summary>
-        public byte ZoneFlag;
+        public sbyte ZoneFlag;
     }
 }

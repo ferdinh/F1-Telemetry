@@ -107,5 +107,56 @@ namespace F12020Telemetry
 
             return packetCarMotionData;
         }
+
+        private static IPacket Session(PacketHeader packetHeader, BinaryReader reader)
+        {
+            var packetSessionData = new PacketSessionData(packetHeader);
+
+            packetSessionData.Weather = reader.ReadByte();
+
+            packetSessionData.TrackTemperature = reader.ReadSByte();
+            packetSessionData.AirTemperature = reader.ReadSByte();
+
+            packetSessionData.TotalLaps = reader.ReadByte();
+            packetSessionData.TrackLength = reader.ReadUInt16();
+            packetSessionData.SessionType = reader.ReadByte();
+
+            packetSessionData.TrackId = reader.ReadSByte();
+            packetSessionData.Formula = reader.ReadByte();
+
+            packetSessionData.SessionTimeLeft = reader.ReadUInt16();
+            packetSessionData.SessionDuration = reader.ReadUInt16();
+            packetSessionData.PitSpeedLimit = reader.ReadByte();
+            packetSessionData.GamePaused = reader.ReadByte();
+            packetSessionData.IsSpectating = reader.ReadByte();
+            packetSessionData.GamePaused = reader.ReadByte();
+            packetSessionData.SpectatorCarIndex = reader.ReadByte();
+            packetSessionData.SliProNativeSupport = reader.ReadByte();
+            packetSessionData.NumMarshalZones = reader.ReadByte();
+
+            for (int j = 0; j < 21; j++)
+            {
+                packetSessionData.MarshalZones[j].ZoneStart = reader.ReadSingle();
+                packetSessionData.MarshalZones[j].ZoneFlag = reader.ReadSByte();
+            }
+
+            packetSessionData.SafetyCarStatus = reader.ReadByte();
+
+            packetSessionData.NetworkGame = reader.ReadByte();
+            packetSessionData.NumWeatherForecastSamples = reader.ReadByte();
+
+            for (int j = 0; j < NumberOfWeatherSamples; j++)
+            {
+                packetSessionData.WeatherForecastSamples[j].SessionType = reader.ReadByte();
+
+                packetSessionData.WeatherForecastSamples[j].TimeOffset = reader.ReadByte();
+                packetSessionData.WeatherForecastSamples[j].Weather = reader.ReadByte();
+
+                packetSessionData.WeatherForecastSamples[j].TrackTemperature = reader.ReadSByte();
+                packetSessionData.WeatherForecastSamples[j].AirTemperature = reader.ReadSByte();
+            }
+
+            return packetSessionData;
+        }
     }
 }
