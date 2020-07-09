@@ -265,5 +265,67 @@ namespace F12020Telemetry
 
             return packetCarTelemetryData;
         }
+
+        public static IPacket Packet(byte[] packetBytes)
+        {
+            IPacket packet = null;
+
+            using (var stream = new MemoryStream(packetBytes))
+            {
+                using (BinaryReader reader = new BinaryReader(stream))
+                {
+                    var packetHeader = Decode.Header(reader);
+
+                    Func<PacketHeader, BinaryReader, IPacket> decoder = null;
+
+                    switch (packetHeader.PacketId)
+                    {
+                        case PacketTypes.Motion:
+                            decoder = Decode.Motion;
+                            break;
+
+                        case PacketTypes.Session:
+                            decoder = Decode.Session;
+                            break;
+
+                        case PacketTypes.LapData:
+                            decoder = Decode.Lap;
+                            break;
+
+                        //case PacketTypes.Event:
+                        //    break;
+
+                        //case PacketTypes.Participants:
+                        //    break;
+
+                        //case PacketTypes.CarSetups:
+                        //    break;
+
+                        case PacketTypes.CarTelemetry:
+                            decoder = Decode.CarTelemetry;
+                            break;
+
+                        //case PacketTypes.CarStatus:
+                        //    break;
+
+                        //case PacketTypes.FinalClassification:
+                        //    break;
+
+                        //case PacketTypes.LobbyInfo:
+                        //    break;
+
+                        default:
+                            break;
+                    }
+
+                    if (decoder != null)
+                    {
+                        packet = decoder(packetHeader, reader);
+                    }
+                }
+
+                return packet;
+            }
+        }
     }
 }
