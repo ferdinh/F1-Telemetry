@@ -7,9 +7,9 @@ namespace F12020Telemetry
 {
     public static class Decode
     {
-        private static readonly int MaxNumberOfCarsOnTrack = 22;
-        private static readonly int NumberOfTyres = 4;
-        private static readonly int MaxNumberOfWeatherSamples = 20;
+        public static readonly int MaxNumberOfCarsOnTrack = 22;
+        public static readonly int NumberOfTyres = 4;
+        public static readonly int MaxNumberOfWeatherSamples = 20;
         public static readonly int MaxNumberOfMarshalZones = 21;
 
         /// <summary>
@@ -271,6 +271,66 @@ namespace F12020Telemetry
 
             return packetCarTelemetryData;
         }
+        private static IPacket CarStatus(PacketHeader packetHeader, BinaryReader reader)
+        {
+            var packetCarStatus = new PacketCarStatusData(packetHeader);
+
+            for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
+            {
+                packetCarStatus.CarStatusData[i].TractionControl = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].AntiLockBrakes = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].FuelMix = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].FrontBrakeBias = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].pitLimiterStatus = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].FuelInTank = reader.ReadSingle();
+                packetCarStatus.CarStatusData[i].FuelCapacity = reader.ReadSingle();
+                packetCarStatus.CarStatusData[i].FuelRemainingLaps = reader.ReadSingle();
+                packetCarStatus.CarStatusData[i].MaxRPM = reader.ReadUInt16();
+                packetCarStatus.CarStatusData[i].IdleRPM = reader.ReadUInt16();
+                packetCarStatus.CarStatusData[i].MaxGears = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].DrsAllowed = reader.ReadByte();
+
+                packetCarStatus.CarStatusData[i].DrsActivationDistance = reader.ReadUInt16();
+
+                packetCarStatus.CarStatusData[i].TyresWear = new byte[NumberOfTyres];
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    packetCarStatus.CarStatusData[i].TyresWear[j] = reader.ReadByte();
+                }
+
+                packetCarStatus.CarStatusData[i].ActualTyreCompound = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].VisualTyreCompound = reader.ReadByte();
+
+                packetCarStatus.CarStatusData[i].TyresAgeLaps = reader.ReadByte();
+
+                packetCarStatus.CarStatusData[i].TyresDamage = new byte[NumberOfTyres];
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    packetCarStatus.CarStatusData[i].TyresDamage[j] = reader.ReadByte();
+                }
+
+                packetCarStatus.CarStatusData[i].FrontLeftWingDamage = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].FrontRightWingDamage = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].RearWingDamage = reader.ReadByte();
+
+                packetCarStatus.CarStatusData[i].DrsFault = reader.ReadByte();
+
+                packetCarStatus.CarStatusData[i].EngineDamage = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].GearBoxDamage = reader.ReadByte();
+                packetCarStatus.CarStatusData[i].VehicleFiaFlags = reader.ReadSByte();
+
+                packetCarStatus.CarStatusData[i].ErsStoreEnergy = reader.ReadSingle();
+                packetCarStatus.CarStatusData[i].ErsDeployMode = reader.ReadByte();
+
+                packetCarStatus.CarStatusData[i].ErsHarvestedThisLapMGUK = reader.ReadSingle();
+                packetCarStatus.CarStatusData[i].ErsHarvestedThisLapMGUH = reader.ReadSingle();
+                packetCarStatus.CarStatusData[i].ErsDeployedThisLap = reader.ReadSingle();
+            }
+
+            return packetCarStatus;
+        }
 
         public static IPacket Packet(byte[] packetBytes)
         {
@@ -311,8 +371,9 @@ namespace F12020Telemetry
                             decoder = Decode.CarTelemetry;
                             break;
 
-                        //case PacketTypes.CarStatus:
-                        //    break;
+                        case PacketTypes.CarStatus:
+                            decoder = Decode.CarStatus;
+                            break;
 
                         //case PacketTypes.FinalClassification:
                         //    break;
