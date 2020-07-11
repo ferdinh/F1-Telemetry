@@ -2,7 +2,7 @@
 
 namespace F12020Telemetry.Data
 {
-    public struct CarTelemetryData
+    public class CarTelemetryData
     {
         /// <summary>
         /// Speed of car in kilometres per hour
