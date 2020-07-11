@@ -7,7 +7,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Speed of car in kilometres per hour
         /// </summary>
-        public UInt16 Speed;
+        public ushort Speed;
 
         /// <summary>
         /// Amount of throttle applied (0.0 to 1.0)
@@ -37,7 +37,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Engine RPM
         /// </summary>
-        public UInt16 EngineRPM;
+        public ushort EngineRPM;
 
         /// <summary>
         /// The DRS (0 = off, 1 = on)
@@ -52,7 +52,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Brakes temperature (celsius)
         /// </summary>
-        public UInt16[] BrakesTemperature;
+        public ushort[] BrakesTemperature;
 
         /// <summary>
         /// Tyres surface temperature (celsius)
@@ -67,7 +67,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Engine temperature (celsius)
         /// </summary>
-        public UInt16 EngineTemperature;
+        public ushort EngineTemperature;
 
         /// <summary>
         /// Tyres pressure (PSI)
