@@ -7,9 +7,9 @@ namespace F12020Telemetry
 {
     public static class Decode
     {
-        private static readonly int MaxNumberOfCarsOnTrack = 22;
-        private static readonly int NumberOfTyres = 4;
-        private static readonly int MaxNumberOfWeatherSamples = 20;
+        public static readonly int MaxNumberOfCarsOnTrack = 22;
+        public static readonly int NumberOfTyres = 4;
+        public static readonly int MaxNumberOfWeatherSamples = 20;
         public static readonly int MaxNumberOfMarshalZones = 21;
 
         /// <summary>
