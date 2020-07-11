@@ -72,7 +72,7 @@
         /// <summary>
         /// Tyre wear percentage
         /// </summary>
-        public byte[] TyresWear;
+        public byte[] TyresWear = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// The actual tyre compound
@@ -98,7 +98,7 @@
         /// <summary>
         /// Tyre damage (percentage)
         /// </summary>
-        public byte[] TyresDamage;
+        public byte[] TyresDamage = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// Front left wing damage (percentage)
