@@ -12,12 +12,12 @@ namespace F12020Telemetry.Data
         public float FuelInTank;              // Current fuel mass
         public float FuelCapacity;            // Fuel capacity
         public float FuelRemainingLaps;       // Fuel remaining in terms of laps (value on MFD)
-        public UInt16 MaxRPM;                 // Cars max RPM, point of rev limiter
-        public UInt16 IdleRPM;                // Cars idle RPM
+        public ushort MaxRPM;                 // Cars max RPM, point of rev limiter
+        public ushort IdleRPM;                // Cars idle RPM
         public byte MaxGears;                 // Maximum number of gears
         public byte DrsAllowed;               // 0 = not allowed, 1 = allowed, -1 = unknown
 
-        public UInt16 DrsActivationDistance;  // 0 = DRS not available, non-zero - DRS will be available
+        public ushort DrsActivationDistance;  // 0 = DRS not available, non-zero - DRS will be available
                                               // in [X] metres
 
         public byte[] TyresWear;              // Tyre wear percentage
