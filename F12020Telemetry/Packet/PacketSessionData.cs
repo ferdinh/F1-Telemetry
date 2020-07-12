@@ -1,5 +1,4 @@
 ﻿using F12020Telemetry.Data;
-using System;
 
 namespace F12020Telemetry.Packet
 {
@@ -34,9 +33,9 @@ namespace F12020Telemetry.Packet
         public ushort TrackLength;
 
         /// <summary>
-        /// The session type; 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1, 6 = Q2, 7 = Q3, 8 = Short Q, 9 = OSQ, 10 = R, 11 = R2, 12 = Time Trial
+        /// The session type
         /// </summary>
-        public byte SessionType;
+        public SessionType SessionType;
 
         /// <summary>
         /// The track identifier; -1 for unknown, 0-21 for tracks, see appendix
