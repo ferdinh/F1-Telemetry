@@ -3,7 +3,7 @@ using System;
 
 namespace F12020Telemetry.Packet
 {
-    public struct PacketCarTelemetryData : IPacket
+    public class PacketCarTelemetryData : IPacket
     {
         public PacketHeader Header { get; set; }
 
