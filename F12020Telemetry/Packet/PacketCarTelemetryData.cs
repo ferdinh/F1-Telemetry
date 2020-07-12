@@ -12,7 +12,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Bit flags specifying which buttons are being pressed currently
         /// </summary>
-        public UInt32 ButtonStatus;
+        public uint ButtonStatus;
 
         /// <summary>
         /// Index of MFD panel open - 255 = MFD closed
