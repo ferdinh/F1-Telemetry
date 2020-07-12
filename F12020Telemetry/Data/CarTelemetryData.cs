@@ -52,17 +52,17 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Brakes temperature (celsius)
         /// </summary>
-        public ushort[] BrakesTemperature;
+        public ushort[] BrakesTemperature = new ushort[Decode.NumberOfTyres];
 
         /// <summary>
         /// Tyres surface temperature (celsius)
         /// </summary>
-        public byte[] TyresSurfaceTemperature;
+        public byte[] TyresSurfaceTemperature = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// Tyres inner temperature (celsius)
         /// </summary>
-        public byte[] TyresInnerTemperature;
+        public byte[] TyresInnerTemperature = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// Engine temperature (celsius)
@@ -72,11 +72,11 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Tyres pressure (PSI)
         /// </summary>
-        public float[] TyresPressure;
+        public float[] TyresPressure = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Driving surface, see appendices
         /// </summary>
-        public SurfaceTypes[] SurfaceType;
+        public SurfaceTypes[] SurfaceType = new SurfaceTypes[Decode.NumberOfTyres];
     }
 }
