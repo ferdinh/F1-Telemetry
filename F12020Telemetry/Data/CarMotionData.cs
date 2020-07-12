@@ -37,32 +37,32 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// World space forward X direction (normalised)
         /// </summary>
-        public Int16 WorldForwardDirX;
+        public short WorldForwardDirX;
 
         /// <summary>
         /// World space forward Y direction (normalised)
         /// </summary>
-        public Int16 WorldForwardDirY;
+        public short WorldForwardDirY;
 
         /// <summary>
         /// World space forward Z direction (normalised)
         /// </summary>
-        public Int16 WorldForwardDirZ;
+        public short WorldForwardDirZ;
 
         /// <summary>
         /// World space right X direction (normalised)
         /// </summary>
-        public Int16 WorldRightDirX;
+        public short WorldRightDirX;
 
         /// <summary>
         /// World space right Y direction (normalised)
         /// </summary>
-        public Int16 WorldRightDirY;
+        public short WorldRightDirY;
 
         /// <summary>
         /// World space right Z direction (normalised)
         /// </summary>
-        public Int16 WorldRightDirZ;
+        public short WorldRightDirZ;
 
         /// <summary>
         /// Lateral G-Force component
