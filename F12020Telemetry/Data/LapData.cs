@@ -1,9 +1,8 @@
-﻿using F12020Telemetry.Packet;
-using System;
+﻿using System;
 
 namespace F12020Telemetry.Data
 {
-    public struct LapData
+    public class LapData
     {
         /// <summary>
         /// Last lap time in seconds
@@ -94,7 +93,6 @@ namespace F12020Telemetry.Data
 
         /// <summary>
         /// Delta in seconds for safety car
-
         /// </summary>
         public float SafetyCarDelta;
 
