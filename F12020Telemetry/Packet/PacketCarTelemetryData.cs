@@ -33,11 +33,7 @@ namespace F12020Telemetry.Packet
         public PacketCarTelemetryData(PacketHeader packetHeader)
         {
             Header = packetHeader;
-            CarTelemetryData = new CarTelemetryData[22];
-            ButtonStatus = 0;
-            MfdPanelIndex = 0;
-            MfdPanelIndexSecondaryPlayer = 0;
-            SuggestedGear = 0;
+            CarTelemetryData = new CarTelemetryData[Decode.MaxNumberOfCarsOnTrack];
         }
     }
 }
