@@ -7,7 +7,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// 2020
         /// </summary>
-        public UInt16 PacketFormat;
+        public ushort PacketFormat;
 
         /// <summary>
         /// Game major version - "X.00"
@@ -32,7 +32,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Unique identifier for the session
         /// </summary>
-        public UInt64 SessionUID;
+        public ulong SessionUID;
 
         /// <summary>
         /// Session timestamp
@@ -42,7 +42,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Identifier for the frame the data was retrieved on
         /// </summary>
-        public UInt32 FrameIdentifier;
+        public uint FrameIdentifier;
 
         /// <summary>
         /// Index of player's car in the array
