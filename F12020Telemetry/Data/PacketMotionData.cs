@@ -19,27 +19,27 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// The suspension position
         /// </summary>
-        public float[] SuspensionPosition;
+        public float[] SuspensionPosition = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// The suspension velocity
         /// </summary>
-        public float[] SuspensionVelocity;
+        public float[] SuspensionVelocity = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// The suspension acceleration
         /// </summary>
-        public float[] SuspensionAcceleration;
+        public float[] SuspensionAcceleration = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Speed of each wheel
         /// </summary>
-        public float[] WheelSpeed;
+        public float[] WheelSpeed = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Slip ratio for each wheel
         /// </summary>
-        public float[] WheelSlip;
+        public float[] WheelSlip = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Velocity in local space
