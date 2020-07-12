@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace F12020Telemetry.Util.Extensions
@@ -23,7 +22,7 @@ namespace F12020Telemetry.Util.Extensions
                     }
                 }
             }
-            return null;
+            return value.ToString();
         }
     }
 }
