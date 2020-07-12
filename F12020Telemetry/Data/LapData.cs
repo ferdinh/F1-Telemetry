@@ -1,4 +1,6 @@
-﻿namespace F12020Telemetry.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace F12020Telemetry.Data
 {
     public class LapData
     {
@@ -107,7 +109,7 @@
         /// <summary>
         /// The pit status; 0 = none, 1 = pitting, 2 = in pit area
         /// </summary>
-        public byte PitStatus;
+        public PitStatus PitStatus;
 
         /// <summary>
         /// The sector; 0 = sector1, 1 = sector2, 2 = sector3
@@ -133,13 +135,54 @@
         /// Status of driver - 0 = in garage, 1 = flying lap
         /// 2 = in lap, 3 = out lap, 4 = on track
         /// </summary>
-        public byte DriverStatus;
+        public DriverStatus DriverStatus;
 
         /// <summary>
         /// Result status - 0 = invalid, 1 = inactive, 2 = active
         /// 3 = finished, 4 = disqualified, 5 = not classified
         /// 6 = retired
         /// </summary>
-        public byte ResultStatus;
+        public ResultStatus ResultStatus;
+    }
+
+    public enum ResultStatus : byte
+    {
+        Invalid,
+        Inactive,
+        Active,
+        Finished,
+        Disqualified,
+
+        [Display(Name = "Not Classified")]
+        NotClassified,
+
+        Retired
+    }
+
+    public enum DriverStatus : byte
+    {
+        [Display(Name = "In Garage")]
+        InGarage,
+
+        [Display(Name = "Flying Lap")]
+        FlyingLap,
+
+        [Display(Name = "In Lap")]
+        InLap,
+
+        [Display(Name = "Out Lap")]
+        OutLap,
+
+        [Display(Name = "On Track")]
+        OnTrack
+    }
+
+    public enum PitStatus : byte
+    {
+        None,
+        Pitting,
+
+        [Display(Name = "In Pit Area")]
+        InPitArea
     }
 }
