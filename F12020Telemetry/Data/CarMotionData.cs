@@ -2,7 +2,7 @@
 
 namespace F12020Telemetry.Data
 {
-    internal struct CarMotionData
+    public class CarMotionData
     {
         /// <summary>
         /// World space X position

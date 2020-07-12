@@ -2,14 +2,14 @@
 
 namespace F12020Telemetry.Data
 {
-    internal struct PacketMotionData : IPacket
+    public class PacketMotionData : IPacket
     {
         public PacketHeader Header { get; set; }
 
         /// <summary>
         /// Data for all cars on track
         /// </summary>
-        public CarMotionData[] CarMotionData;
+        public CarMotionData[] CarMotionData = new CarMotionData[Decode.MaxNumberOfCarsOnTrack];
 
         // Note: All wheel arrays have the following order:
         // RL, RR, FL, FR
@@ -53,7 +53,6 @@ namespace F12020Telemetry.Data
 
         /// <summary>
         /// Velocity in local space
-
         /// </summary>
         public float LocalVelocityZ;
 
@@ -91,12 +90,10 @@ namespace F12020Telemetry.Data
         /// Current front wheels angle in radians
         /// </summary>
         public float FrontWheelsAngle;
-        private PacketHeader packetHeader;
 
-        public PacketMotionData(PacketHeader packetHeader) : this()
+        public PacketMotionData(PacketHeader packetHeader)
         {
-            this.packetHeader = packetHeader;
-            this.CarMotionData = new CarMotionData[22];
+            Header = packetHeader;
         }
     }
 }

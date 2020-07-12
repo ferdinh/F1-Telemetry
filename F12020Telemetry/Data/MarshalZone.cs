@@ -2,7 +2,7 @@
 
 namespace F12020Telemetry.Data
 {
-    public struct MarshalZone
+    public class MarshalZone
     {
         /// <summary>
         /// Fraction (0..1) of way through the lap the marshal zone starts
