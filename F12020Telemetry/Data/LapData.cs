@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace F12020Telemetry.Data
+﻿namespace F12020Telemetry.Data
 {
     public class LapData
     {
@@ -17,12 +15,12 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Sector 1 time in milliseconds
         /// </summary>
-        public UInt16 Sector1TimeInMS;
+        public ushort Sector1TimeInMS;
 
         /// <summary>
         /// Sector 2 time in milliseconds
         /// </summary>
-        public UInt16 Sector2TimeInMS;
+        public ushort Sector2TimeInMS;
 
         /// <summary>
         /// Best lap time of the session in seconds
@@ -37,22 +35,22 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Sector 1 time of best lap in the session in milliseconds
         /// </summary>
-        public UInt16 BestLapSector1TimeInMS;
+        public ushort BestLapSector1TimeInMS;
 
         /// <summary>
         /// Sector 2 time of best lap in the session in milliseconds
         /// </summary>
-        public UInt16 BestLapSector2TimeInMS;
+        public ushort BestLapSector2TimeInMS;
 
         /// <summary>
         /// Sector 3 time of best lap in the session in milliseconds
         /// </summary>
-        public UInt16 BestLapSector3TimeInMS;
+        public ushort BestLapSector3TimeInMS;
 
         /// <summary>
         /// Best overall sector 1 time of the session in milliseconds
         /// </summary>
-        public UInt16 BestOverallSector1TimeInMS;
+        public ushort BestOverallSector1TimeInMS;
 
         /// <summary>
         /// Lap number best overall sector 1 time achieved on
@@ -62,7 +60,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Best overall sector 2 time of the session in milliseconds
         /// </summary>
-        public UInt16 BestOverallSector2TimeInMS;
+        public ushort BestOverallSector2TimeInMS;
 
         /// <summary>
         /// Lap number best overall sector 2 time achieved on
@@ -72,7 +70,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Best overall sector 3 time of the session in milliseconds
         /// </summary>
-        public UInt16 BestOverallSector3TimeInMS;
+        public ushort BestOverallSector3TimeInMS;
 
         /// <summary>
         /// Lap number best overall sector 3 time achieved on
