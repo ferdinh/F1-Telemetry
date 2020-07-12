@@ -2,7 +2,7 @@
 
 namespace F12020Telemetry.Packet
 {
-    public struct PacketHeader
+    public class PacketHeader
     {
         /// <summary>
         /// 2020
@@ -27,7 +27,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Identifier for the packet type
         /// </summary>
-        public PacketTypes PacketId;
+        public PacketTypes PacketTypes;
 
         /// <summary>
         /// Unique identifier for the session

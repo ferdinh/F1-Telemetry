@@ -25,7 +25,7 @@ namespace F12020Telemetry
             packetHeader.GameMajorVersion = reader.ReadByte();
             packetHeader.GameMinorVersion = reader.ReadByte();
             packetHeader.PacketVersion = reader.ReadByte();
-            packetHeader.PacketId = (PacketTypes)reader.ReadByte();
+            packetHeader.PacketTypes = (PacketTypes)reader.ReadByte();
             packetHeader.SessionUID = reader.ReadUInt64();
             packetHeader.SessionTime = reader.ReadSingle();
             packetHeader.FrameIdentifier = reader.ReadUInt32();
@@ -344,7 +344,7 @@ namespace F12020Telemetry
 
                     Func<PacketHeader, BinaryReader, IPacket> decoder = null;
 
-                    switch (packetHeader.PacketId)
+                    switch (packetHeader.PacketTypes)
                     {
                         case PacketTypes.Motion:
                             decoder = Decode.Motion;
