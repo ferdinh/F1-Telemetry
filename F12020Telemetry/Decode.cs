@@ -126,7 +126,7 @@ namespace F12020Telemetry
 
             packetSessionData.TotalLaps = reader.ReadByte();
             packetSessionData.TrackLength = reader.ReadUInt16();
-            packetSessionData.SessionType = reader.ReadByte();
+            packetSessionData.SessionType = (SessionType)reader.ReadByte();
 
             packetSessionData.TrackId = reader.ReadSByte();
             packetSessionData.Formula = reader.ReadByte();
@@ -143,7 +143,7 @@ namespace F12020Telemetry
             for (int j = 0; j < MaxNumberOfMarshalZones; j++)
             {
                 packetSessionData.MarshalZones[j].ZoneStart = reader.ReadSingle();
-                packetSessionData.MarshalZones[j].ZoneFlag = reader.ReadSByte();
+                packetSessionData.MarshalZones[j].ZoneFlag = (ZoneFlag)reader.ReadSByte();
             }
 
             packetSessionData.SafetyCarStatus = reader.ReadByte();
@@ -153,7 +153,7 @@ namespace F12020Telemetry
 
             for (int j = 0; j < MaxNumberOfWeatherSamples; j++)
             {
-                packetSessionData.WeatherForecastSamples[j].SessionType = reader.ReadByte();
+                packetSessionData.WeatherForecastSamples[j].SessionType = (SessionType)reader.ReadByte();
 
                 packetSessionData.WeatherForecastSamples[j].TimeOffset = reader.ReadByte();
                 packetSessionData.WeatherForecastSamples[j].Weather = reader.ReadByte();
@@ -200,13 +200,13 @@ namespace F12020Telemetry
                 packetLapData.LapData[i].CarPosition = reader.ReadByte();
 
                 packetLapData.LapData[i].CurrentLapNum = reader.ReadByte();
-                packetLapData.LapData[i].PitStatus = reader.ReadByte();
+                packetLapData.LapData[i].PitStatus = (PitStatus)reader.ReadByte();
                 packetLapData.LapData[i].Sector = reader.ReadByte();
                 packetLapData.LapData[i].CurrentLapInvalid = reader.ReadByte();
                 packetLapData.LapData[i].Penalties = reader.ReadByte();
                 packetLapData.LapData[i].GridPosition = reader.ReadByte();
-                packetLapData.LapData[i].DriverStatus = reader.ReadByte();
-                packetLapData.LapData[i].ResultStatus = reader.ReadByte();
+                packetLapData.LapData[i].DriverStatus = (DriverStatus)reader.ReadByte();
+                packetLapData.LapData[i].ResultStatus = (ResultStatus)reader.ReadByte();
             }
 
             return packetLapData;
