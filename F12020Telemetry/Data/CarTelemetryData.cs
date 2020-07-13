@@ -42,7 +42,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// The DRS (0 = off, 1 = on)
         /// </summary>
-        public byte Drs;
+        public DRS Drs;
 
         /// <summary>
         /// Rev lights indicator (percentage)
@@ -78,5 +78,11 @@ namespace F12020Telemetry.Data
         /// Driving surface, see appendices
         /// </summary>
         public SurfaceTypes[] SurfaceType = new SurfaceTypes[Decode.NumberOfTyres];
+    }
+
+    public enum DRS
+    {
+        Off,
+        On
     }
 }

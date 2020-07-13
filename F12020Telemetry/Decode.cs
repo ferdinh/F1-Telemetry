@@ -237,7 +237,7 @@ namespace F12020Telemetry
                 carTelemData.Clutch = reader.ReadByte();
                 carTelemData.Gear = reader.ReadSByte();
                 carTelemData.EngineRPM = reader.ReadUInt16();
-                carTelemData.Drs = reader.ReadByte();
+                carTelemData.Drs = (DRS)reader.ReadByte();
                 carTelemData.RevLightsPercent = reader.ReadByte();
 
                 //packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature = new UInt16[NumberOfTyres];
