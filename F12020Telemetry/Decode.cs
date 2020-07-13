@@ -117,7 +117,7 @@ namespace F12020Telemetry
         {
             var packetSessionData = new PacketSessionData(packetHeader);
 
-            packetSessionData.Weather = reader.ReadByte();
+            packetSessionData.Weather = (WeatherType)reader.ReadByte();
 
             packetSessionData.TrackTemperature = reader.ReadSByte();
             packetSessionData.AirTemperature = reader.ReadSByte();
@@ -160,7 +160,7 @@ namespace F12020Telemetry
                 newWeatherForecastSample.SessionType = (SessionType)reader.ReadByte();
 
                 newWeatherForecastSample.TimeOffset = reader.ReadByte();
-                newWeatherForecastSample.Weather = reader.ReadByte();
+                newWeatherForecastSample.Weather = (WeatherType)reader.ReadByte();
 
                 newWeatherForecastSample.TrackTemperature = reader.ReadSByte();
                 newWeatherForecastSample.AirTemperature = reader.ReadSByte();

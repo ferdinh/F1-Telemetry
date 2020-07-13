@@ -10,7 +10,7 @@ namespace F12020Telemetry.Packet
         /// Weather - 0 = clear, 1 = light cloud, 2 = overcast
         /// 3 = light rain, 4 = heavy rain, 5 = storm
         /// </summary>
-        public byte Weather;
+        public WeatherType Weather;
 
         /// <summary>
         /// Track temp. in degrees celsius
