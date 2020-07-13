@@ -1,9 +1,8 @@
-﻿using F12020Telemetry.Packet;
-using System;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace F12020Telemetry.Data
 {
-    public struct LapData
+    public class LapData
     {
         /// <summary>
         /// Last lap time in seconds
@@ -18,12 +17,12 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Sector 1 time in milliseconds
         /// </summary>
-        public UInt16 Sector1TimeInMS;
+        public ushort Sector1TimeInMS;
 
         /// <summary>
         /// Sector 2 time in milliseconds
         /// </summary>
-        public UInt16 Sector2TimeInMS;
+        public ushort Sector2TimeInMS;
 
         /// <summary>
         /// Best lap time of the session in seconds
@@ -38,22 +37,22 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Sector 1 time of best lap in the session in milliseconds
         /// </summary>
-        public UInt16 BestLapSector1TimeInMS;
+        public ushort BestLapSector1TimeInMS;
 
         /// <summary>
         /// Sector 2 time of best lap in the session in milliseconds
         /// </summary>
-        public UInt16 BestLapSector2TimeInMS;
+        public ushort BestLapSector2TimeInMS;
 
         /// <summary>
         /// Sector 3 time of best lap in the session in milliseconds
         /// </summary>
-        public UInt16 BestLapSector3TimeInMS;
+        public ushort BestLapSector3TimeInMS;
 
         /// <summary>
         /// Best overall sector 1 time of the session in milliseconds
         /// </summary>
-        public UInt16 BestOverallSector1TimeInMS;
+        public ushort BestOverallSector1TimeInMS;
 
         /// <summary>
         /// Lap number best overall sector 1 time achieved on
@@ -63,7 +62,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Best overall sector 2 time of the session in milliseconds
         /// </summary>
-        public UInt16 BestOverallSector2TimeInMS;
+        public ushort BestOverallSector2TimeInMS;
 
         /// <summary>
         /// Lap number best overall sector 2 time achieved on
@@ -73,7 +72,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Best overall sector 3 time of the session in milliseconds
         /// </summary>
-        public UInt16 BestOverallSector3TimeInMS;
+        public ushort BestOverallSector3TimeInMS;
 
         /// <summary>
         /// Lap number best overall sector 3 time achieved on
@@ -94,7 +93,6 @@ namespace F12020Telemetry.Data
 
         /// <summary>
         /// Delta in seconds for safety car
-
         /// </summary>
         public float SafetyCarDelta;
 
@@ -111,7 +109,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// The pit status; 0 = none, 1 = pitting, 2 = in pit area
         /// </summary>
-        public byte PitStatus;
+        public PitStatus PitStatus;
 
         /// <summary>
         /// The sector; 0 = sector1, 1 = sector2, 2 = sector3
@@ -137,13 +135,54 @@ namespace F12020Telemetry.Data
         /// Status of driver - 0 = in garage, 1 = flying lap
         /// 2 = in lap, 3 = out lap, 4 = on track
         /// </summary>
-        public byte DriverStatus;
+        public DriverStatus DriverStatus;
 
         /// <summary>
         /// Result status - 0 = invalid, 1 = inactive, 2 = active
         /// 3 = finished, 4 = disqualified, 5 = not classified
         /// 6 = retired
         /// </summary>
-        public byte ResultStatus;
+        public ResultStatus ResultStatus;
+    }
+
+    public enum ResultStatus : byte
+    {
+        Invalid,
+        Inactive,
+        Active,
+        Finished,
+        Disqualified,
+
+        [Display(Name = "Not Classified")]
+        NotClassified,
+
+        Retired
+    }
+
+    public enum DriverStatus : byte
+    {
+        [Display(Name = "In Garage")]
+        InGarage,
+
+        [Display(Name = "Flying Lap")]
+        FlyingLap,
+
+        [Display(Name = "In Lap")]
+        InLap,
+
+        [Display(Name = "Out Lap")]
+        OutLap,
+
+        [Display(Name = "On Track")]
+        OnTrack
+    }
+
+    public enum PitStatus : byte
+    {
+        None,
+        Pitting,
+
+        [Display(Name = "In Pit Area")]
+        InPitArea
     }
 }

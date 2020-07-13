@@ -3,7 +3,7 @@ using System;
 
 namespace F12020Telemetry.Packet
 {
-    public struct PacketCarTelemetryData : IPacket
+    public class PacketCarTelemetryData : IPacket
     {
         public PacketHeader Header { get; set; }
 
@@ -12,7 +12,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Bit flags specifying which buttons are being pressed currently
         /// </summary>
-        public UInt32 ButtonStatus;
+        public uint ButtonStatus;
 
         /// <summary>
         /// Index of MFD panel open - 255 = MFD closed
@@ -33,11 +33,7 @@ namespace F12020Telemetry.Packet
         public PacketCarTelemetryData(PacketHeader packetHeader)
         {
             Header = packetHeader;
-            CarTelemetryData = new CarTelemetryData[22];
-            ButtonStatus = 0;
-            MfdPanelIndex = 0;
-            MfdPanelIndexSecondaryPlayer = 0;
-            SuggestedGear = 0;
+            CarTelemetryData = new CarTelemetryData[Decode.MaxNumberOfCarsOnTrack];
         }
     }
 }

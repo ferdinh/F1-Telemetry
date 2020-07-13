@@ -2,12 +2,12 @@
 
 namespace F12020Telemetry.Data
 {
-    public struct CarTelemetryData
+    public class CarTelemetryData
     {
         /// <summary>
         /// Speed of car in kilometres per hour
         /// </summary>
-        public UInt16 Speed;
+        public ushort Speed;
 
         /// <summary>
         /// Amount of throttle applied (0.0 to 1.0)
@@ -37,7 +37,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Engine RPM
         /// </summary>
-        public UInt16 EngineRPM;
+        public ushort EngineRPM;
 
         /// <summary>
         /// The DRS (0 = off, 1 = on)
@@ -52,31 +52,31 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Brakes temperature (celsius)
         /// </summary>
-        public UInt16[] BrakesTemperature;
+        public ushort[] BrakesTemperature = new ushort[Decode.NumberOfTyres];
 
         /// <summary>
         /// Tyres surface temperature (celsius)
         /// </summary>
-        public byte[] TyresSurfaceTemperature;
+        public byte[] TyresSurfaceTemperature = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// Tyres inner temperature (celsius)
         /// </summary>
-        public byte[] TyresInnerTemperature;
+        public byte[] TyresInnerTemperature = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// Engine temperature (celsius)
         /// </summary>
-        public UInt16 EngineTemperature;
+        public ushort EngineTemperature;
 
         /// <summary>
         /// Tyres pressure (PSI)
         /// </summary>
-        public float[] TyresPressure;
+        public float[] TyresPressure = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Driving surface, see appendices
         /// </summary>
-        public SurfaceTypes[] SurfaceType;
+        public SurfaceTypes[] SurfaceType = new SurfaceTypes[Decode.NumberOfTyres];
     }
 }

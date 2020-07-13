@@ -25,7 +25,7 @@ namespace F12020Telemetry
             packetHeader.GameMajorVersion = reader.ReadByte();
             packetHeader.GameMinorVersion = reader.ReadByte();
             packetHeader.PacketVersion = reader.ReadByte();
-            packetHeader.PacketId = (PacketTypes)reader.ReadByte();
+            packetHeader.PacketTypes = (PacketTypes)reader.ReadByte();
             packetHeader.SessionUID = reader.ReadUInt64();
             packetHeader.SessionTime = reader.ReadSingle();
             packetHeader.FrameIdentifier = reader.ReadUInt32();
@@ -41,36 +41,34 @@ namespace F12020Telemetry
 
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
-                packetCarMotionData.CarMotionData[i].WorldPositionX = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].WorldPositionY = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].WorldPositionZ = reader.ReadSingle();
+                var carMotionData = new CarMotionData();
 
-                packetCarMotionData.CarMotionData[i].WorldVelocityX = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].WorldVelocityY = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].WorldVelocityZ = reader.ReadSingle();
+                carMotionData.WorldPositionX = reader.ReadSingle();
+                carMotionData.WorldPositionY = reader.ReadSingle();
+                carMotionData.WorldPositionZ = reader.ReadSingle();
 
-                packetCarMotionData.CarMotionData[i].WorldForwardDirX = reader.ReadInt16();
-                packetCarMotionData.CarMotionData[i].WorldForwardDirY = reader.ReadInt16();
-                packetCarMotionData.CarMotionData[i].WorldForwardDirZ = reader.ReadInt16();
+                carMotionData.WorldVelocityX = reader.ReadSingle();
+                carMotionData.WorldVelocityY = reader.ReadSingle();
+                carMotionData.WorldVelocityZ = reader.ReadSingle();
 
-                packetCarMotionData.CarMotionData[i].WorldRightDirX = reader.ReadInt16();
-                packetCarMotionData.CarMotionData[i].WorldRightDirY = reader.ReadInt16();
-                packetCarMotionData.CarMotionData[i].WorldRightDirZ = reader.ReadInt16();
+                carMotionData.WorldForwardDirX = reader.ReadInt16();
+                carMotionData.WorldForwardDirY = reader.ReadInt16();
+                carMotionData.WorldForwardDirZ = reader.ReadInt16();
 
-                packetCarMotionData.CarMotionData[i].GForceLateral = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].GForceLongitudinal = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].GForceVertical = reader.ReadSingle();
+                carMotionData.WorldRightDirX = reader.ReadInt16();
+                carMotionData.WorldRightDirY = reader.ReadInt16();
+                carMotionData.WorldRightDirZ = reader.ReadInt16();
 
-                packetCarMotionData.CarMotionData[i].Yaw = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].Pitch = reader.ReadSingle();
-                packetCarMotionData.CarMotionData[i].Roll = reader.ReadSingle();
+                carMotionData.GForceLateral = reader.ReadSingle();
+                carMotionData.GForceLongitudinal = reader.ReadSingle();
+                carMotionData.GForceVertical = reader.ReadSingle();
+
+                carMotionData.Yaw = reader.ReadSingle();
+                carMotionData.Pitch = reader.ReadSingle();
+                carMotionData.Roll = reader.ReadSingle();
+
+                packetCarMotionData.CarMotionData[i] = carMotionData;
             }
-
-            packetCarMotionData.SuspensionPosition = new float[NumberOfTyres];
-            packetCarMotionData.SuspensionVelocity = new float[NumberOfTyres];
-            packetCarMotionData.SuspensionAcceleration = new float[NumberOfTyres];
-            packetCarMotionData.WheelSpeed = new float[NumberOfTyres];
-            packetCarMotionData.WheelSlip = new float[NumberOfTyres];
 
             // Extra player data
             for (int j = 0; j < NumberOfTyres; j++)
@@ -126,7 +124,7 @@ namespace F12020Telemetry
 
             packetSessionData.TotalLaps = reader.ReadByte();
             packetSessionData.TrackLength = reader.ReadUInt16();
-            packetSessionData.SessionType = reader.ReadByte();
+            packetSessionData.SessionType = (SessionType)reader.ReadByte();
 
             packetSessionData.TrackId = reader.ReadSByte();
             packetSessionData.Formula = reader.ReadByte();
@@ -142,8 +140,12 @@ namespace F12020Telemetry
 
             for (int j = 0; j < MaxNumberOfMarshalZones; j++)
             {
-                packetSessionData.MarshalZones[j].ZoneStart = reader.ReadSingle();
-                packetSessionData.MarshalZones[j].ZoneFlag = reader.ReadSByte();
+                var marshalZone = new MarshalZone();
+
+                marshalZone.ZoneStart = reader.ReadSingle();
+                marshalZone.ZoneFlag = (ZoneFlag)reader.ReadSByte();
+
+                packetSessionData.MarshalZones[j] = marshalZone;
             }
 
             packetSessionData.SafetyCarStatus = reader.ReadByte();
@@ -153,13 +155,17 @@ namespace F12020Telemetry
 
             for (int j = 0; j < MaxNumberOfWeatherSamples; j++)
             {
-                packetSessionData.WeatherForecastSamples[j].SessionType = reader.ReadByte();
+                var newWeatherForecastSample = new WeatherForecastSample();
 
-                packetSessionData.WeatherForecastSamples[j].TimeOffset = reader.ReadByte();
-                packetSessionData.WeatherForecastSamples[j].Weather = reader.ReadByte();
+                newWeatherForecastSample.SessionType = (SessionType)reader.ReadByte();
 
-                packetSessionData.WeatherForecastSamples[j].TrackTemperature = reader.ReadSByte();
-                packetSessionData.WeatherForecastSamples[j].AirTemperature = reader.ReadSByte();
+                newWeatherForecastSample.TimeOffset = reader.ReadByte();
+                newWeatherForecastSample.Weather = reader.ReadByte();
+
+                newWeatherForecastSample.TrackTemperature = reader.ReadSByte();
+                newWeatherForecastSample.AirTemperature = reader.ReadSByte();
+
+                packetSessionData.WeatherForecastSamples[j] = newWeatherForecastSample;
             }
 
             return packetSessionData;
@@ -171,42 +177,46 @@ namespace F12020Telemetry
 
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
-                packetLapData.LapData[i].LastLapTime = reader.ReadSingle();
-                packetLapData.LapData[i].CurrentLapTime = reader.ReadSingle();
+                var lapData = new LapData();
 
-                packetLapData.LapData[i].Sector1TimeInMS = reader.ReadUInt16();
-                packetLapData.LapData[i].Sector2TimeInMS = reader.ReadUInt16();
+                lapData.LastLapTime = reader.ReadSingle();
+                lapData.CurrentLapTime = reader.ReadSingle();
 
-                packetLapData.LapData[i].BestLapTime = reader.ReadSingle();
-                packetLapData.LapData[i].BestLapNum = reader.ReadByte();
+                lapData.Sector1TimeInMS = reader.ReadUInt16();
+                lapData.Sector2TimeInMS = reader.ReadUInt16();
 
-                packetLapData.LapData[i].BestLapSector1TimeInMS = reader.ReadUInt16();
-                packetLapData.LapData[i].BestLapSector2TimeInMS = reader.ReadUInt16();
-                packetLapData.LapData[i].BestLapSector3TimeInMS = reader.ReadUInt16();
+                lapData.BestLapTime = reader.ReadSingle();
+                lapData.BestLapNum = reader.ReadByte();
 
-                packetLapData.LapData[i].BestOverallSector1TimeInMS = reader.ReadUInt16();
-                packetLapData.LapData[i].BestOverallSector1LapNum = reader.ReadByte();
+                lapData.BestLapSector1TimeInMS = reader.ReadUInt16();
+                lapData.BestLapSector2TimeInMS = reader.ReadUInt16();
+                lapData.BestLapSector3TimeInMS = reader.ReadUInt16();
 
-                packetLapData.LapData[i].BestOverallSector2TimeInMS = reader.ReadUInt16();
-                packetLapData.LapData[i].BestOverallSector2LapNum = reader.ReadByte();
+                lapData.BestOverallSector1TimeInMS = reader.ReadUInt16();
+                lapData.BestOverallSector1LapNum = reader.ReadByte();
 
-                packetLapData.LapData[i].BestOverallSector3TimeInMS = reader.ReadUInt16();
-                packetLapData.LapData[i].BestOverallSector3LapNum = reader.ReadByte();
+                lapData.BestOverallSector2TimeInMS = reader.ReadUInt16();
+                lapData.BestOverallSector2LapNum = reader.ReadByte();
 
-                packetLapData.LapData[i].LapDistance = reader.ReadSingle();
-                packetLapData.LapData[i].TotalDistance = reader.ReadSingle();
+                lapData.BestOverallSector3TimeInMS = reader.ReadUInt16();
+                lapData.BestOverallSector3LapNum = reader.ReadByte();
 
-                packetLapData.LapData[i].SafetyCarDelta = reader.ReadSingle();
-                packetLapData.LapData[i].CarPosition = reader.ReadByte();
+                lapData.LapDistance = reader.ReadSingle();
+                lapData.TotalDistance = reader.ReadSingle();
 
-                packetLapData.LapData[i].CurrentLapNum = reader.ReadByte();
-                packetLapData.LapData[i].PitStatus = reader.ReadByte();
-                packetLapData.LapData[i].Sector = reader.ReadByte();
-                packetLapData.LapData[i].CurrentLapInvalid = reader.ReadByte();
-                packetLapData.LapData[i].Penalties = reader.ReadByte();
-                packetLapData.LapData[i].GridPosition = reader.ReadByte();
-                packetLapData.LapData[i].DriverStatus = reader.ReadByte();
-                packetLapData.LapData[i].ResultStatus = reader.ReadByte();
+                lapData.SafetyCarDelta = reader.ReadSingle();
+                lapData.CarPosition = reader.ReadByte();
+
+                lapData.CurrentLapNum = reader.ReadByte();
+                lapData.PitStatus = (PitStatus)reader.ReadByte();
+                lapData.Sector = reader.ReadByte();
+                lapData.CurrentLapInvalid = reader.ReadByte();
+                lapData.Penalties = reader.ReadByte();
+                lapData.GridPosition = reader.ReadByte();
+                lapData.DriverStatus = (DriverStatus)reader.ReadByte();
+                lapData.ResultStatus = (ResultStatus)reader.ReadByte();
+
+                packetLapData.LapData[i] = lapData;
             }
 
             return packetLapData;
@@ -218,48 +228,52 @@ namespace F12020Telemetry
 
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
-                packetCarTelemetryData.CarTelemetryData[i].Speed = reader.ReadUInt16();
-                packetCarTelemetryData.CarTelemetryData[i].Throttle = reader.ReadSingle();
-                packetCarTelemetryData.CarTelemetryData[i].Steer = reader.ReadSingle();
-                packetCarTelemetryData.CarTelemetryData[i].Brake = reader.ReadSingle();
-                packetCarTelemetryData.CarTelemetryData[i].Clutch = reader.ReadByte();
-                packetCarTelemetryData.CarTelemetryData[i].Gear = reader.ReadSByte();
-                packetCarTelemetryData.CarTelemetryData[i].EngineRPM = reader.ReadUInt16();
-                packetCarTelemetryData.CarTelemetryData[i].Drs = reader.ReadByte();
-                packetCarTelemetryData.CarTelemetryData[i].RevLightsPercent = reader.ReadByte();
+                var carTelemData = new CarTelemetryData();
 
-                packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature = new UInt16[NumberOfTyres];
-                packetCarTelemetryData.CarTelemetryData[i].TyresSurfaceTemperature = new byte[NumberOfTyres];
-                packetCarTelemetryData.CarTelemetryData[i].TyresInnerTemperature = new byte[NumberOfTyres];
-                packetCarTelemetryData.CarTelemetryData[i].TyresPressure = new float[NumberOfTyres];
-                packetCarTelemetryData.CarTelemetryData[i].SurfaceType = new SurfaceTypes[NumberOfTyres];
+                carTelemData.Speed = reader.ReadUInt16();
+                carTelemData.Throttle = reader.ReadSingle();
+                carTelemData.Steer = reader.ReadSingle();
+                carTelemData.Brake = reader.ReadSingle();
+                carTelemData.Clutch = reader.ReadByte();
+                carTelemData.Gear = reader.ReadSByte();
+                carTelemData.EngineRPM = reader.ReadUInt16();
+                carTelemData.Drs = reader.ReadByte();
+                carTelemData.RevLightsPercent = reader.ReadByte();
+
+                //packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature = new UInt16[NumberOfTyres];
+                //packetCarTelemetryData.CarTelemetryData[i].TyresSurfaceTemperature = new byte[NumberOfTyres];
+                //packetCarTelemetryData.CarTelemetryData[i].TyresInnerTemperature = new byte[NumberOfTyres];
+                //packetCarTelemetryData.CarTelemetryData[i].TyresPressure = new float[NumberOfTyres];
+                //packetCarTelemetryData.CarTelemetryData[i].SurfaceType = new SurfaceTypes[NumberOfTyres];
 
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
-                    packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature[j] = reader.ReadUInt16();
+                    carTelemData.BrakesTemperature[j] = reader.ReadUInt16();
                 }
 
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
-                    packetCarTelemetryData.CarTelemetryData[i].TyresSurfaceTemperature[j] = reader.ReadByte();
+                    carTelemData.TyresSurfaceTemperature[j] = reader.ReadByte();
                 }
 
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
-                    packetCarTelemetryData.CarTelemetryData[i].TyresInnerTemperature[j] = reader.ReadByte();
+                    carTelemData.TyresInnerTemperature[j] = reader.ReadByte();
                 }
 
-                packetCarTelemetryData.CarTelemetryData[i].EngineTemperature = reader.ReadUInt16();
-
-                for (int j = 0; j < NumberOfTyres; j++)
-                {
-                    packetCarTelemetryData.CarTelemetryData[i].TyresPressure[j] = reader.ReadSingle();
-                }
+                carTelemData.EngineTemperature = reader.ReadUInt16();
 
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
-                    packetCarTelemetryData.CarTelemetryData[i].SurfaceType[j] = (SurfaceTypes) reader.ReadByte();
+                    carTelemData.TyresPressure[j] = reader.ReadSingle();
                 }
+
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    carTelemData.SurfaceType[j] = (SurfaceTypes)reader.ReadByte();
+                }
+
+                packetCarTelemetryData.CarTelemetryData[i] = carTelemData;
             }
 
             packetCarTelemetryData.ButtonStatus = reader.ReadUInt32();
@@ -271,62 +285,66 @@ namespace F12020Telemetry
 
             return packetCarTelemetryData;
         }
+
         private static IPacket CarStatus(PacketHeader packetHeader, BinaryReader reader)
         {
             var packetCarStatus = new PacketCarStatusData(packetHeader);
 
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
-                packetCarStatus.CarStatusData[i].TractionControl = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].AntiLockBrakes = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].FuelMix = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].FrontBrakeBias = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].pitLimiterStatus = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].FuelInTank = reader.ReadSingle();
-                packetCarStatus.CarStatusData[i].FuelCapacity = reader.ReadSingle();
-                packetCarStatus.CarStatusData[i].FuelRemainingLaps = reader.ReadSingle();
-                packetCarStatus.CarStatusData[i].MaxRPM = reader.ReadUInt16();
-                packetCarStatus.CarStatusData[i].IdleRPM = reader.ReadUInt16();
-                packetCarStatus.CarStatusData[i].MaxGears = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].DrsAllowed = reader.ReadByte();
+                var carStatusData = new CarStatusData();
+                packetCarStatus.CarStatusData[i] = carStatusData;
 
-                packetCarStatus.CarStatusData[i].DrsActivationDistance = reader.ReadUInt16();
+                carStatusData.TractionControl = reader.ReadByte();
+                carStatusData.AntiLockBrakes = reader.ReadByte();
+                carStatusData.FuelMix = reader.ReadByte();
+                carStatusData.FrontBrakeBias = reader.ReadByte();
+                carStatusData.pitLimiterStatus = reader.ReadByte();
+                carStatusData.FuelInTank = reader.ReadSingle();
+                carStatusData.FuelCapacity = reader.ReadSingle();
+                carStatusData.FuelRemainingLaps = reader.ReadSingle();
+                carStatusData.MaxRPM = reader.ReadUInt16();
+                carStatusData.IdleRPM = reader.ReadUInt16();
+                carStatusData.MaxGears = reader.ReadByte();
+                carStatusData.DrsAllowed = reader.ReadByte();
 
-                packetCarStatus.CarStatusData[i].TyresWear = new byte[NumberOfTyres];
+                carStatusData.DrsActivationDistance = reader.ReadUInt16();
 
-                for (int j = 0; j < NumberOfTyres; j++)
-                {
-                    packetCarStatus.CarStatusData[i].TyresWear[j] = reader.ReadByte();
-                }
-
-                packetCarStatus.CarStatusData[i].ActualTyreCompound = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].VisualTyreCompound = reader.ReadByte();
-
-                packetCarStatus.CarStatusData[i].TyresAgeLaps = reader.ReadByte();
-
-                packetCarStatus.CarStatusData[i].TyresDamage = new byte[NumberOfTyres];
+                carStatusData.TyresWear = new byte[NumberOfTyres];
 
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
-                    packetCarStatus.CarStatusData[i].TyresDamage[j] = reader.ReadByte();
+                    carStatusData.TyresWear[j] = reader.ReadByte();
                 }
 
-                packetCarStatus.CarStatusData[i].FrontLeftWingDamage = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].FrontRightWingDamage = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].RearWingDamage = reader.ReadByte();
+                carStatusData.ActualTyreCompound = reader.ReadByte();
+                carStatusData.VisualTyreCompound = reader.ReadByte();
 
-                packetCarStatus.CarStatusData[i].DrsFault = reader.ReadByte();
+                carStatusData.TyresAgeLaps = reader.ReadByte();
 
-                packetCarStatus.CarStatusData[i].EngineDamage = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].GearBoxDamage = reader.ReadByte();
-                packetCarStatus.CarStatusData[i].VehicleFiaFlags = reader.ReadSByte();
+                carStatusData.TyresDamage = new byte[NumberOfTyres];
 
-                packetCarStatus.CarStatusData[i].ErsStoreEnergy = reader.ReadSingle();
-                packetCarStatus.CarStatusData[i].ErsDeployMode = reader.ReadByte();
+                for (int j = 0; j < NumberOfTyres; j++)
+                {
+                    carStatusData.TyresDamage[j] = reader.ReadByte();
+                }
 
-                packetCarStatus.CarStatusData[i].ErsHarvestedThisLapMGUK = reader.ReadSingle();
-                packetCarStatus.CarStatusData[i].ErsHarvestedThisLapMGUH = reader.ReadSingle();
-                packetCarStatus.CarStatusData[i].ErsDeployedThisLap = reader.ReadSingle();
+                carStatusData.FrontLeftWingDamage = reader.ReadByte();
+                carStatusData.FrontRightWingDamage = reader.ReadByte();
+                carStatusData.RearWingDamage = reader.ReadByte();
+
+                carStatusData.DrsFault = reader.ReadByte();
+
+                carStatusData.EngineDamage = reader.ReadByte();
+                carStatusData.GearBoxDamage = reader.ReadByte();
+                carStatusData.VehicleFiaFlags = reader.ReadSByte();
+
+                carStatusData.ErsStoreEnergy = reader.ReadSingle();
+                carStatusData.ErsDeployMode = reader.ReadByte();
+
+                carStatusData.ErsHarvestedThisLapMGUK = reader.ReadSingle();
+                carStatusData.ErsHarvestedThisLapMGUH = reader.ReadSingle();
+                carStatusData.ErsDeployedThisLap = reader.ReadSingle();
             }
 
             return packetCarStatus;
@@ -344,7 +362,7 @@ namespace F12020Telemetry
 
                     Func<PacketHeader, BinaryReader, IPacket> decoder = null;
 
-                    switch (packetHeader.PacketId)
+                    switch (packetHeader.PacketTypes)
                     {
                         case PacketTypes.Motion:
                             decoder = Decode.Motion;

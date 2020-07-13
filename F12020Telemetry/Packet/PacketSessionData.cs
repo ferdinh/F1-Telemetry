@@ -1,9 +1,8 @@
 ﻿using F12020Telemetry.Data;
-using System;
 
 namespace F12020Telemetry.Packet
 {
-    internal struct PacketSessionData : IPacket
+    public class PacketSessionData : IPacket
     {
         public PacketHeader Header { get; set; }
 
@@ -31,12 +30,12 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Track length in metres
         /// </summary>
-        public UInt16 TrackLength;
+        public ushort TrackLength;
 
         /// <summary>
-        /// The session type; 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1, 6 = Q2, 7 = Q3, 8 = Short Q, 9 = OSQ, 10 = R, 11 = R2, 12 = Time Trial
+        /// The session type
         /// </summary>
-        public byte SessionType;
+        public SessionType SessionType;
 
         /// <summary>
         /// The track identifier; -1 for unknown, 0-21 for tracks, see appendix
@@ -51,12 +50,12 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Time left in session in seconds
         /// </summary>
-        public UInt16 SessionTimeLeft;
+        public ushort SessionTimeLeft;
 
         /// <summary>
         /// Session duration in seconds
         /// </summary>
-        public UInt16 SessionDuration;
+        public ushort SessionDuration;
 
         /// <summary>
         /// Pit speed limit in kilometres per hour
@@ -91,7 +90,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// List of marshal zones – max 21
         /// </summary>
-        public MarshalZone[] MarshalZones;
+        public MarshalZone[] MarshalZones = new MarshalZone[Decode.MaxNumberOfMarshalZones];
 
         /// <summary>
         /// 0 = no safety car, 1 = full safety car, 2 = virtual safety car
@@ -111,32 +110,11 @@ namespace F12020Telemetry.Packet
         /// <summary>
         /// Array of weather forecast samples
         /// </summary>
-        public WeatherForecastSample[] WeatherForecastSamples;
+        public WeatherForecastSample[] WeatherForecastSamples = new WeatherForecastSample[Decode.MaxNumberOfWeatherSamples];
 
         public PacketSessionData(PacketHeader packetHeader)
         {
             Header = packetHeader;
-            Weather = 0;
-            TrackTemperature = 0;
-            AirTemperature = 0;
-            TotalLaps = 0;
-            TrackLength = 0;
-            SessionType = 0;
-            TrackId = 0;
-            Formula = 0;
-            SessionTimeLeft = 0;
-            SessionDuration = 0;
-            PitSpeedLimit = 0;
-            GamePaused = 0;
-            IsSpectating = 0;
-            SpectatorCarIndex = 0;
-            SliProNativeSupport = 0;
-            NumMarshalZones = 0;
-            MarshalZones = new MarshalZone[21];
-            SafetyCarStatus = 0;
-            NetworkGame = 0;
-            NumWeatherForecastSamples = 0;
-            WeatherForecastSamples = new WeatherForecastSample[20];
         }
     }
 }
