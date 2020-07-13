@@ -59,5 +59,7 @@ namespace F12020Telemetry.Packet
         /// </summary>
         [Display(Name = "Lobby Info")]
         LobbyInfo,
+
+        Invalid,
     }
 }
