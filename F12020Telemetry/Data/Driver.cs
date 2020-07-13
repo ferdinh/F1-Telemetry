@@ -19,6 +19,12 @@ namespace F12020Telemetry.Data
         public IList<LapData> LapData { get; } = new List<LapData>();
         public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
 
+        /// <summary>
+        /// Gets the current telemetry.
+        /// </summary>
+        /// <value>
+        /// The current telemetry.
+        /// </value>
         public CarTelemetryData CurrentTelemetry => CarTelemetryData.LastOrDefault();
     }
 }
