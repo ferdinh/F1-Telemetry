@@ -45,10 +45,10 @@ namespace F12020Telemetry
 
                     var playerData = telemetryManager.GetPlayerInfo();
 
-                    if (playerData != null && playerData.PlayerCurrentTelemetry != null)
+                    if (playerData != null && playerData.CurrentTelemetry != null)
                     {
-                        Console.WriteLine($"Player Speed: {playerData.PlayerCurrentTelemetry.Speed}             ");
-                        Console.WriteLine($"Player Gear : {playerData.PlayerCurrentTelemetry.Gear}             ");
+                        Console.WriteLine($"Player Speed: {playerData.CurrentTelemetry.Speed}             ");
+                        Console.WriteLine($"Player Gear : {playerData.CurrentTelemetry.Gear}             ");
                     }
                 }
             }
