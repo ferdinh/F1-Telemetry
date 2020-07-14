@@ -350,6 +350,32 @@ namespace F12020Telemetry
             return packetCarStatus;
         }
 
+        private static IPacket Participants(PacketHeader packetHeader, BinaryReader reader)
+        {
+            var packetParticipantsData = new PacketParticipantsData(packetHeader);
+
+            packetParticipantsData.NumActiveCars = reader.ReadByte();
+
+            for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
+            {
+                var participantData = new ParticipantData();
+
+                packetParticipantsData.Participants[i] = participantData;
+
+                participantData.AiControlled = reader.ReadBoolean();
+                participantData.DriverId = reader.ReadByte();
+                participantData.TeamId = reader.ReadByte();
+                participantData.RaceNumber = reader.ReadByte();
+                participantData.Nationality = reader.ReadByte();
+                participantData.Name = reader.ReadChars(48);
+
+                participantData.YourTelemetry = (TelemetrySetting)reader.ReadByte();
+
+            }
+
+            return packetParticipantsData;
+        }
+
         public static IPacket Packet(byte[] packetBytes)
         {
             IPacket packet = null;
@@ -379,8 +405,9 @@ namespace F12020Telemetry
                         //case PacketTypes.Event:
                         //    break;
 
-                        //case PacketTypes.Participants:
-                        //    break;
+                        case PacketTypes.Participants:
+                            decoder = Decode.Participants;
+                            break;
 
                         //case PacketTypes.CarSetups:
                         //    break;
