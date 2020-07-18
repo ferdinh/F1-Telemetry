@@ -367,7 +367,7 @@ namespace F12020Telemetry
                 participantData.TeamId = reader.ReadByte();
                 participantData.RaceNumber = reader.ReadByte();
                 participantData.Nationality = reader.ReadByte();
-                participantData.Name = reader.ReadChars(48);
+                participantData.Name = reader.ReadChars(47);
 
                 participantData.YourTelemetry = (TelemetrySetting)reader.ReadByte();
 
