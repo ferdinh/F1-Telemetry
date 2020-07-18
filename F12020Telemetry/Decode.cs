@@ -362,7 +362,7 @@ namespace F12020Telemetry
 
                 packetParticipantsData.Participants[i] = participantData;
 
-                participantData.AiControlled = reader.ReadBoolean();
+                participantData.AiControlled = (reader.ReadByte() != 0);
                 participantData.DriverId = reader.ReadByte();
                 participantData.TeamId = reader.ReadByte();
                 participantData.RaceNumber = reader.ReadByte();
