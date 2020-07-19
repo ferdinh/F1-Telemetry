@@ -15,6 +15,8 @@ namespace F12020Telemetry
 
         private int PlayerCarIndex;
 
+        public event EventHandler NewSession;
+
         public TelemetryManager()
         {
             var newDrivers = new List<Driver>();
