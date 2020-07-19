@@ -1,4 +1,6 @@
 ﻿using F12020Telemetry.Data;
+using System;
+using System.Collections.Generic;
 
 namespace F12020Telemetry.Packet
 {
@@ -115,6 +117,17 @@ namespace F12020Telemetry.Packet
         public PacketSessionData(PacketHeader packetHeader)
         {
             Header = packetHeader;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is PacketSessionData data &&
+                   EqualityComparer<ulong>.Default.Equals(Header.SessionUID, data.Header.SessionUID);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Header.SessionUID);
         }
     }
 }
