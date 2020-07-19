@@ -52,18 +52,20 @@ namespace F12020Telemetry
 
                     telemetryManager.Feed(bytes);
 
-                    Console.SetCursorPosition(0, 0);
 
                     Console.WriteLine($"Session Type: {telemetryManager.Session.SessionType.GetDisplayName()}                  ");
                     Console.WriteLine($"Formula Series: {telemetryManager.Session.Formula}                  ");
                     Console.WriteLine($"Track Name: {TrackInfo.TrackNames[telemetryManager.Session.TrackId]}                             ");
+                    Console.SetCursorPosition(0, 6);
 
                     var playerData = telemetryManager.GetPlayerInfo();
 
                     if (playerData != null && playerData.CurrentTelemetry != null)
                     {
-                        Console.WriteLine($"Player Speed: {playerData.CurrentTelemetry.Speed}             ");
+                        Console.WriteLine($"Player Speed: {playerData.CurrentTelemetry.Speed}km/h             ");
                         Console.WriteLine($"Player Gear : {playerData.CurrentTelemetry.Gear}             ");
+                        Console.WriteLine($"Steer       : {playerData.CurrentTelemetry.Steer}                                 ");
+                        Console.WriteLine($"DRS         : {playerData.CurrentTelemetry.Drs.GetDisplayName()}            ");
                     }
                 }
             }
