@@ -31,6 +31,21 @@ namespace F12020Telemetry
             {
                 var telemetryManager = new TelemetryManager();
 
+                telemetryManager.NewSession += (s, e) =>
+                {
+                    var manager = s as TelemetryManager;
+
+                    if (manager != null)
+                    {
+                        Console.SetCursorPosition(0, 0);
+                        Console.WriteLine($"Session id      : {manager.Session.Header.SessionUID}                       ");
+                        Console.WriteLine($"Session Type    : {manager.Session.SessionType.GetDisplayName()}                  ");
+                        Console.WriteLine($"Formula Series  : {manager.Session.Formula}                  ");
+                        Console.WriteLine($"Track Name      : {TrackInfo.TrackNames[telemetryManager.Session.TrackId]}                             ");
+                        Console.WriteLine($"Player car index: {manager.Session.Header.PlayerCarIndex}                              ");
+                    }
+                };
+
                 while (true)
                 {
                     byte[] bytes = listener.Receive(ref groupEP);
