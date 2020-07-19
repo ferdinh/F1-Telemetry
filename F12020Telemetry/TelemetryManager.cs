@@ -1,5 +1,6 @@
 ﻿using F12020Telemetry.Data;
 using F12020Telemetry.Packet;
+using System;
 using System.Collections.Generic;
 
 namespace F12020Telemetry
@@ -99,10 +100,15 @@ namespace F12020Telemetry
 
                     break;
 
-                    //case PacketLapData pLapData:
-                    //    LapData = pLapData;
-                    //    packetQueue.Enqueue(LapData);
-                    //    break;
+                case PacketLapData pLapData:
+
+                    for (int i = 0; i < pLapData.LapData.Length; i++)
+                    {
+                        var lapData = pLapData.LapData[i];
+                        Drivers[i].AddLapData(lapData);
+                    }
+
+                    break;
 
                     //case PacketMotionData pMotionData:
                     //    packetCarMotionData = pMotionData;
