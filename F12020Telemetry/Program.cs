@@ -53,9 +53,6 @@ namespace F12020Telemetry
                     telemetryManager.Feed(bytes);
 
 
-                    Console.WriteLine($"Session Type: {telemetryManager.Session.SessionType.GetDisplayName()}                  ");
-                    Console.WriteLine($"Formula Series: {telemetryManager.Session.Formula}                  ");
-                    Console.WriteLine($"Track Name: {TrackInfo.TrackNames[telemetryManager.Session.TrackId]}                             ");
                     Console.SetCursorPosition(0, 6);
 
                     var playerData = telemetryManager.GetPlayerInfo();
