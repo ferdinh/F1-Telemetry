@@ -66,9 +66,27 @@ namespace F12020Telemetry
                 //    break;
 
                 case PacketSessionData packetSessionData:
-                    PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
-                    Session = packetSessionData;
-                    packetTypeReceived = PacketTypes.Session;
+
+                    if (Session == null)
+                    {
+                        PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
+                        Session = packetSessionData;
+                        packetTypeReceived = PacketTypes.Session;
+                        NewSession?.Invoke(this, EventArgs.Empty);
+                    }
+                    else
+                    {
+                        bool isNewSession = !packetSessionData.Equals(Session);
+
+                        if (isNewSession)
+                        {
+                            PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
+                            Session = packetSessionData;
+                            packetTypeReceived = PacketTypes.Session;
+                            NewSession?.Invoke(this, EventArgs.Empty);
+                        }
+                    }
+
                     break;
 
                 case PacketCarTelemetryData packetCarTelemetryData:
