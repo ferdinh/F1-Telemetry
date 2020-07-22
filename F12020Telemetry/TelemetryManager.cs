@@ -10,7 +10,8 @@ namespace F12020Telemetry
     /// </summary>
     public class TelemetryManager
     {
-        public IReadOnlyList<Driver> Drivers { get; }
+        private List<Driver> drivers = new List<Driver>();
+        public IReadOnlyList<Driver> Drivers { get => drivers.AsReadOnly(); }
 
         public PacketSessionData Session { get; private set; }
 
@@ -27,7 +28,7 @@ namespace F12020Telemetry
                 newDrivers.Add(new Driver());
             }
 
-            Drivers = newDrivers;
+            drivers = newDrivers;
         }
 
         /// <summary>
