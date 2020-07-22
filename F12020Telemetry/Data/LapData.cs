@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace F12020Telemetry.Data
 {
     public class LapData
     {
+        public ulong SessionUID;
+        public float SessionTime;
+
         /// <summary>
         /// Last lap time in seconds
         /// </summary>

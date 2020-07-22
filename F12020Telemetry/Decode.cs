@@ -178,6 +178,8 @@ namespace F12020Telemetry
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
                 var lapData = new LapData();
+                lapData.SessionUID = packetHeader.SessionUID;
+                lapData.SessionTime = packetHeader.SessionTime;
 
                 lapData.LastLapTime = reader.ReadSingle();
                 lapData.CurrentLapTime = reader.ReadSingle();
@@ -229,6 +231,8 @@ namespace F12020Telemetry
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
                 var carTelemData = new CarTelemetryData();
+                carTelemData.SessionUID = packetHeader.SessionUID;
+                carTelemData.SessionTime = packetHeader.SessionTime;
 
                 carTelemData.Speed = reader.ReadUInt16();
                 carTelemData.Throttle = reader.ReadSingle();

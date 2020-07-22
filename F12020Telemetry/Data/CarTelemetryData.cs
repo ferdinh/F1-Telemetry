@@ -4,6 +4,9 @@ namespace F12020Telemetry.Data
 {
     public class CarTelemetryData
     {
+        public ulong SessionUID;
+        public float SessionTime;
+
         /// <summary>
         /// Speed of car in kilometres per hour
         /// </summary>
