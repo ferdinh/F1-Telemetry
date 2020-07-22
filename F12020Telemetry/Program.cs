@@ -52,7 +52,6 @@ namespace F12020Telemetry
 
                     telemetryManager.Feed(bytes);
 
-
                     Console.SetCursorPosition(0, 6);
 
                     var playerData = telemetryManager.GetPlayerInfo();
