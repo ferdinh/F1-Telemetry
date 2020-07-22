@@ -21,14 +21,7 @@ namespace F12020Telemetry
 
         public TelemetryManager()
         {
-            var newDrivers = new List<Driver>();
-
-            for (int i = 0; i < Decode.MaxNumberOfCarsOnTrack; i++)
-            {
-                newDrivers.Add(new Driver());
-            }
-
-            drivers = newDrivers;
+            drivers = NewDriverList();
         }
 
         /// <summary>
@@ -123,6 +116,21 @@ namespace F12020Telemetry
         public Driver GetPlayerInfo()
         {
             return Drivers[PlayerCarIndex];
+        }
+
+        /// <summary>
+        /// Creates new driver list.
+        /// </summary>
+        /// <returns>Clean Driver List.</returns>
+        private List<Driver> NewDriverList()
+        {
+            var newDrivers = new List<Driver>();
+
+            for (int i = 0; i < Decode.MaxNumberOfCarsOnTrack; i++)
+            {
+                newDrivers.Add(new Driver());
+            }
+            return newDrivers;
         }
     }
 }
