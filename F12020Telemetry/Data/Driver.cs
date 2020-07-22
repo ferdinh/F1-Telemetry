@@ -3,6 +3,14 @@ using System.Linq;
 
 namespace F12020Telemetry.Data
 {
+    public class NewLapEventArgs : EventArgs
+    {
+        public int LastLapNumber { get; set; }
+        public float LastLapTime { get; set; }
+        public IReadOnlyList<LapData> LastLapData { get; set; }
+        public IReadOnlyList<CarTelemetryData> LastCarTelemetryData { get; set; }
+    }
+
     /// <summary>
     /// Contains telemetry and driver information.
     /// </summary>
