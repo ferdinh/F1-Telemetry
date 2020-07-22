@@ -16,6 +16,12 @@ namespace F12020Telemetry.Data
     /// </summary>
     public class Driver
     {
+        // TODO: Try using Dictionary to hold all of the packets of a particular lap. Use Lap number as the key? It also needs to match the
+        // session ID.
+        private List<LapData> lapData = new List<LapData>();
+
+        public event EventHandler<NewLapEventArgs> NewLap;
+
         /// <summary>
         /// Gets or sets the number of laps the driver had done.
         /// </summary>
@@ -38,5 +44,35 @@ namespace F12020Telemetry.Data
         /// The current telemetry.
         /// </value>
         public CarTelemetryData CurrentTelemetry => CarTelemetryData.LastOrDefault();
+
+        public void AddLapData(LapData lapData)
+        {
+            this.lapData.Add(lapData);
+
+            if (NumberOfLaps == 0)
+            {
+                NumberOfLaps = lapData.CurrentLapNum;
+            }
+            else if (lapData.CurrentLapNum > NumberOfLaps)
+            {
+                var lastLapData = LapData.Where(l => (lapData.CurrentLapNum - 1).Equals(l.CurrentLapNum)).ToList().AsReadOnly();
+                var lastCarTelemetryData = new List<CarTelemetryData>();
+
+                foreach (var lastLap in lastLapData)
+                {
+                    lastCarTelemetryData.Add(CarTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                }
+
+                NewLap?.Invoke(this, new NewLapEventArgs
+                {
+                    LastLapNumber = lapData.CurrentLapNum - 1,
+                    LastLapTime = lapData.LastLapTime,
+                    LastLapData = lastLapData,
+                    LastCarTelemetryData = lastCarTelemetryData.AsReadOnly()
+                });
+            }
+
+            NumberOfLaps = lapData.CurrentLapNum;
+        }
     }
 }
