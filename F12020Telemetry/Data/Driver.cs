@@ -16,7 +16,11 @@ namespace F12020Telemetry.Data
         /// </value>
         public int NumberOfLaps { get; private set; } = 0;
 
-        public IList<LapData> LapData { get; } = new List<LapData>();
+        public IReadOnlyCollection<LapData> LapData
+        {
+            get { return lapData.AsReadOnly(); }
+        }
+
         public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
 
         /// <summary>
