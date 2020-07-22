@@ -78,6 +78,9 @@ namespace F12020Telemetry
                             PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
                             Session = packetSessionData;
                             packetTypeReceived = PacketTypes.Session;
+
+                            drivers = NewDriverList();
+
                             NewSession?.Invoke(this, EventArgs.Empty);
                         }
                     }
