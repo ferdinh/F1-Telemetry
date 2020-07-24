@@ -1,18 +1,10 @@
-﻿using F12020Telemetry.Packet;
-using F12020Telemetry.Util.Extensions;
+﻿using F12020Telemetry.Util.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
 namespace F12020Telemetry
 {
-    public class Lap
-    {
-        public List<PacketLapData> LapData = new List<PacketLapData>();
-        public List<PacketCarTelemetryData> CarTelemetryData = new List<PacketCarTelemetryData>();
-    }
-
     internal class Program
     {
         private static int listenPort = 20777;
