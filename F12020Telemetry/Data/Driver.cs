@@ -42,17 +42,17 @@ namespace F12020Telemetry.Data
         /// <value>
         /// The number of laps.
         /// </value>
-        public int NumberOfLaps { get; private set; } = 0;
+        public int CurrentLapNumber { get; private set; } = 0;
 
         public void AddLapData(LapData lapData)
         {
             this.lapData.Add(lapData);
 
-            if (NumberOfLaps == 0)
+            if (CurrentLapNumber == 0)
             {
-                NumberOfLaps = lapData.CurrentLapNum;
+                CurrentLapNumber = lapData.CurrentLapNum;
             }
-            else if (lapData.CurrentLapNum > NumberOfLaps)
+            else if (lapData.CurrentLapNum > CurrentLapNumber)
             {
                 var lastLapData = LapData.Where(l => (lapData.CurrentLapNum - 1).Equals(l.CurrentLapNum)).ToList().AsReadOnly();
                 var lastCarTelemetryData = new List<CarTelemetryData>();
@@ -81,7 +81,7 @@ namespace F12020Telemetry.Data
                 CurrentLapInterval++;
             }
 
-            NumberOfLaps = lapData.CurrentLapNum;
+            CurrentLapNumber = lapData.CurrentLapNum;
         }
 
         protected virtual void OnLapInterval()
