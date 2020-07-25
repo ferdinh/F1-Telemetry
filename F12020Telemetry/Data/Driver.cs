@@ -94,4 +94,12 @@ namespace F12020Telemetry.Data
             NewLap?.Invoke(this, e);
         }
     }
+
+    public class NewLapEventArgs : EventArgs
+    {
+        public IReadOnlyList<CarTelemetryData> LastCarTelemetryData { get; set; }
+        public IReadOnlyList<LapData> LastLapData { get; set; }
+        public int LastLapNumber { get; set; }
+        public float LastLapTime { get; set; }
+    }
 }
