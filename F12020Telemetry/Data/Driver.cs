@@ -4,43 +4,20 @@ using System.Linq;
 
 namespace F12020Telemetry.Data
 {
-    public class NewLapEventArgs : EventArgs
-    {
-        public int LastLapNumber { get; set; }
-        public float LastLapTime { get; set; }
-        public IReadOnlyList<LapData> LastLapData { get; set; }
-        public IReadOnlyList<CarTelemetryData> LastCarTelemetryData { get; set; }
-    }
-
     /// <summary>
     /// Contains telemetry and driver information.
     /// </summary>
     public class Driver
     {
+        public event EventHandler LapInterval;
+
+        private int CurrentLapInterval = 1;
+
         // TODO: Try using Dictionary to hold all of the packets of a particular lap. Use Lap number as the key? It also needs to match the
         // session ID.
         private List<LapData> lapData = new List<LapData>();
 
         public event EventHandler<NewLapEventArgs> NewLap;
-
-        public event EventHandler LapInterval;
-
-        /// <summary>
-        /// Gets or sets the number of laps the driver had done.
-        /// </summary>
-        /// <value>
-        /// The number of laps.
-        /// </value>
-        public int NumberOfLaps { get; private set; } = 0;
-
-        public int LapIntervalThreshold { get; set; } = 3;
-
-        public IReadOnlyCollection<LapData> LapData
-        {
-            get { return lapData.AsReadOnly(); }
-        }
-
-        private int CurrentLapInterval = 1;
 
         public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
 
@@ -51,6 +28,21 @@ namespace F12020Telemetry.Data
         /// The current telemetry.
         /// </value>
         public CarTelemetryData CurrentTelemetry => CarTelemetryData.LastOrDefault();
+
+        public IReadOnlyCollection<LapData> LapData
+        {
+            get { return lapData.AsReadOnly(); }
+        }
+
+        public int LapIntervalThreshold { get; set; } = 3;
+
+        /// <summary>
+        /// Gets or sets the number of laps the driver had done.
+        /// </summary>
+        /// <value>
+        /// The number of laps.
+        /// </value>
+        public int NumberOfLaps { get; private set; } = 0;
 
         public void AddLapData(LapData lapData)
         {
@@ -92,14 +84,14 @@ namespace F12020Telemetry.Data
             NumberOfLaps = lapData.CurrentLapNum;
         }
 
-        protected virtual void OnNewLap(NewLapEventArgs e)
-        {
-            NewLap?.Invoke(this, e);
-        }
-
         protected virtual void OnLapInterval()
         {
             LapInterval?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnNewLap(NewLapEventArgs e)
+        {
+            NewLap?.Invoke(this, e);
         }
     }
 }
