@@ -117,7 +117,7 @@ namespace F12020Telemetry
         {
             var packetSessionData = new PacketSessionData(packetHeader);
 
-            packetSessionData.Weather = reader.ReadByte();
+            packetSessionData.Weather = (WeatherType)reader.ReadByte();
 
             packetSessionData.TrackTemperature = reader.ReadSByte();
             packetSessionData.AirTemperature = reader.ReadSByte();
@@ -160,7 +160,7 @@ namespace F12020Telemetry
                 newWeatherForecastSample.SessionType = (SessionType)reader.ReadByte();
 
                 newWeatherForecastSample.TimeOffset = reader.ReadByte();
-                newWeatherForecastSample.Weather = reader.ReadByte();
+                newWeatherForecastSample.Weather = (WeatherType)reader.ReadByte();
 
                 newWeatherForecastSample.TrackTemperature = reader.ReadSByte();
                 newWeatherForecastSample.AirTemperature = reader.ReadSByte();
@@ -178,6 +178,8 @@ namespace F12020Telemetry
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
                 var lapData = new LapData();
+                lapData.SessionUID = packetHeader.SessionUID;
+                lapData.SessionTime = packetHeader.SessionTime;
 
                 lapData.LastLapTime = reader.ReadSingle();
                 lapData.CurrentLapTime = reader.ReadSingle();
@@ -229,6 +231,8 @@ namespace F12020Telemetry
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
                 var carTelemData = new CarTelemetryData();
+                carTelemData.SessionUID = packetHeader.SessionUID;
+                carTelemData.SessionTime = packetHeader.SessionTime;
 
                 carTelemData.Speed = reader.ReadUInt16();
                 carTelemData.Throttle = reader.ReadSingle();
@@ -237,7 +241,7 @@ namespace F12020Telemetry
                 carTelemData.Clutch = reader.ReadByte();
                 carTelemData.Gear = reader.ReadSByte();
                 carTelemData.EngineRPM = reader.ReadUInt16();
-                carTelemData.Drs = reader.ReadByte();
+                carTelemData.Drs = (DRS)reader.ReadByte();
                 carTelemData.RevLightsPercent = reader.ReadByte();
 
                 //packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature = new UInt16[NumberOfTyres];
@@ -350,6 +354,32 @@ namespace F12020Telemetry
             return packetCarStatus;
         }
 
+        private static IPacket Participants(PacketHeader packetHeader, BinaryReader reader)
+        {
+            var packetParticipantsData = new PacketParticipantsData(packetHeader);
+
+            packetParticipantsData.NumActiveCars = reader.ReadByte();
+
+            for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
+            {
+                var participantData = new ParticipantData();
+
+                packetParticipantsData.Participants[i] = participantData;
+
+                participantData.AiControlled = (reader.ReadByte() != 0);
+                participantData.DriverId = reader.ReadByte();
+                participantData.TeamId = reader.ReadByte();
+                participantData.RaceNumber = reader.ReadByte();
+                participantData.Nationality = reader.ReadByte();
+                participantData.Name = reader.ReadChars(47);
+
+                participantData.YourTelemetry = (TelemetrySetting)reader.ReadByte();
+
+            }
+
+            return packetParticipantsData;
+        }
+
         public static IPacket Packet(byte[] packetBytes)
         {
             IPacket packet = null;
@@ -379,8 +409,9 @@ namespace F12020Telemetry
                         //case PacketTypes.Event:
                         //    break;
 
-                        //case PacketTypes.Participants:
-                        //    break;
+                        case PacketTypes.Participants:
+                            decoder = Decode.Participants;
+                            break;
 
                         //case PacketTypes.CarSetups:
                         //    break;

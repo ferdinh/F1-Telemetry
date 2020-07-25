@@ -1,12 +1,18 @@
-﻿using F12020Telemetry.Data;
-using F12020Telemetry.Packet;
+﻿using F12020Telemetry.Packet;
 using F12020Telemetry.Util.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
 namespace F12020Telemetry
 {
+    public class Lap
+    {
+        public List<PacketLapData> LapData = new List<PacketLapData>();
+        public List<PacketCarTelemetryData> CarTelemetryData = new List<PacketCarTelemetryData>();
+    }
+
     internal class Program
     {
         private static int listenPort = 20777;
@@ -23,75 +29,40 @@ namespace F12020Telemetry
 
             try
             {
-                var packetHeader = new PacketHeader();
-                PacketLapData LapData = new PacketLapData(packetHeader);
-                PacketMotionData packetCarMotionData = new PacketMotionData(packetHeader);
-                PacketSessionData packetSessionData = new PacketSessionData();
-                PacketCarTelemetryData packetCarTelemetryData = new PacketCarTelemetryData(packetHeader);
+                var telemetryManager = new TelemetryManager();
+
+                telemetryManager.NewSession += (s, e) =>
+                {
+                    var manager = s as TelemetryManager;
+
+                    if (manager != null)
+                    {
+                        Console.SetCursorPosition(0, 0);
+                        Console.WriteLine($"Session id      : {manager.Session.Header.SessionUID}                       ");
+                        Console.WriteLine($"Session Type    : {manager.Session.SessionType.GetDisplayName()}                  ");
+                        Console.WriteLine($"Formula Series  : {manager.Session.Formula}                  ");
+                        Console.WriteLine($"Track Name      : {TrackInfo.TrackNames[telemetryManager.Session.TrackId]}                             ");
+                        Console.WriteLine($"Player car index: {manager.Session.Header.PlayerCarIndex}                              ");
+                    }
+                };
 
                 while (true)
                 {
                     byte[] bytes = listener.Receive(ref groupEP);
 
-                    IPacket packet = Decode.Packet(bytes);
+                    telemetryManager.Feed(bytes);
 
-                    switch (packet)
+                    Console.SetCursorPosition(0, 6);
+
+                    var playerData = telemetryManager.GetPlayerInfo();
+
+                    if (playerData != null && playerData.CurrentTelemetry != null)
                     {
-                        case PacketSessionData pSessionData:
-                            packetSessionData = pSessionData;
-                            break;
-
-                        case PacketCarTelemetryData pCarTelemetryData:
-                            packetCarTelemetryData = pCarTelemetryData;
-                            break;
-
-                        case PacketLapData pLapData:
-                            LapData = pLapData;
-                            break;
-
-                        case PacketMotionData pMotionData:
-                            packetCarMotionData = pMotionData;
-                            break;
-
-                        default:
-                            break;
+                        Console.WriteLine($"Player Speed: {playerData.CurrentTelemetry.Speed}km/h             ");
+                        Console.WriteLine($"Player Gear : {playerData.CurrentTelemetry.Gear}             ");
+                        Console.WriteLine($"Steer       : {playerData.CurrentTelemetry.Steer}                                 ");
+                        Console.WriteLine($"DRS         : {playerData.CurrentTelemetry.Drs.GetDisplayName()}            ");
                     }
-
-                    var playerIndex = LapData.Header.PlayerCarIndex;
-
-                    var lapDistance = LapData.LapData[playerIndex].LapDistance / 1000.0f;
-                    var totalDistance = LapData.LapData[playerIndex].TotalDistance / 1000.0f;
-                    var sector = LapData.LapData[playerIndex].Sector + 1;
-
-                    var lat = 1.0f + packetCarMotionData.CarMotionData[playerIndex].GForceLateral;
-                    var glong = 1.0f + packetCarMotionData.CarMotionData[playerIndex].GForceLongitudinal;
-                    var vert = 1.0f + packetCarMotionData.CarMotionData[playerIndex].GForceVertical;
-
-                    var trackLength = packetSessionData.TrackLength / 1000.0f;
-
-                    var speed = packetCarTelemetryData.CarTelemetryData[playerIndex].Speed;
-                    var throttle = packetCarTelemetryData.CarTelemetryData[playerIndex].Throttle;
-                    var brake = packetCarTelemetryData.CarTelemetryData[playerIndex].Brake;
-                    var gear = packetCarTelemetryData.CarTelemetryData[playerIndex].Gear;
-
-                    Console.SetCursorPosition(0, 0);
-
-                    Console.WriteLine($"Lat: {lat:F3} Long: {glong:F3} Vert: {vert:F3}                                        ");
-                    Console.WriteLine($"Current: {lapDistance:F3}/{trackLength:F3}km; Total Distance: {totalDistance:F3}km; Current Lap: {LapData.LapData[0].CurrentLapNum} Sector: {sector}                                    ");
-                    Console.WriteLine($"Speed: {speed}km/h; Throttle: {throttle:P2}; Brake: {brake:P2}; Gear: {gear}                                                       ");
-
-                    var telemetry = packetCarTelemetryData.CarTelemetryData[playerIndex];
-
-                    if (telemetry.SurfaceType != null)
-                    {
-                        Console.WriteLine("Wheel stats (Surface Type):");
-                        Console.WriteLine($"RL: {telemetry.SurfaceType[0].GetDisplayName()} | Spd: {packetCarMotionData.WheelSpeed[0]:F2} | Slp: {packetCarMotionData.WheelSlip[0]:F4}             ");
-                        Console.WriteLine($"RR: {telemetry.SurfaceType[1].GetDisplayName()} | Spd: {packetCarMotionData.WheelSpeed[1]:F2} | Slp: {packetCarMotionData.WheelSlip[1]:F4}             ");
-                        Console.WriteLine($"FL: {telemetry.SurfaceType[2].GetDisplayName()} | Spd: {packetCarMotionData.WheelSpeed[2]:F2} | Slp: {packetCarMotionData.WheelSlip[2]:F4}             ");
-                        Console.WriteLine($"FR: {telemetry.SurfaceType[3].GetDisplayName()} | Spd: {packetCarMotionData.WheelSpeed[3]:F2} | Slp: {packetCarMotionData.WheelSlip[3]:F4}             ");
-                    }
-
-                    Console.WriteLine(telemetry.EngineRPM + "          ");
                 }
             }
             catch (SocketException e)

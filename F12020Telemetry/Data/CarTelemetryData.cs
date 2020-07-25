@@ -4,6 +4,9 @@ namespace F12020Telemetry.Data
 {
     public class CarTelemetryData
     {
+        public ulong SessionUID;
+        public float SessionTime;
+
         /// <summary>
         /// Speed of car in kilometres per hour
         /// </summary>
@@ -42,7 +45,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// The DRS (0 = off, 1 = on)
         /// </summary>
-        public byte Drs;
+        public DRS Drs;
 
         /// <summary>
         /// Rev lights indicator (percentage)
@@ -78,5 +81,11 @@ namespace F12020Telemetry.Data
         /// Driving surface, see appendices
         /// </summary>
         public SurfaceTypes[] SurfaceType = new SurfaceTypes[Decode.NumberOfTyres];
+    }
+
+    public enum DRS
+    {
+        Off,
+        On
     }
 }
