@@ -64,16 +64,24 @@ namespace F12020Telemetry.Data
                     lastCarTelemetryData.Add(CarTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
                 }
 
-                NewLap?.Invoke(this, new NewLapEventArgs
+                var newLapEventArgs = new NewLapEventArgs
                 {
                     LastLapNumber = lapData.CurrentLapNum - 1,
                     LastLapTime = lapData.LastLapTime,
                     LastLapData = lastLapData,
                     LastCarTelemetryData = lastCarTelemetryData.AsReadOnly()
-                });
+                };
+
+                OnNewLap(newLapEventArgs);
+
             }
 
             NumberOfLaps = lapData.CurrentLapNum;
+        }
+
+        protected virtual void OnNewLap(NewLapEventArgs e)
+        {
+            NewLap?.Invoke(this, e);
         }
     }
 }
