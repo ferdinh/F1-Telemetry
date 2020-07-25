@@ -23,6 +23,8 @@ namespace F12020Telemetry.Data
 
         public event EventHandler<NewLapEventArgs> NewLap;
 
+        public event EventHandler LapInterval;
+
         /// <summary>
         /// Gets or sets the number of laps the driver had done.
         /// </summary>
@@ -31,10 +33,14 @@ namespace F12020Telemetry.Data
         /// </value>
         public int NumberOfLaps { get; private set; } = 0;
 
+        public int LapIntervalThreshold { get; set; } = 3;
+
         public IReadOnlyCollection<LapData> LapData
         {
             get { return lapData.AsReadOnly(); }
         }
+
+        private int CurrentLapInterval = 1;
 
         public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
 
@@ -74,6 +80,13 @@ namespace F12020Telemetry.Data
 
                 OnNewLap(newLapEventArgs);
 
+                if (CurrentLapInterval == LapIntervalThreshold)
+                {
+                    OnLapInterval();
+                    CurrentLapInterval = 0;
+                }
+
+                CurrentLapInterval++;
             }
 
             NumberOfLaps = lapData.CurrentLapNum;
@@ -82,6 +95,11 @@ namespace F12020Telemetry.Data
         protected virtual void OnNewLap(NewLapEventArgs e)
         {
             NewLap?.Invoke(this, e);
+        }
+
+        protected virtual void OnLapInterval()
+        {
+            LapInterval?.Invoke(this, EventArgs.Empty);
         }
     }
 }
