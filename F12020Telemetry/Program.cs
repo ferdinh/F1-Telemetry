@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace F12020Telemetry
 {
-    internal class Program
+    internal static class Program
     {
         private static int listenPort = 20777;
 
