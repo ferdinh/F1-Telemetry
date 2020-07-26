@@ -9,17 +9,30 @@ namespace F12020Telemetry.Data
     /// </summary>
     public class Driver
     {
-        public event EventHandler LapInterval;
-
         private int CurrentLapInterval = 1;
 
         // TODO: Try using Dictionary to hold all of the packets of a particular lap. Use Lap number as the key? It also needs to match the
         // session ID.
         private List<LapData> lapData = new List<LapData>();
 
+        public Driver(TelemetryManager manager)
+        {
+            Manager = manager;
+        }
+
+        public event EventHandler LapInterval;
+
         public event EventHandler<NewLapEventArgs> NewLap;
 
         public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
+
+        /// <summary>
+        /// Gets or sets the number of laps the driver had done.
+        /// </summary>
+        /// <value>
+        /// The number of laps.
+        /// </value>
+        public int CurrentLapNumber { get; private set; } = 0;
 
         /// <summary>
         /// Gets the current telemetry.
@@ -35,14 +48,7 @@ namespace F12020Telemetry.Data
         }
 
         public int LapIntervalThreshold { get; set; } = 3;
-
-        /// <summary>
-        /// Gets or sets the number of laps the driver had done.
-        /// </summary>
-        /// <value>
-        /// The number of laps.
-        /// </value>
-        public int CurrentLapNumber { get; private set; } = 0;
+        public TelemetryManager Manager { get; }
 
         public void AddLapData(LapData lapData)
         {

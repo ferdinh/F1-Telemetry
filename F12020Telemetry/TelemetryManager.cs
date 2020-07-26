@@ -131,7 +131,7 @@ namespace F12020Telemetry
 
             for (int i = 0; i < Decode.MaxNumberOfCarsOnTrack; i++)
             {
-                newDrivers.Add(new Driver());
+                newDrivers.Add(new Driver(this));
             }
             return newDrivers;
         }
