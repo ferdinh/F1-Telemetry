@@ -1,5 +1,9 @@
-﻿using F12020Telemetry.Util.Extensions;
+﻿using F12020Telemetry.Data;
+using F12020Telemetry.Util.Extensions;
+using ScottPlot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -35,6 +39,8 @@ namespace F12020Telemetry
                         Console.WriteLine($"Formula Series  : {manager.Session.Formula}                  ");
                         Console.WriteLine($"Track Name      : {TrackInfo.TrackNames[telemetryManager.Session.TrackId]}                             ");
                         Console.WriteLine($"Player car index: {manager.Session.Header.PlayerCarIndex}                              ");
+
+                        manager.GetPlayerInfo().LapInterval += OnPlayerLapInterval;
                     }
                 };
 
@@ -64,6 +70,44 @@ namespace F12020Telemetry
             finally
             {
                 listener.Close();
+            }
+        }
+
+        private static void OnPlayerLapInterval(object sender, EventArgs e)
+        {
+            var player = sender as Driver;
+
+            if (player != null)
+            {
+                var plt = new Plot(1200, 900);
+
+                for (int i = 3 - 1; i >= 0; i--)
+                {
+                    int lapNumber = player.CurrentLapNumber - i;
+
+                    var lastLapData = player.LapData.Where(l => lapNumber.Equals(l.CurrentLapNum)).ToList().AsReadOnly();
+                    var lastCarTelemetryData = new List<CarTelemetryData>();
+
+                    foreach (var lastLap in lastLapData)
+                    {
+                        lastCarTelemetryData.Add(player.CarTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                    }
+
+                    var time = lastLapData?.Select(l => l.CurrentLapTime);
+                    var speed = lastCarTelemetryData?.Select(t => t.Speed);
+
+                    if (time != null && speed != null)
+                    {
+                        plt.PlotScatter(Array.ConvertAll(time.ToArray(), x => (double)x), Array.ConvertAll(speed.ToArray(), x => (double)x), label: $"Lap {lapNumber}", lineWidth: 3, markerSize: 0);
+                    }
+                }
+
+                plt.Legend();
+                plt.Title("Scatter Plot Quickstart");
+                plt.YLabel("Speed");
+                plt.XLabel("Time");
+
+                plt.SaveFig($"Lap{player.CurrentLapNumber}.png");
             }
         }
     }
