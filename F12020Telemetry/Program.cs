@@ -103,11 +103,11 @@ namespace F12020Telemetry
                 }
 
                 plt.Legend();
-                plt.Title("Scatter Plot Quickstart");
+                plt.Title($"{TrackInfo.TrackNames[player.Manager.Session.TrackId]}");
                 plt.YLabel("Speed");
                 plt.XLabel("Time");
 
-                plt.SaveFig($"Lap{player.CurrentLapNumber}.png");
+                plt.SaveFig($"Lap{player.CurrentLapNumber}-{TrackInfo.TrackNames[player.Manager.Session.TrackId]}.png");
             }
         }
     }
