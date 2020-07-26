@@ -85,7 +85,7 @@ namespace F12020Telemetry
                 {
                     int lapNumber = player.CurrentLapNumber - i;
 
-                    var lastLapData = player.LapData.Where(l => lapNumber.Equals(l.CurrentLapNum)).ToList().AsReadOnly();
+                    var lastLapData = player.LapData.Where(l => lapNumber.Equals(l.CurrentLapNum) && !l.DriverStatus.Equals(DriverStatus.InGarage)).ToList().AsReadOnly();
                     var lastCarTelemetryData = new List<CarTelemetryData>();
 
                     foreach (var lastLap in lastLapData)
