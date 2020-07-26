@@ -30,7 +30,7 @@ namespace F12020Telemetry
                     if (manager != null)
                     {
                         Console.SetCursorPosition(0, 0);
-                        Console.WriteLine($"Session id      : {manager.Session.Header.SessionUID}                       ");
+                        Console.WriteLine($"Session ID      : {manager.Session.Header.SessionUID}                       ");
                         Console.WriteLine($"Session Type    : {manager.Session.SessionType.GetDisplayName()}                  ");
                         Console.WriteLine($"Formula Series  : {manager.Session.Formula}                  ");
                         Console.WriteLine($"Track Name      : {TrackInfo.TrackNames[telemetryManager.Session.TrackId]}                             ");
