@@ -81,7 +81,7 @@ namespace F12020Telemetry
             {
                 var plt = new Plot(1200, 900);
 
-                for (int i = 3 - 1; i >= 0; i--)
+                for (int i = 2; i >= 0; i--)
                 {
                     int lapNumber = player.CurrentLapNumber - i;
 
