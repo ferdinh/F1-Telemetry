@@ -2,7 +2,6 @@
 using F12020Telemetry.Util.Extensions;
 using ScottPlot;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -85,17 +84,11 @@ namespace F12020Telemetry
                 {
                     int lapNumber = player.CurrentLapNumber - i;
 
-                    var lastCarTelemetryData = new List<CarTelemetryData>();
                     var lapData = player.LapData.GetLap(lapNumber);
+                    var carTelemetryData = player.CarTelemetryData.GetForLap(lapData);
 
-                    foreach (var lastLap in lastLapData)
-                    {
-                        lastCarTelemetryData.Add(player.CarTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
-                    }
-
-                    var time = lastLapData?.Select(l => l.CurrentLapTime);
-                    var speed = lastCarTelemetryData?.Select(t => t.Speed);
                     var time = lapData?.Select(l => l.CurrentLapTime);
+                    var speed = carTelemetryData?.Select(t => t.Speed);
 
                     if (time != null && speed != null)
                     {
