@@ -6,4 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\F12020Telemetry\F12020Telemetry.csproj" />
+  </ItemGroup>
+
 </Project>
