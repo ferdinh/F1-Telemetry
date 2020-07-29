@@ -2,11 +2,81 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:F1Telemetry.WPF"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="550" Width="900" Topmost="True">
 
+    <Window.Resources>
+        <local:ToPercentageConverter x:Key="ToPercentageConverter" />
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewmodels:MainViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <GroupBox ScrollViewer.CanContentScroll="True">
+            <StackPanel>
+                <WrapPanel DataContext="{Binding SessionInfo}">
+                    <Label Content="Session Type:" />
+                    <Label Content="{Binding SessionType, UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+            </StackPanel>
+        </GroupBox>
+
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="7*" />
+                <ColumnDefinition  Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="3*" />
+                <!--<RowDefinition Height="3*" />-->
+            </Grid.RowDefinitions>
+            <WpfPlot Name="MainGraphPlot" Grid.Column="0" />
+            <WpfPlot Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
+            <WpfPlot Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
+            <WpfPlot Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
+
+            <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
+                <WrapPanel>
+                    <Label Content="Spd:" />
+                    <Label Content="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="RPM:" />
+                    <Label Content="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <Label Content="Throttle:" />
+                    <Label Content="{Binding Throttle, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
+                </WrapPanel>
+                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}"/>
+                <WrapPanel>
+                    <Label Content="Brake:" />
+                    <Label Content="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
+                </WrapPanel>
+                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010"/>
+                <WrapPanel>
+                    <Label Content="Cursor:" />
+                    <Label Content="{Binding Cursor, UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+
+        
+
+        <Button x:Name="ListenButton" Grid.Row="2" FontWeight="Bold" Click="StartListening" Content="Start Listening" />
     </Grid>
 </Window>
