@@ -1,19 +1,14 @@
-﻿using F12020Telemetry.Packet;
+﻿using F12020Telemetry.Data;
 using F12020Telemetry.Util.Extensions;
+using ScottPlot;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
 namespace F12020Telemetry
 {
-    public class Lap
-    {
-        public List<PacketLapData> LapData = new List<PacketLapData>();
-        public List<PacketCarTelemetryData> CarTelemetryData = new List<PacketCarTelemetryData>();
-    }
-
-    internal class Program
+    internal static class Program
     {
         private static int listenPort = 20777;
 
@@ -38,11 +33,13 @@ namespace F12020Telemetry
                     if (manager != null)
                     {
                         Console.SetCursorPosition(0, 0);
-                        Console.WriteLine($"Session id      : {manager.Session.Header.SessionUID}                       ");
+                        Console.WriteLine($"Session ID      : {manager.Session.Header.SessionUID}                       ");
                         Console.WriteLine($"Session Type    : {manager.Session.SessionType.GetDisplayName()}                  ");
                         Console.WriteLine($"Formula Series  : {manager.Session.Formula}                  ");
                         Console.WriteLine($"Track Name      : {TrackInfo.TrackNames[telemetryManager.Session.TrackId]}                             ");
                         Console.WriteLine($"Player car index: {manager.Session.Header.PlayerCarIndex}                              ");
+
+                        manager.GetPlayerInfo().LapInterval += OnPlayerLapInterval;
                     }
                 };
 
@@ -72,6 +69,39 @@ namespace F12020Telemetry
             finally
             {
                 listener.Close();
+            }
+        }
+
+        private static void OnPlayerLapInterval(object sender, EventArgs e)
+        {
+            var player = sender as Driver;
+
+            if (player != null)
+            {
+                var plt = new Plot(1200, 900);
+
+                for (int i = 2; i >= 0; i--)
+                {
+                    int lapNumber = player.CurrentLapNumber - i;
+
+                    var lapData = player.LapData.GetLap(lapNumber);
+                    var carTelemetryData = player.CarTelemetryData.GetForLap(lapData);
+
+                    var time = lapData?.Select(l => l.CurrentLapTime);
+                    var speed = carTelemetryData?.Select(t => t.Speed);
+
+                    if (time != null && speed != null)
+                    {
+                        plt.PlotScatter(Array.ConvertAll(time.ToArray(), x => (double)x), Array.ConvertAll(speed.ToArray(), x => (double)x), label: $"Lap {lapNumber}", lineWidth: 3, markerSize: 0);
+                    }
+                }
+
+                plt.Legend();
+                plt.Title($"{TrackInfo.TrackNames[player.Manager.Session.TrackId]}");
+                plt.YLabel("Speed");
+                plt.XLabel("Time");
+
+                plt.SaveFig($"Lap{player.CurrentLapNumber}-{TrackInfo.TrackNames[player.Manager.Session.TrackId]}.png");
             }
         }
     }
