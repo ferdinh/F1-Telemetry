@@ -73,6 +73,92 @@ namespace F1Telemetry.WPF
 
         private MainViewModel MainViewModel { get; set; } = new MainViewModel();
 
+        private async Task StartListenerAsync()
+        {
+            Application.Current.Properties["Manager"] = new TelemetryManager();
+            var telemetryManager = (TelemetryManager)Application.Current.Properties["Manager"];
+
+            UdpClient listener = new UdpClient(20777);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, 20777);
+
+            try
+            {
+                int cursor = 0;
+
+                telemetryManager.NewSession += (s, e) =>
+                {
+                    var manager = s as TelemetryManager;
+
+                    if (manager != null)
+                    {
+                        MainGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 360);
+                        GearGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 9);
+
+                        ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
+                        BrakeGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
+
+                        manager.GetPlayerInfo().NewLap += (s, e) =>
+                        {
+                            cursor = 0;
+                        };
+                    }
+                };
+
+                while (true)
+                {
+                    byte[] bytes = listener.Receive(ref groupEP);
+                    telemetryManager.Feed(bytes);
+
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        MainViewModel.SessionInfo.SessionType = telemetryManager.Session != null ? telemetryManager.Session.SessionType.GetDisplayName() : "";
+
+                        var currentTelemetry = telemetryManager.GetPlayerInfo()?.CurrentTelemetry;
+                        var currentLapTime = telemetryManager.GetPlayerInfo()?.LapData.LastOrDefault();
+
+                        if (currentTelemetry != null)
+                        {
+                            if (currentLapTime.DriverStatus == DriverStatus.InGarage)
+                            {
+                                cursor = 0;
+                            }
+                            else
+                            {
+                                currentRenderPosition[0] = currentLapTime.LapDistance;
+
+                                MainViewModel.speed[cursor] = currentTelemetry.Speed;
+                                MainViewModel.time[cursor] = currentLapTime.LapDistance;
+                                MainViewModel.gear[cursor] = currentTelemetry.Gear;
+
+                                MainViewModel.throttle[cursor] = currentTelemetry.Throttle;
+                                MainViewModel.brake[cursor] = currentTelemetry.Brake;
+
+                                SpeedGraph.maxRenderIndex = cursor;
+                                GearGraph.maxRenderIndex = cursor;
+
+                                BrakeGraph.maxRenderIndex = cursor;
+                                ThrottleGraph.maxRenderIndex = cursor;
+
+                                MainViewModel.CurrentTelemetry.Brake = currentTelemetry.Brake;
+                                MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
+                                MainViewModel.CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
+                                MainViewModel.CurrentTelemetry.Speed = currentTelemetry.Speed;
+
+                                cursor++;
+                            }
+                        }
+                    });
+                }
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                listener.Close();
+            }
+        }
         }
     }
 }
