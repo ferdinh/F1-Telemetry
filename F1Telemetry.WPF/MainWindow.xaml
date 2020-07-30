@@ -8,6 +8,7 @@
 
     <Window.Resources>
         <local:ToPercentageConverter x:Key="ToPercentageConverter" />
+        <local:ToLapTimeString x:Key="ToLapTimeString" />
     </Window.Resources>
 
     <Window.DataContext>
@@ -50,6 +51,10 @@
             <WpfPlot Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
 
             <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
+                <WrapPanel>
+                    <Label Content="Time:" />
+                    <Label Content="{Binding LapTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToLapTimeString}}" />
+                </WrapPanel>
                 <WrapPanel>
                     <Label Content="Spd:" />
                     <Label Content="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />

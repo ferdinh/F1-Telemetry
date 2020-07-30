@@ -143,6 +143,7 @@ namespace F1Telemetry.WPF
                                 MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
                                 MainViewModel.CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
                                 MainViewModel.CurrentTelemetry.Speed = currentTelemetry.Speed;
+                                MainViewModel.CurrentTelemetry.LapTime = currentLapTime.CurrentLapTime;
 
                                 cursor++;
                             }
