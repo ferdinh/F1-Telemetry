@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="900" Topmost="True">
+        Title="F1 Telemetry" Height="550" Width="900" Topmost="True">
 
     <Window.Resources>
         <local:ToPercentageConverter x:Key="ToPercentageConverter" />
