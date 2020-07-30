@@ -70,6 +70,9 @@ namespace F1Telemetry.WPF
                 ThrottleGraphPlot.Render(recalculateLayout: true);
             };
         }
+
+        private MainViewModel MainViewModel { get; set; } = new MainViewModel();
+
         }
     }
 }
