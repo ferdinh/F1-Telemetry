@@ -34,6 +34,9 @@ namespace F1Telemetry.WPF
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = MainViewModel;
+
         }
     }
 }
