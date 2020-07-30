@@ -159,6 +159,31 @@ namespace F1Telemetry.WPF
                 listener.Close();
             }
         }
+
+        private void StartListening(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+
+            if (!IsListening)
+            {
+                ListeningCancellationTokenSource = new CancellationTokenSource();
+                var cancelToken = ListeningCancellationTokenSource.Token;
+
+                Task.Run(async () => await StartListenerAsync(), cancelToken);
+
+                GraphRenderTimer.Start();
+
+                IsListening = !IsListening;
+
+                ListenButton.Content = "Listening";
+            }
+            else
+            {
+                ListeningCancellationTokenSource.Cancel();
+                IsListening = !IsListening;
+
+                ListenButton.Content = "Start Listening";
+            }
         }
     }
 }
