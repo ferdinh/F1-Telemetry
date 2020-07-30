@@ -37,9 +37,9 @@ namespace F1Telemetry.WPF
 
             DataContext = MainViewModel;
 
-            SpeedGraph = MainGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.speed);
-            MainGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
-            MainGraphPlot.plt.YLabel("Speed");
+            SpeedGraph = SpeedGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.speed);
+            SpeedGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+            SpeedGraphPlot.plt.YLabel("Speed");
 
             GearGraph = GearGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.gear);
             GearGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
@@ -51,7 +51,7 @@ namespace F1Telemetry.WPF
             BrakeGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
             ThrottleGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
 
-            MainGraphPlot.plt.Axis(0, 6000, 0, 360);
+            SpeedGraphPlot.plt.Axis(0, 6000, 0, 360);
             GearGraphPlot.plt.Axis(0, 6000, 0, 9);
 
             ThrottleGraphPlot.plt.Axis(0, 6000, 0, 1.05);
@@ -62,7 +62,7 @@ namespace F1Telemetry.WPF
             GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(20);
             GraphRenderTimer.Tick += (s, e) =>
             {
-                MainGraphPlot.Render(recalculateLayout: true);
+                SpeedGraphPlot.Render(recalculateLayout: true);
 
                 GearGraphPlot.Render(recalculateLayout: true);
 
@@ -91,7 +91,7 @@ namespace F1Telemetry.WPF
 
                     if (manager != null)
                     {
-                        MainGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 360);
+                        SpeedGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 360);
                         GearGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 9);
 
                         ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
