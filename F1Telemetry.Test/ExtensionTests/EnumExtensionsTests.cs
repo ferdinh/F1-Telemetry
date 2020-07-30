@@ -1,6 +1,5 @@
 using F12020Telemetry.Util.Extensions;
 using FluentAssertions;
-using System;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
 
@@ -12,6 +11,7 @@ namespace F1Telemetry.Test.ExtensionTests
         {
             [Display(Name = "With Display Name")]
             WithDisplayAttrName,
+
             WithoutDisplayAttrName
         }
 
