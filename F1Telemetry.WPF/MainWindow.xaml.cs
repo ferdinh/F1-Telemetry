@@ -37,6 +37,39 @@ namespace F1Telemetry.WPF
 
             DataContext = MainViewModel;
 
+            SpeedGraph = MainGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.speed);
+            MainGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+            MainGraphPlot.plt.YLabel("Speed");
+
+            GearGraph = GearGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.gear);
+            GearGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+            GearGraphPlot.plt.YLabel("Gear");
+
+            BrakeGraph = BrakeGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.brake, color: Color.Red);
+            ThrottleGraph = ThrottleGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.throttle, color: Color.Green);
+
+            BrakeGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+            ThrottleGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+
+            MainGraphPlot.plt.Axis(0, 6000, 0, 360);
+            GearGraphPlot.plt.Axis(0, 6000, 0, 9);
+
+            ThrottleGraphPlot.plt.Axis(0, 6000, 0, 1.05);
+            ThrottleGraphPlot.plt.YLabel("Throttle");
+            BrakeGraphPlot.plt.Axis(0, 6000, 0, 1.05);
+            BrakeGraphPlot.plt.YLabel("Brake");
+
+            GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(20);
+            GraphRenderTimer.Tick += (s, e) =>
+            {
+                MainGraphPlot.Render(recalculateLayout: true);
+
+                GearGraphPlot.Render(recalculateLayout: true);
+
+                BrakeGraphPlot.Render(recalculateLayout: true);
+                ThrottleGraphPlot.Render(recalculateLayout: true);
+            };
+        }
         }
     }
 }
