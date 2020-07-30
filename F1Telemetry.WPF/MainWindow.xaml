@@ -68,10 +68,6 @@
                     <Label Content="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
                 </WrapPanel>
                 <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010"/>
-                <WrapPanel>
-                    <Label Content="Cursor:" />
-                    <Label Content="{Binding Cursor, UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
             </StackPanel>
         </Grid>
 
