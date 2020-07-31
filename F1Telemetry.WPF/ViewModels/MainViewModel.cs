@@ -8,15 +8,7 @@ namespace F1Telemetry.WPF.ViewModels
     {
         public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
 
-        // 5000 for one minute of data.
-        public double[] speed = new double[25_000];
-
-        public double[] time = new double[25_000];
-        public double[] gear = new double[25_000];
-
-        public double[] throttle = new double[25_000];
-        public double[] brake = new double[25_000];
-
+        public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
         public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -33,6 +25,10 @@ namespace F1Telemetry.WPF.ViewModels
         public MainViewModel()
         {
             SetTopmostCommand = new RelayCommand<bool>(SetTopmost);
+            for (int i = 0; i < LapData.Length; i++)
+            {
+                LapData[i] = new CurrentLapDataModel();
+            }
         }
     }
 }
