@@ -1,5 +1,5 @@
 ﻿using F1Telemetry.WPF.Command;
-using System;
+using F1Telemetry.WPF.Model;
 using System.ComponentModel;
 
 namespace F1Telemetry.WPF.ViewModels
@@ -17,7 +17,7 @@ namespace F1Telemetry.WPF.ViewModels
         public double[] throttle = new double[25_000];
         public double[] brake = new double[25_000];
 
-        public CurrentTelemetryDataViewModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataViewModel();
+        public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

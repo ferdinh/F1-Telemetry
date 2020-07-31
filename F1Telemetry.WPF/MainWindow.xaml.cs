@@ -1,6 +1,7 @@
 ﻿using F12020Telemetry;
 using F12020Telemetry.Data;
 using F12020Telemetry.Util.Extensions;
+using F1Telemetry.WPF.Model;
 using F1Telemetry.WPF.ViewModels;
 using ScottPlot;
 using System;

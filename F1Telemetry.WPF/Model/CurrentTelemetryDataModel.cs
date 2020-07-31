@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace F1Telemetry.WPF.ViewModels
+namespace F1Telemetry.WPF.Model
 {
-    public class CurrentTelemetryDataViewModel : INotifyPropertyChanged
+    public class CurrentTelemetryDataModel : INotifyPropertyChanged
     {
         public float Brake { get; set; }
         public float Throttle { get; set; }
