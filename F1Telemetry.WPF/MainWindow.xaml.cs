@@ -49,8 +49,8 @@ namespace F1Telemetry.WPF
                 GearGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
                 GearGraphPlot.plt.YLabel("Gear");
 
-                BrakeGraph = BrakeGraphPlot.plt.PlotSignalXY(lap.Distance, lap.Brake, color: Color.Red);
-                ThrottleGraph = ThrottleGraphPlot.plt.PlotSignalXY(lap.Distance, lap.Throttle, color: Color.Green);
+                BrakeGraph = BrakeGraphPlot.plt.PlotSignalXY(lap.Distance, lap.Brake);
+                ThrottleGraph = ThrottleGraphPlot.plt.PlotSignalXY(lap.Distance, lap.Throttle);
 
                 BrakeGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
                 ThrottleGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
