@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="F1 Telemetry" Height="550" Width="900" Topmost="True">
+        Title="F1 Telemetry" Height="550" Width="900" Topmost="{Binding IsTopmost}">
 
     <Window.Resources>
         <local:ToPercentageConverter x:Key="ToPercentageConverter" />
@@ -31,10 +31,9 @@
             </StackPanel>
         </GroupBox>
 
-
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition  Width="7*" />
+                <ColumnDefinition  Width="5*" />
                 <ColumnDefinition  Width="1*" />
             </Grid.ColumnDefinitions>
 
@@ -43,41 +42,44 @@
                 <RowDefinition Height="3*" />
                 <RowDefinition Height="3*" />
                 <RowDefinition Height="3*" />
-                <!--<RowDefinition Height="3*" />-->
             </Grid.RowDefinitions>
             <WpfPlot Name="SpeedGraphPlot" Grid.Column="0" />
             <WpfPlot Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
             <WpfPlot Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
             <WpfPlot Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
 
-            <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
-                <WrapPanel>
+            <Grid Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
                     <Label Content="Time:" />
-                    <Label Content="{Binding LapTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToLapTimeString}}" />
-                </WrapPanel>
-                <WrapPanel>
                     <Label Content="Spd:" />
-                    <Label Content="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-                <WrapPanel>
                     <Label Content="RPM:" />
-                    <Label Content="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-                <WrapPanel>
                     <Label Content="Throttle:" />
-                    <Label Content="{Binding Throttle, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
-                </WrapPanel>
-                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}"/>
-                <WrapPanel>
                     <Label Content="Brake:" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Label Content="{Binding LapTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToLapTimeString}}" />
+                    <Label Content="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="{Binding Throttle, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
+                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
                     <Label Content="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
-                </WrapPanel>
-                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010"/>
-            </StackPanel>
+                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
+                </StackPanel>
+            </Grid>
         </Grid>
 
-        
-
-        <Button x:Name="ListenButton" Grid.Row="2" FontWeight="Bold" Click="StartListening" Content="Start Listening" />
+        <StackPanel Grid.Row="2">
+            <WrapPanel>
+                <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
+                <Label Content="Keep window on top" />
+            </WrapPanel>
+            <Button x:Name="ListenButton"  FontWeight="Bold" Click="StartListening" Content="Start Listening" />
+        </StackPanel>
     </Grid>
 </Window>
