@@ -1,4 +1,5 @@
-﻿using F12020Telemetry.Data;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.ComponentModel;
 
 namespace F1Telemetry.WPF.ViewModels
@@ -9,6 +10,7 @@ namespace F1Telemetry.WPF.ViewModels
 
         // 5000 for one minute of data.
         public double[] speed = new double[25_000];
+
         public double[] time = new double[25_000];
         public double[] gear = new double[25_000];
 
@@ -18,5 +20,19 @@ namespace F1Telemetry.WPF.ViewModels
         public CurrentTelemetryDataViewModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataViewModel();
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public RelayCommand<bool> SetTopmostCommand { get; private set; }
+
+        public bool IsTopmost { get; internal set; }
+
+        private void SetTopmost(bool topmost)
+        {
+            IsTopmost = topmost;
+        }
+
+        public MainViewModel()
+        {
+            SetTopmostCommand = new RelayCommand<bool>(SetTopmost);
+        }
     }
 }

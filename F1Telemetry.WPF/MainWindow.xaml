@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="F1 Telemetry" Height="550" Width="900" Topmost="True">
+        Title="F1 Telemetry" Height="550" Width="900" Topmost="{Binding IsTopmost}">
 
     <Window.Resources>
         <local:ToPercentageConverter x:Key="ToPercentageConverter" />
@@ -30,7 +30,6 @@
                 </WrapPanel>
             </StackPanel>
         </GroupBox>
-
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -67,17 +66,21 @@
                     <Label Content="Throttle:" />
                     <Label Content="{Binding Throttle, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
                 </WrapPanel>
-                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}"/>
+                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
                 <WrapPanel>
                     <Label Content="Brake:" />
                     <Label Content="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
                 </WrapPanel>
-                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010"/>
+                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
             </StackPanel>
         </Grid>
 
-        
-
-        <Button x:Name="ListenButton" Grid.Row="2" FontWeight="Bold" Click="StartListening" Content="Start Listening" />
+        <StackPanel Grid.Row="2">
+            <WrapPanel>
+                <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
+                <Label Content="Keep window on top." />
+            </WrapPanel>
+            <Button x:Name="ListenButton"  FontWeight="Bold" Click="StartListening" Content="Start Listening" />
+        </StackPanel>
     </Grid>
 </Window>
