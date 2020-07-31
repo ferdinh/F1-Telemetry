@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using F1Telemetry.WPF.Command;
 using System;
 using System.ComponentModel;
 
