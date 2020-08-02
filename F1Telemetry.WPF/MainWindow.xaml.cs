@@ -128,27 +128,28 @@ namespace F1Telemetry.WPF
                         MainViewModel.SessionInfo.SessionType = telemetryManager.Session != null ? telemetryManager.Session.SessionType.GetDisplayName() : "";
 
                         var currentTelemetry = telemetryManager.GetPlayerInfo()?.CurrentTelemetry;
-                        var currentLapTime = telemetryManager.GetPlayerInfo()?.LapData.LastOrDefault();
+                        var currentLapData = telemetryManager.GetPlayerInfo()?.LapData.LastOrDefault();
 
                         if (currentTelemetry != null)
                         {
-                            if (currentLapTime.DriverStatus == DriverStatus.InGarage)
+                            if (currentLapData.DriverStatus == DriverStatus.InGarage)
                             {
                                 cursor = 0;
                             }
                             else
                             {
-                                currentRenderPosition[0] = currentLapTime.LapDistance;
+                                currentRenderPosition[0] = currentLapData.LapDistance;
 
-                                var currentLap = MainViewModel.LapData[CurrentLapCursor];
-                                var lapNumberLabel = $"Lap {currentLapTime.CurrentLapNum}";
+                                var currentLapDataModel = MainViewModel.LapData[CurrentLapCursor];
 
-                                currentLap.Speed[cursor] = currentTelemetry.Speed;
-                                currentLap.Distance[cursor] = currentLapTime.LapDistance;
-                                currentLap.Gear[cursor] = currentTelemetry.Gear;
+                                var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
 
-                                currentLap.Throttle[cursor] = currentTelemetry.Throttle;
-                                currentLap.Brake[cursor] = currentTelemetry.Brake;
+                                currentLapDataModel.Speed[cursor] = currentTelemetry.Speed;
+                                currentLapDataModel.Distance[cursor] = currentLapData.LapDistance;
+                                currentLapDataModel.Gear[cursor] = currentTelemetry.Gear;
+
+                                currentLapDataModel.Throttle[cursor] = currentTelemetry.Throttle;
+                                currentLapDataModel.Brake[cursor] = currentTelemetry.Brake;
 
                                 SpeedGraph[CurrentLapCursor].maxRenderIndex = cursor;
                                 SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
@@ -166,7 +167,7 @@ namespace F1Telemetry.WPF
                                 MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
                                 MainViewModel.CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
                                 MainViewModel.CurrentTelemetry.Speed = currentTelemetry.Speed;
-                                MainViewModel.CurrentTelemetry.LapTime = currentLapTime.CurrentLapTime;
+                                MainViewModel.CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
 
                                 cursor++;
                             }
