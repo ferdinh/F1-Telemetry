@@ -31,6 +31,9 @@ namespace F1Telemetry.WPF
         private PlottableSignalXY[] BrakeGraph = new PlottableSignalXY[3];
         private PlottableSignalXY[] GearGraph = new PlottableSignalXY[3];
 
+        /// <summary>
+        /// The current lap cursor for the array.
+        /// </summary>
         private int CurrentLapCursor;
 
         public MainWindow()
