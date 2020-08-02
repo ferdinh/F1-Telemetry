@@ -31,7 +31,7 @@ namespace F1Telemetry.WPF
         private PlottableSignalXY[] BrakeGraph = new PlottableSignalXY[3];
         private PlottableSignalXY[] GearGraph = new PlottableSignalXY[3];
 
-        private int currentLapCursor;
+        private int CurrentLapCursor;
 
         public MainWindow()
         {
@@ -110,7 +110,7 @@ namespace F1Telemetry.WPF
                         manager.GetPlayerInfo().NewLap += (s, e) =>
                         {
                             cursor = 0;
-                            currentLapCursor = (currentLapCursor + 1) % MainViewModel.LapData.Length;
+                            CurrentLapCursor = (CurrentLapCursor + 1) % MainViewModel.LapData.Length;
                         };
                     }
                 };
@@ -137,7 +137,7 @@ namespace F1Telemetry.WPF
                             {
                                 currentRenderPosition[0] = currentLapTime.LapDistance;
 
-                                var currentLap = MainViewModel.LapData[currentLapCursor];
+                                var currentLap = MainViewModel.LapData[CurrentLapCursor];
                                 var lapNumberLabel = $"Lap {currentLapTime.CurrentLapNum}";
 
                                 currentLap.Speed[cursor] = currentTelemetry.Speed;
@@ -147,17 +147,17 @@ namespace F1Telemetry.WPF
                                 currentLap.Throttle[cursor] = currentTelemetry.Throttle;
                                 currentLap.Brake[cursor] = currentTelemetry.Brake;
 
-                                SpeedGraph[currentLapCursor].maxRenderIndex = cursor;
-                                SpeedGraph[currentLapCursor].label = lapNumberLabel;
+                                SpeedGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                                GearGraph[currentLapCursor].maxRenderIndex = cursor;
-                                GearGraph[currentLapCursor].label = lapNumberLabel;
+                                GearGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                GearGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                                BrakeGraph[currentLapCursor].maxRenderIndex = cursor;
-                                BrakeGraph[currentLapCursor].label = lapNumberLabel;
+                                BrakeGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                                ThrottleGraph[currentLapCursor].maxRenderIndex = cursor;
-                                ThrottleGraph[currentLapCursor].label = lapNumberLabel;
+                                ThrottleGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
 
                                 MainViewModel.CurrentTelemetry.Brake = currentTelemetry.Brake;
                                 MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
