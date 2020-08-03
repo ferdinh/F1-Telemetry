@@ -119,7 +119,7 @@ namespace F1Telemetry.WPF
 
                         manager.GetPlayerInfo().NewLap += (s, e) =>
                         {
-                            cursor = 0;
+                            ResetRenderCursor();
                             CurrentLapCursor = (CurrentLapCursor + 1) % MainViewModel.LapData.Length;
                         };
                     }
@@ -217,6 +217,11 @@ namespace F1Telemetry.WPF
 
                 ListenButton.Content = "Start Listening";
             }
+        }
+
+        private void ResetRenderCursor()
+        {
+            currentRenderPosition[0] = 0.0;
         }
     }
 }
