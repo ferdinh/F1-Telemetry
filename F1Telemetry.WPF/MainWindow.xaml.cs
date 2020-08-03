@@ -110,6 +110,13 @@ namespace F1Telemetry.WPF
                         ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
                         BrakeGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
 
+                        foreach (var lapModel in MainViewModel.LapData)
+                        {
+                            lapModel.Clear();
+                            cursor = 0;
+                            currentRenderPosition[0] = 0.0;
+                        }
+
                         manager.GetPlayerInfo().NewLap += (s, e) =>
                         {
                             cursor = 0;
