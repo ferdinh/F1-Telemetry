@@ -113,9 +113,9 @@ namespace F1Telemetry.WPF
                         foreach (var lapModel in MainViewModel.LapData)
                         {
                             lapModel.Clear();
-                            cursor = 0;
-                            currentRenderPosition[0] = 0.0;
                         }
+
+                        ResetRenderCursor();
 
                         manager.GetPlayerInfo().NewLap += (s, e) =>
                         {
