@@ -8,6 +8,7 @@ namespace F1Telemetry.WPF.Model
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class CurrentTelemetryDataModel : INotifyPropertyChanged
     {
+        public int LapNumber { get; set; }
         public float Brake { get; set; }
         public float Throttle { get; set; }
         public ushort EngineRPM { get; set; }

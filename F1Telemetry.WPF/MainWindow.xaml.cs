@@ -163,6 +163,7 @@ namespace F1Telemetry.WPF
                                 ThrottleGraph[CurrentLapCursor].maxRenderIndex = cursor;
                                 ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
 
+                                MainViewModel.CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
                                 MainViewModel.CurrentTelemetry.Brake = currentTelemetry.Brake;
                                 MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
                                 MainViewModel.CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
