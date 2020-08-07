@@ -121,6 +121,7 @@ namespace F1Telemetry.WPF
                         {
                             ResetRenderCursor();
                             CurrentLapCursor = (CurrentLapCursor + 1) % MainViewModel.LapData.Length;
+                            indexCursor = 0;
                         };
                     }
                 };
