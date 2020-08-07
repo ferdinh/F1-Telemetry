@@ -96,7 +96,7 @@ namespace F1Telemetry.WPF
 
             try
             {
-                int cursor = 0;
+                int indexCursor = 0;
 
                 telemetryManager.NewSession += (s, e) =>
                 {
@@ -141,7 +141,7 @@ namespace F1Telemetry.WPF
                         {
                             if (currentLapData.DriverStatus == DriverStatus.InGarage)
                             {
-                                cursor = 0;
+                                indexCursor = 0;
                             }
                             else
                             {
@@ -151,23 +151,23 @@ namespace F1Telemetry.WPF
 
                                 var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
 
-                                currentLapDataModel.Speed[cursor] = currentTelemetry.Speed;
-                                currentLapDataModel.Distance[cursor] = currentLapData.LapDistance;
-                                currentLapDataModel.Gear[cursor] = currentTelemetry.Gear;
+                                currentLapDataModel.Speed[indexCursor] = currentTelemetry.Speed;
+                                currentLapDataModel.Distance[indexCursor] = currentLapData.LapDistance;
+                                currentLapDataModel.Gear[indexCursor] = currentTelemetry.Gear;
 
-                                currentLapDataModel.Throttle[cursor] = currentTelemetry.Throttle;
-                                currentLapDataModel.Brake[cursor] = currentTelemetry.Brake;
+                                currentLapDataModel.Throttle[indexCursor] = currentTelemetry.Throttle;
+                                currentLapDataModel.Brake[indexCursor] = currentTelemetry.Brake;
 
-                                SpeedGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                SpeedGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
                                 SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                                GearGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                GearGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
                                 GearGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                                BrakeGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                BrakeGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
                                 BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                                ThrottleGraph[CurrentLapCursor].maxRenderIndex = cursor;
+                                ThrottleGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
                                 ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
 
                                 MainViewModel.CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
@@ -177,7 +177,7 @@ namespace F1Telemetry.WPF
                                 MainViewModel.CurrentTelemetry.Speed = currentTelemetry.Speed;
                                 MainViewModel.CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
 
-                                cursor++;
+                                indexCursor++;
                             }
                         }
                     });
