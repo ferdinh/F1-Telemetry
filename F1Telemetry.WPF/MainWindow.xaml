@@ -55,6 +55,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
+                    <Label Content="Lap:" />
                     <Label Content="Time:" />
                     <Label Content="Spd:" />
                     <Label Content="RPM:" />
@@ -63,6 +64,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
+                    <Label Content="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
                     <Label Content="{Binding LapTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToLapTimeString}}" />
                     <Label Content="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
                     <Label Content="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />

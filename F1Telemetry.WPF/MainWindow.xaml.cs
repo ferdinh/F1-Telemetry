@@ -4,7 +4,6 @@ using F12020Telemetry.Util.Extensions;
 using F1Telemetry.WPF.ViewModels;
 using ScottPlot;
 using System;
-using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -21,15 +20,21 @@ namespace F1Telemetry.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private PlottableSignalXY BrakeGraph;
         private double[] currentRenderPosition = new double[1] { 0 };
         private double[] currentRenderValue = new double[1] { 1000 };
-        private PlottableSignalXY GearGraph;
         private DispatcherTimer GraphRenderTimer = new DispatcherTimer();
         private bool IsListening;
         private CancellationTokenSource ListeningCancellationTokenSource;
-        private PlottableSignalXY SpeedGraph;
-        private PlottableSignalXY ThrottleGraph;
+
+        private PlottableSignalXY[] SpeedGraph = new PlottableSignalXY[3];
+        private PlottableSignalXY[] ThrottleGraph = new PlottableSignalXY[3];
+        private PlottableSignalXY[] BrakeGraph = new PlottableSignalXY[3];
+        private PlottableSignalXY[] GearGraph = new PlottableSignalXY[3];
+
+        /// <summary>
+        /// The current lap cursor for the array.
+        /// </summary>
+        private int CurrentLapCursor;
 
         public MainWindow()
         {
@@ -37,27 +42,35 @@ namespace F1Telemetry.WPF
 
             DataContext = MainViewModel;
 
-            SpeedGraph = SpeedGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.speed);
-            SpeedGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
-            SpeedGraphPlot.plt.YLabel("Speed");
+            for (int i = 0; i < MainViewModel.LapData.Length; i++)
+            {
+                SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Speed);
+                SpeedGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+                SpeedGraphPlot.plt.YLabel("Speed");
+                SpeedGraphPlot.plt.Legend();
 
-            GearGraph = GearGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.gear);
-            GearGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
-            GearGraphPlot.plt.YLabel("Gear");
+                GearGraph[i] = GearGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Gear);
+                GearGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+                GearGraphPlot.plt.YLabel("Gear");
+                GearGraphPlot.plt.Legend();
 
-            BrakeGraph = BrakeGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.brake, color: Color.Red);
-            ThrottleGraph = ThrottleGraphPlot.plt.PlotSignalXY(MainViewModel.time, MainViewModel.throttle, color: Color.Green);
+                BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Brake);
+                ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Throttle);
 
-            BrakeGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
-            ThrottleGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+                BrakeGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
+                ThrottleGraphPlot.plt.PlotBar(currentRenderPosition, currentRenderValue);
 
-            SpeedGraphPlot.plt.Axis(0, 6000, 0, 360);
-            GearGraphPlot.plt.Axis(0, 6000, 0, 9);
+                SpeedGraphPlot.plt.Axis(0, 6000, 0, 360);
+                GearGraphPlot.plt.Axis(0, 6000, 0, 9);
 
-            ThrottleGraphPlot.plt.Axis(0, 6000, 0, 1.05);
-            ThrottleGraphPlot.plt.YLabel("Throttle");
-            BrakeGraphPlot.plt.Axis(0, 6000, 0, 1.05);
-            BrakeGraphPlot.plt.YLabel("Brake");
+                ThrottleGraphPlot.plt.Axis(0, 6000, 0, 1.05);
+                ThrottleGraphPlot.plt.YLabel("Throttle");
+                ThrottleGraphPlot.plt.Legend();
+
+                BrakeGraphPlot.plt.Axis(0, 6000, 0, 1.05);
+                BrakeGraphPlot.plt.YLabel("Brake");
+                BrakeGraphPlot.plt.Legend();
+            }
 
             GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(20);
             GraphRenderTimer.Tick += (s, e) =>
@@ -83,7 +96,7 @@ namespace F1Telemetry.WPF
 
             try
             {
-                int cursor = 0;
+                int indexCursor = 0;
 
                 telemetryManager.NewSession += (s, e) =>
                 {
@@ -97,9 +110,18 @@ namespace F1Telemetry.WPF
                         ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
                         BrakeGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
 
+                        foreach (var lapModel in MainViewModel.LapData)
+                        {
+                            lapModel.Clear();
+                        }
+
+                        ResetRenderCursor();
+
                         manager.GetPlayerInfo().NewLap += (s, e) =>
                         {
-                            cursor = 0;
+                            ResetRenderCursor();
+                            CurrentLapCursor = (CurrentLapCursor + 1) % MainViewModel.LapData.Length;
+                            indexCursor = 0;
                         };
                     }
                 };
@@ -114,38 +136,49 @@ namespace F1Telemetry.WPF
                         MainViewModel.SessionInfo.SessionType = telemetryManager.Session != null ? telemetryManager.Session.SessionType.GetDisplayName() : "";
 
                         var currentTelemetry = telemetryManager.GetPlayerInfo()?.CurrentTelemetry;
-                        var currentLapTime = telemetryManager.GetPlayerInfo()?.LapData.LastOrDefault();
+                        var currentLapData = telemetryManager.GetPlayerInfo()?.LapData.LastOrDefault();
 
                         if (currentTelemetry != null)
                         {
-                            if (currentLapTime.DriverStatus == DriverStatus.InGarage)
+                            if (currentLapData.DriverStatus == DriverStatus.InGarage)
                             {
-                                cursor = 0;
+                                indexCursor = 0;
                             }
                             else
                             {
-                                currentRenderPosition[0] = currentLapTime.LapDistance;
+                                currentRenderPosition[0] = currentLapData.LapDistance;
 
-                                MainViewModel.speed[cursor] = currentTelemetry.Speed;
-                                MainViewModel.time[cursor] = currentLapTime.LapDistance;
-                                MainViewModel.gear[cursor] = currentTelemetry.Gear;
+                                var currentLapDataModel = MainViewModel.LapData[CurrentLapCursor];
 
-                                MainViewModel.throttle[cursor] = currentTelemetry.Throttle;
-                                MainViewModel.brake[cursor] = currentTelemetry.Brake;
+                                var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
 
-                                SpeedGraph.maxRenderIndex = cursor;
-                                GearGraph.maxRenderIndex = cursor;
+                                currentLapDataModel.Speed[indexCursor] = currentTelemetry.Speed;
+                                currentLapDataModel.Distance[indexCursor] = currentLapData.LapDistance;
+                                currentLapDataModel.Gear[indexCursor] = currentTelemetry.Gear;
 
-                                BrakeGraph.maxRenderIndex = cursor;
-                                ThrottleGraph.maxRenderIndex = cursor;
+                                currentLapDataModel.Throttle[indexCursor] = currentTelemetry.Throttle;
+                                currentLapDataModel.Brake[indexCursor] = currentTelemetry.Brake;
 
+                                SpeedGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                                SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                                GearGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                                GearGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                                BrakeGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                                BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                                ThrottleGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                                ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                                MainViewModel.CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
                                 MainViewModel.CurrentTelemetry.Brake = currentTelemetry.Brake;
                                 MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
                                 MainViewModel.CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
                                 MainViewModel.CurrentTelemetry.Speed = currentTelemetry.Speed;
-                                MainViewModel.CurrentTelemetry.LapTime = currentLapTime.CurrentLapTime;
+                                MainViewModel.CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
 
-                                cursor++;
+                                indexCursor++;
                             }
                         }
                     });
@@ -185,6 +218,11 @@ namespace F1Telemetry.WPF
 
                 ListenButton.Content = "Start Listening";
             }
+        }
+
+        private void ResetRenderCursor()
+        {
+            currentRenderPosition[0] = 0.0;
         }
     }
 }
