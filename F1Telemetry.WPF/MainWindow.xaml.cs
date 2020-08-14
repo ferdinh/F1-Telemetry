@@ -87,20 +87,6 @@ namespace F1Telemetry.WPF
 
                 ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
                 BrakeGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
-
-                foreach (var lapModel in MainViewModel.LapData)
-                {
-                    lapModel.Clear();
-                }
-
-                MainViewModel.ResetRenderCursor();
-
-                manager.GetPlayerInfo().NewLap += (s, e) =>
-                {
-                    MainViewModel.ResetRenderCursor();
-                    MainViewModel.CurrentLapCursor = (MainViewModel.CurrentLapCursor + 1) % MainViewModel.LapData.Length;
-                    MainViewModel.CurrentTelemetryIndexCursor = 0;
-                };
             }
         }
     }

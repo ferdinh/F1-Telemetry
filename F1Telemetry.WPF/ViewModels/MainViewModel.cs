@@ -38,6 +38,30 @@ namespace F1Telemetry.WPF.ViewModels
             }
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s); });
+
+            Manager.NewSession += Manager_NewSession;
+        }
+
+        private void Manager_NewSession(object sender, EventArgs e)
+        {
+            var manager = sender as TelemetryManager;
+
+            if (manager != null)
+            {
+                foreach (var lapModel in LapData)
+                {
+                    lapModel.Clear();
+                }
+
+                ResetRenderCursor();
+
+                manager.GetPlayerInfo().NewLap += (s, e) =>
+                {
+                    ResetRenderCursor();
+                    CurrentLapCursor = (CurrentLapCursor + 1) % LapData.Length;
+                    CurrentTelemetryIndexCursor = 0;
+                };
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
