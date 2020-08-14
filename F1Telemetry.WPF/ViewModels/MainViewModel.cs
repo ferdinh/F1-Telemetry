@@ -44,7 +44,7 @@ namespace F1Telemetry.WPF.ViewModels
 
         public int CurrentLapCursor { get; set; }
         public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
-        public int IndexCursor { get; internal set; }
+        public int CurrentTelemetryIndexCursor { get; internal set; }
         public bool IsListening { get; set; }
         public bool IsTopmost { get; internal set; }
         public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
@@ -82,9 +82,15 @@ namespace F1Telemetry.WPF.ViewModels
             else
             {
                 senderButton.Content = "Stop Listening";
+                await StartListening();
+            }
+
+            async Task StartListening()
+            {
                 GraphRenderTimer.Start();
                 IsListening = true;
-                IndexCursor = 0;
+
+                CurrentTelemetryIndexCursor = 0;
 
                 try
                 {
@@ -132,7 +138,7 @@ namespace F1Telemetry.WPF.ViewModels
             {
                 if (currentLapData.DriverStatus == DriverStatus.InGarage)
                 {
-                    IndexCursor = 0;
+                    CurrentTelemetryIndexCursor = 0;
                 }
                 else
                 {
@@ -142,23 +148,23 @@ namespace F1Telemetry.WPF.ViewModels
 
                     var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
 
-                    currentLapDataModel.Speed[IndexCursor] = currentTelemetry.Speed;
-                    currentLapDataModel.Distance[IndexCursor] = currentLapData.LapDistance;
-                    currentLapDataModel.Gear[IndexCursor] = currentTelemetry.Gear;
+                    currentLapDataModel.Speed[CurrentTelemetryIndexCursor] = currentTelemetry.Speed;
+                    currentLapDataModel.Distance[CurrentTelemetryIndexCursor] = currentLapData.LapDistance;
+                    currentLapDataModel.Gear[CurrentTelemetryIndexCursor] = currentTelemetry.Gear;
 
-                    currentLapDataModel.Throttle[IndexCursor] = currentTelemetry.Throttle;
-                    currentLapDataModel.Brake[IndexCursor] = currentTelemetry.Brake;
+                    currentLapDataModel.Throttle[CurrentTelemetryIndexCursor] = currentTelemetry.Throttle;
+                    currentLapDataModel.Brake[CurrentTelemetryIndexCursor] = currentTelemetry.Brake;
 
-                    SpeedGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    SpeedGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
                     SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    GearGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    GearGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
                     GearGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    BrakeGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    BrakeGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
                     BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    ThrottleGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    ThrottleGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
                     ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
 
                     CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
@@ -168,7 +174,7 @@ namespace F1Telemetry.WPF.ViewModels
                     CurrentTelemetry.Speed = currentTelemetry.Speed;
                     CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
 
-                    IndexCursor++;
+                    CurrentTelemetryIndexCursor++;
                 }
             }
         }
