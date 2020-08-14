@@ -1,11 +1,11 @@
 ﻿using F12020Telemetry;
 using F12020Telemetry.Data;
 using F12020Telemetry.Util.Extensions;
+using F12020Telemetry.Util.Network;
 using F1Telemetry.WPF.ViewModels;
 using ScottPlot;
 using System;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,19 +85,79 @@ namespace F1Telemetry.WPF
         }
 
         private MainViewModel MainViewModel { get; set; } = new MainViewModel();
+        private UDPListener Listener;
 
-        private async Task StartListenerAsync()
+        private void StartListener(CancellationToken cancelToken)
         {
             Application.Current.Properties["Manager"] = new TelemetryManager();
             var telemetryManager = (TelemetryManager)Application.Current.Properties["Manager"];
 
-            UdpClient listener = new UdpClient(20777);
-            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, 20777);
+            var listener = new UDPListener(20777);
+            Listener = listener;
+
+            int indexCursor = 0;
+
+            listener.BytesReceived += async (s, e) =>
+            {
+                var eventArgs = e as UDPPacketReceivedEventArgs;
+
+                telemetryManager.Feed(eventArgs.Bytes);
+
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    MainViewModel.SessionInfo.SessionType = telemetryManager.Session != null ? telemetryManager.Session.SessionType.GetDisplayName() : "";
+
+                    var currentTelemetry = telemetryManager.GetPlayerInfo()?.CurrentTelemetry;
+                    var currentLapData = telemetryManager.GetPlayerInfo()?.LapData.LastOrDefault();
+
+                    if (currentTelemetry != null)
+                    {
+                        if (currentLapData.DriverStatus == DriverStatus.InGarage)
+                        {
+                            indexCursor = 0;
+                        }
+                        else
+                        {
+                            currentRenderPosition[0] = currentLapData.LapDistance;
+
+                            var currentLapDataModel = MainViewModel.LapData[CurrentLapCursor];
+
+                            var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
+
+                            currentLapDataModel.Speed[indexCursor] = currentTelemetry.Speed;
+                            currentLapDataModel.Distance[indexCursor] = currentLapData.LapDistance;
+                            currentLapDataModel.Gear[indexCursor] = currentTelemetry.Gear;
+
+                            currentLapDataModel.Throttle[indexCursor] = currentTelemetry.Throttle;
+                            currentLapDataModel.Brake[indexCursor] = currentTelemetry.Brake;
+
+                            SpeedGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                            SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                            GearGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                            GearGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                            BrakeGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                            BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                            ThrottleGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
+                            ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                            MainViewModel.CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
+                            MainViewModel.CurrentTelemetry.Brake = currentTelemetry.Brake;
+                            MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
+                            MainViewModel.CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
+                            MainViewModel.CurrentTelemetry.Speed = currentTelemetry.Speed;
+                            MainViewModel.CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
+
+                            indexCursor++;
+                        }
+                    }
+                });
+            };
 
             try
             {
-                int indexCursor = 0;
-
                 telemetryManager.NewSession += (s, e) =>
                 {
                     var manager = s as TelemetryManager;
@@ -126,67 +186,16 @@ namespace F1Telemetry.WPF
                     }
                 };
 
-                while (true)
+                cancelToken.ThrowIfCancellationRequested();
+
+                while (!cancelToken.IsCancellationRequested)
                 {
-                    byte[] bytes = listener.Receive(ref groupEP);
-                    telemetryManager.Feed(bytes);
-
-                    await Dispatcher.InvokeAsync(() =>
-                    {
-                        MainViewModel.SessionInfo.SessionType = telemetryManager.Session != null ? telemetryManager.Session.SessionType.GetDisplayName() : "";
-
-                        var currentTelemetry = telemetryManager.GetPlayerInfo()?.CurrentTelemetry;
-                        var currentLapData = telemetryManager.GetPlayerInfo()?.LapData.LastOrDefault();
-
-                        if (currentTelemetry != null)
-                        {
-                            if (currentLapData.DriverStatus == DriverStatus.InGarage)
-                            {
-                                indexCursor = 0;
-                            }
-                            else
-                            {
-                                currentRenderPosition[0] = currentLapData.LapDistance;
-
-                                var currentLapDataModel = MainViewModel.LapData[CurrentLapCursor];
-
-                                var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
-
-                                currentLapDataModel.Speed[indexCursor] = currentTelemetry.Speed;
-                                currentLapDataModel.Distance[indexCursor] = currentLapData.LapDistance;
-                                currentLapDataModel.Gear[indexCursor] = currentTelemetry.Gear;
-
-                                currentLapDataModel.Throttle[indexCursor] = currentTelemetry.Throttle;
-                                currentLapDataModel.Brake[indexCursor] = currentTelemetry.Brake;
-
-                                SpeedGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
-                                SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                                GearGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
-                                GearGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                                BrakeGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
-                                BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                                ThrottleGraph[CurrentLapCursor].maxRenderIndex = indexCursor;
-                                ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                                MainViewModel.CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
-                                MainViewModel.CurrentTelemetry.Brake = currentTelemetry.Brake;
-                                MainViewModel.CurrentTelemetry.Throttle = currentTelemetry.Throttle;
-                                MainViewModel.CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
-                                MainViewModel.CurrentTelemetry.Speed = currentTelemetry.Speed;
-                                MainViewModel.CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
-
-                                indexCursor++;
-                            }
-                        }
-                    });
+                    listener.Listen();
                 }
             }
-            catch (SocketException e)
+            catch (SocketException sE)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(sE);
             }
             finally
             {
@@ -203,7 +212,7 @@ namespace F1Telemetry.WPF
                 ListeningCancellationTokenSource = new CancellationTokenSource();
                 var cancelToken = ListeningCancellationTokenSource.Token;
 
-                Task.Run(async () => await StartListenerAsync(), cancelToken);
+                Task.Run(() => StartListener(cancelToken), cancelToken);
 
                 GraphRenderTimer.Start();
 
