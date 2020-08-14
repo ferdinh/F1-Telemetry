@@ -9,7 +9,7 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// Data for all cars on track
         /// </summary>
-        public CarMotionData[] CarMotionData = new CarMotionData[Decode.MaxNumberOfCarsOnTrack];
+        public CarMotionData[] CarMotionData { get; set; } = new CarMotionData[Decode.MaxNumberOfCarsOnTrack];
 
         // Note: All wheel arrays have the following order:
         // RL, RR, FL, FR
@@ -19,77 +19,77 @@ namespace F12020Telemetry.Data
         /// <summary>
         /// The suspension position
         /// </summary>
-        public float[] SuspensionPosition = new float[Decode.NumberOfTyres];
+        public float[] SuspensionPosition { get; set; } = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// The suspension velocity
         /// </summary>
-        public float[] SuspensionVelocity = new float[Decode.NumberOfTyres];
+        public float[] SuspensionVelocity { get; set; } = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// The suspension acceleration
         /// </summary>
-        public float[] SuspensionAcceleration = new float[Decode.NumberOfTyres];
+        public float[] SuspensionAcceleration { get; set; } = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Speed of each wheel
         /// </summary>
-        public float[] WheelSpeed = new float[Decode.NumberOfTyres];
+        public float[] WheelSpeed { get; set; } = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Slip ratio for each wheel
         /// </summary>
-        public float[] WheelSlip = new float[Decode.NumberOfTyres];
+        public float[] WheelSlip { get; set; } = new float[Decode.NumberOfTyres];
 
         /// <summary>
         /// Velocity in local space
         /// </summary>
-        public float LocalVelocityX;
+        public float LocalVelocityX { get; set; }
 
         /// <summary>
         /// Velocity in local space
         /// </summary>
-        public float LocalVelocityY;
+        public float LocalVelocityY { get; set; }
 
         /// <summary>
         /// Velocity in local space
         /// </summary>
-        public float LocalVelocityZ;
+        public float LocalVelocityZ { get; set; }
 
         /// <summary>
         /// Angular velocity x-component
         /// </summary>
-        public float AngularVelocityX;
+        public float AngularVelocityX { get; set; }
 
         /// <summary>
         ///  Angular velocity y-component
         /// </summary>
-        public float AngularVelocityY;
+        public float AngularVelocityY { get; set; }
 
         /// <summary>
         /// Angular velocity z-component
         /// </summary>
-        public float AngularVelocityZ;
+        public float AngularVelocityZ { get; set; }
 
         /// <summary>
         /// Angular velocity x-component
         /// </summary>
-        public float AngularAccelerationX;
+        public float AngularAccelerationX { get; set; }
 
         /// <summary>
         /// Angular velocity y-component
         /// </summary>
-        public float AngularAccelerationY;
+        public float AngularAccelerationY { get; set; }
 
         /// <summary>
         /// Angular velocity z-component
         /// </summary>
-        public float AngularAccelerationZ;
+        public float AngularAccelerationZ { get; set; }
 
         /// <summary>
         /// Current front wheels angle in radians
         /// </summary>
-        public float FrontWheelsAngle;
+        public float FrontWheelsAngle { get; set; }
 
         public PacketMotionData(PacketHeader packetHeader)
         {

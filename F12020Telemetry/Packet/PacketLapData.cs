@@ -9,7 +9,7 @@ namespace F12020Telemetry.Packet
         /// <summary>
         ///  Lap data for all cars on track
         /// </summary>
-        public LapData[] LapData = new LapData[Decode.MaxNumberOfCarsOnTrack];
+        public LapData[] LapData { get; set; } = new LapData[Decode.MaxNumberOfCarsOnTrack];
 
         public PacketLapData(PacketHeader header)
         {

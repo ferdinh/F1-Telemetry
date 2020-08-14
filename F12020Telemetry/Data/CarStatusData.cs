@@ -5,12 +5,12 @@
         /// <summary>
         /// The traction control [0 (off) - 2 (high)]
         /// </summary>
-        public byte TractionControl;
+        public byte TractionControl { get; set; }
 
         /// <summary>
         /// The anti lock brakes 0 [(off) - 1 (on)]
         /// </summary>
-        public byte AntiLockBrakes;
+        public byte AntiLockBrakes { get; set; }
 
         /// <summary>
         /// Fuel mix - 0 = lean, 1 = standard, 2 = rich, 3 = max
@@ -20,59 +20,59 @@
         /// <summary>
         /// Front brake bias (percentage)
         /// </summary>
-        public byte FrontBrakeBias;
+        public byte FrontBrakeBias { get; set; }
 
         /// <summary>
         /// Pit limiter status - 0 = off, 1 = on
         /// </summary>
-        public byte pitLimiterStatus;
+        public byte pitLimiterStatus { get; set; }
 
         /// <summary>
         /// Current fuel mass
         /// </summary>
-        public float FuelInTank;
+        public float FuelInTank { get; set; }
 
         /// <summary>
         /// Fuel capacity
         /// </summary>
-        public float FuelCapacity;
+        public float FuelCapacity { get; set; }
 
         /// <summary>
         /// Fuel remaining in terms of laps (value on MFD)
         /// </summary>
-        public float FuelRemainingLaps;
+        public float FuelRemainingLaps { get; set; }
 
         /// <summary>
         /// Cars max RPM, point of rev limiter
         /// </summary>
-        public ushort MaxRPM;
+        public ushort MaxRPM { get; set; }
 
         /// <summary>
         /// Cars idle RPM
         /// </summary>
-        public ushort IdleRPM;
+        public ushort IdleRPM { get; set; }
 
         /// <summary>
         /// Maximum number of gears
         /// </summary>
-        public byte MaxGears;
+        public byte MaxGears { get; set; }
 
         /// <summary>
         /// 0 = not allowed, 1 = allowed, -1 = unknown
         /// </summary>
-        public byte DrsAllowed;
+        public byte DrsAllowed { get; set; }
 
         /// <summary>
         /// The DRS activation distance
         /// 0 = DRS not available, non-zero - DRS will be available
         /// in [X] metres
         /// </summary>
-        public ushort DrsActivationDistance;
+        public ushort DrsActivationDistance { get; set; }
 
         /// <summary>
         /// Tyre wear percentage
         /// </summary>
-        public byte[] TyresWear = new byte[Decode.NumberOfTyres];
+        public byte[] TyresWear { get; set; } = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// The actual tyre compound
@@ -80,7 +80,7 @@
         /// F1 Classic - 9 = dry, 10 = wet
         /// F2 – 11 = super soft, 12 = soft, 13 = medium, 14 = hard, 15 = wet
         /// </summary>
-        public byte ActualTyreCompound;
+        public byte ActualTyreCompound { get; set; }
 
         /// <summary>
         /// F1 visual (can be different from actual compound)
@@ -88,78 +88,78 @@
         /// F1 Classic – same as above
         /// F2 – same as above
         /// </summary>
-        public byte VisualTyreCompound;
+        public byte VisualTyreCompound { get; set; }
 
         /// <summary>
         /// Age in laps of the current set of tyres
         /// </summary>
-        public byte TyresAgeLaps;
+        public byte TyresAgeLaps { get; set; }
 
         /// <summary>
         /// Tyre damage (percentage)
         /// </summary>
-        public byte[] TyresDamage = new byte[Decode.NumberOfTyres];
+        public byte[] TyresDamage { get; set; } = new byte[Decode.NumberOfTyres];
 
         /// <summary>
         /// Front left wing damage (percentage)
         /// </summary>
-        public byte FrontLeftWingDamage;
+        public byte FrontLeftWingDamage { get; set; }
 
         /// <summary>
         ///  Front right wing damage (percentage)
         /// </summary>
-        public byte FrontRightWingDamage;
+        public byte FrontRightWingDamage { get; set; }
 
         /// <summary>
         /// Rear wing damage (percentage)
         /// </summary>
-        public byte RearWingDamage;
+        public byte RearWingDamage { get; set; }
 
         /// <summary>
         /// Indicator for DRS fault, 0 = OK, 1 = fault
         /// </summary>
-        public byte DrsFault;
+        public byte DrsFault { get; set; }
 
         /// <summary>
         /// Engine damage (percentage)
         /// </summary>
-        public byte EngineDamage;
+        public byte EngineDamage { get; set; }
 
         /// <summary>
         /// Gear box damage (percentage)
         /// </summary>
-        public byte GearBoxDamage;
+        public byte GearBoxDamage { get; set; }
 
         /// <summary>
         /// The vehicle fia flags
         /// -1 = invalid/unknown, 0 = none, 1 = green
         /// 2 = blue, 3 = yellow, 4 = red
         /// </summary>
-        public sbyte VehicleFiaFlags;
+        public sbyte VehicleFiaFlags { get; set; }
 
         /// <summary>
         /// T ERS energy store in Joules
         /// </summary>
-        public float ErsStoreEnergy;
+        public float ErsStoreEnergy { get; set; }
 
         /// <summary>
         /// ERS deployment mode, 0 = none, 1 = medium, 2 = overtake, 3 = hotlap
         /// </summary>
-        public byte ErsDeployMode;
+        public byte ErsDeployMode { get; set; }
 
         /// <summary>
         /// ERS energy harvested this lap by MGU-K
         /// </summary>
-        public float ErsHarvestedThisLapMGUK;
+        public float ErsHarvestedThisLapMGUK { get; set; }
 
         /// <summary>
         /// ERS energy harvested this lap by MGU-H
         /// </summary>
-        public float ErsHarvestedThisLapMGUH;
+        public float ErsHarvestedThisLapMGUH { get; set; }
 
         /// <summary>
         /// ERS energy deployed this lap
         /// </summary>
-        public float ErsDeployedThisLap;
+        public float ErsDeployedThisLap { get; set; }
     }
 }
