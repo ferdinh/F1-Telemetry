@@ -9,7 +9,7 @@ namespace F12020Telemetry.Util.Network
     /// </summary>
     public class UDPListener : IDisposable
     {
-        private UdpClient Listener;
+        private readonly UdpClient Listener;
         private IPEndPoint IPEndPoint;
 
         public event EventHandler BytesReceived;
