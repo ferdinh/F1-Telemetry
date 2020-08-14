@@ -6,6 +6,7 @@ using F1Telemetry.WPF.Command;
 using F1Telemetry.WPF.Model;
 using ScottPlot;
 using System.ComponentModel;
+using System.Drawing.Text;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
@@ -75,10 +76,7 @@ namespace F1Telemetry.WPF.ViewModels
             if (IsListening)
             {
                 senderButton.Content = "Start Listening";
-                UDPListener.Close();
-                ListeningCancellationTokenSource.Cancel();
-                GraphRenderTimer.Stop();
-                IsListening = false;
+                StopListening();
             }
             else
             {
@@ -163,6 +161,14 @@ namespace F1Telemetry.WPF.ViewModels
                     UDPListener.Close();
                     UDPListener = null;
                 }
+            }
+
+            void StopListening()
+            {
+                UDPListener.Close();
+                ListeningCancellationTokenSource.Cancel();
+                GraphRenderTimer.Stop();
+                IsListening = false;
             }
         }
     }
