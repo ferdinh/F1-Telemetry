@@ -6,8 +6,8 @@ namespace F12020Telemetry.Packet
     {
         public PacketHeader Header { get; set; }
 
-        public byte NumActiveCars;
-        public ParticipantData[] Participants;
+        public byte NumActiveCars { get; set; }
+        public ParticipantData[] Participants { get; set; }
 
         private PacketParticipantsData()
         {

@@ -5,7 +5,7 @@ namespace F12020Telemetry.Packet
     public class PacketCarStatusData : IPacket
     {
         public PacketHeader Header { get; set; }
-        public CarStatusData[] CarStatusData;
+        public CarStatusData[] CarStatusData { get; set; }
 
         private PacketCarStatusData()
         {
