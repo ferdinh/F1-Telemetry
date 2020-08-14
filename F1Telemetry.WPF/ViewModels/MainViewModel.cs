@@ -1,11 +1,4 @@
-﻿using F12020Telemetry;
-using F12020Telemetry.Data;
-using F12020Telemetry.Util.Extensions;
-using F12020Telemetry.Util.Network;
-using F1Telemetry.WPF.Command;
-using F1Telemetry.WPF.Model;
-using ScottPlot;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Sockets;
@@ -13,6 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using F12020Telemetry;
+using F12020Telemetry.Data;
+using F12020Telemetry.Util.Extensions;
+using F12020Telemetry.Util.Network;
+using F1Telemetry.WPF.Command;
+using F1Telemetry.WPF.Model;
+using ScottPlot;
 
 namespace F1Telemetry.WPF.ViewModels
 {
