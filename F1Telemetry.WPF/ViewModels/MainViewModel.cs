@@ -57,11 +57,15 @@ namespace F1Telemetry.WPF.ViewModels
         public PlottableSignalXY[] ThrottleGraph { get; } = new PlottableSignalXY[3];
         public UDPListener UDPListener { get; private set; }
 
+        private void ResetCurrentTelemetryIndexCursor()
+        {
+            CurrentTelemetryIndexCursor = 0;
+        }
+
         public void ResetRenderCursor()
         {
             CurrentRenderPosition[0] = 0.0;
         }
-
         private void Manager_NewSession(object sender, EventArgs e)
         {
             var manager = sender as TelemetryManager;
@@ -79,7 +83,7 @@ namespace F1Telemetry.WPF.ViewModels
                 {
                     ResetRenderCursor();
                     CurrentLapCursor = (CurrentLapCursor + 1) % LapData.Length;
-                    CurrentTelemetryIndexCursor = 0;
+                    ResetCurrentTelemetryIndexCursor();
                 };
             }
         }
@@ -115,7 +119,7 @@ namespace F1Telemetry.WPF.ViewModels
                 GraphRenderTimer.Start();
                 IsListening = true;
 
-                CurrentTelemetryIndexCursor = 0;
+                ResetCurrentTelemetryIndexCursor();
 
                 try
                 {
@@ -160,7 +164,7 @@ namespace F1Telemetry.WPF.ViewModels
             {
                 if (currentLapData.DriverStatus == DriverStatus.InGarage)
                 {
-                    CurrentTelemetryIndexCursor = 0;
+                    ResetCurrentTelemetryIndexCursor();
                 }
                 else
                 {
