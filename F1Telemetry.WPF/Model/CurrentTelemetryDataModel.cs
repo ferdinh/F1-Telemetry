@@ -13,7 +13,7 @@ namespace F1Telemetry.WPF.Model
         public float Throttle { get; set; }
         public ushort EngineRPM { get; set; }
         public ushort Speed { get; set; }
-        public float LapTime {get;set;}
+        public float LapTime { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
