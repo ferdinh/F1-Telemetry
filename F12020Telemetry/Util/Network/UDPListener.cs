@@ -14,8 +14,6 @@ namespace F12020Telemetry.Util.Network
 
         public event EventHandler BytesReceived;
 
-        public bool IsListening;
-
         public UDPListener(int port)
         {
             Listener = new UdpClient(port);
