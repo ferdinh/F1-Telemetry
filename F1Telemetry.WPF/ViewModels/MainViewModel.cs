@@ -17,6 +17,7 @@ namespace F1Telemetry.WPF.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private int CurrentTelemetryIndexCursor;
         private CancellationTokenSource ListeningCancellationTokenSource;
 
         public MainViewModel()
@@ -43,7 +44,6 @@ namespace F1Telemetry.WPF.ViewModels
         public double[] CurrentRenderValue { get; } = new double[1] { 1000 };
 
         public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
-        public int CurrentTelemetryIndexCursor { get; internal set; }
         public PlottableSignalXY[] GearGraph { get; } = new PlottableSignalXY[3];
         public DispatcherTimer GraphRenderTimer { get; } = new DispatcherTimer();
         public bool IsListening { get; set; }
