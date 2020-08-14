@@ -30,6 +30,7 @@ namespace F1Telemetry.WPF.ViewModels
         public MainViewModel()
         {
             SetTopmostCommand = new RelayCommand<bool>(SetTopmost);
+
             for (int i = 0; i < LapData.Length; i++)
             {
                 LapData[i] = new CurrentLapDataModel();
@@ -48,10 +49,9 @@ namespace F1Telemetry.WPF.ViewModels
         public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
         public TelemetryManager Manager { get; } = new TelemetryManager();
         public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
-        public RelayCommand<bool> SetTopmostCommand { get; private set; }
+        public RelayCommand<bool> SetTopmostCommand { get; }
         public RelayCommand StartListeningCommand { get; }
         public UDPListener UDPListener { get; private set; }
-
 
         public void ResetRenderCursor()
         {
@@ -62,6 +62,7 @@ namespace F1Telemetry.WPF.ViewModels
         {
             IsTopmost = topmost;
         }
+
         private async Task StartListeningAsync(object sender)
         {
             if (UDPListener == null)
