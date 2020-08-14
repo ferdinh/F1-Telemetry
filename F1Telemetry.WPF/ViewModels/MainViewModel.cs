@@ -44,6 +44,35 @@ namespace F1Telemetry.WPF.ViewModels
             Manager.NewSession += Manager_NewSession;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public int CurrentLapCursor { get; set; }
+
+        public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
+
+        public int CurrentTelemetryIndexCursor { get; internal set; }
+
+        public bool IsListening { get; set; }
+
+        public bool IsTopmost { get; internal set; }
+
+        public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
+
+        public TelemetryManager Manager { get; } = new TelemetryManager();
+
+        public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
+
+        public RelayCommand<bool> SetTopmostCommand { get; }
+
+        public RelayCommand StartListeningCommand { get; }
+
+        public UDPListener UDPListener { get; private set; }
+
+        public void ResetRenderCursor()
+        {
+            CurrentRenderPosition[0] = 0.0;
+        }
+
         private void Manager_NewSession(object sender, EventArgs e)
         {
             var manager = sender as TelemetryManager;
@@ -64,25 +93,6 @@ namespace F1Telemetry.WPF.ViewModels
                     CurrentTelemetryIndexCursor = 0;
                 };
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public int CurrentLapCursor { get; set; }
-        public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
-        public int CurrentTelemetryIndexCursor { get; internal set; }
-        public bool IsListening { get; set; }
-        public bool IsTopmost { get; internal set; }
-        public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
-        public TelemetryManager Manager { get; } = new TelemetryManager();
-        public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
-        public RelayCommand<bool> SetTopmostCommand { get; }
-        public RelayCommand StartListeningCommand { get; }
-        public UDPListener UDPListener { get; private set; }
-
-        public void ResetRenderCursor()
-        {
-            CurrentRenderPosition[0] = 0.0;
         }
 
         private void SetTopmost(bool topmost)
