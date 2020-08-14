@@ -18,6 +18,19 @@ namespace F1Telemetry.WPF
 
             DataContext = MainViewModel;
 
+            BindGraphToViewModel();
+            RegisterGraphRenderDispatcher();
+
+            MainViewModel.Manager.NewSession += ManagerNewSession;
+        }
+
+        private MainViewModel MainViewModel { get; set; }
+
+        /// <summary>
+        /// Binds the graphs to view model.
+        /// </summary>
+        private void BindGraphToViewModel()
+        {
             for (int i = 0; i < MainViewModel.LapData.Length; i++)
             {
                 MainViewModel.SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Speed);
@@ -47,7 +60,10 @@ namespace F1Telemetry.WPF
                 BrakeGraphPlot.plt.YLabel("Brake");
                 BrakeGraphPlot.plt.Legend();
             }
+        }
 
+        private void RegisterGraphRenderDispatcher()
+        {
             MainViewModel.GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(20);
             MainViewModel.GraphRenderTimer.Tick += (s, e) =>
             {
@@ -58,36 +74,34 @@ namespace F1Telemetry.WPF
                 BrakeGraphPlot.Render(recalculateLayout: true);
                 ThrottleGraphPlot.Render(recalculateLayout: true);
             };
-
-            MainViewModel.Manager.NewSession += (s, e) =>
-            {
-                var manager = s as TelemetryManager;
-
-                if (manager != null)
-                {
-                    SpeedGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 360);
-                    GearGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 9);
-
-                    ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
-                    BrakeGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
-
-                    foreach (var lapModel in MainViewModel.LapData)
-                    {
-                        lapModel.Clear();
-                    }
-
-                    MainViewModel.ResetRenderCursor();
-
-                    manager.GetPlayerInfo().NewLap += (s, e) =>
-                    {
-                        MainViewModel.ResetRenderCursor();
-                        MainViewModel.CurrentLapCursor = (MainViewModel.CurrentLapCursor + 1) % MainViewModel.LapData.Length;
-                        MainViewModel.IndexCursor = 0;
-                    };
-                }
-            };
         }
 
-        private MainViewModel MainViewModel { get; set; }
+        private void ManagerNewSession(object sender, EventArgs e)
+        {
+            var manager = sender as TelemetryManager;
+
+            if (manager != null)
+            {
+                SpeedGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 360);
+                GearGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 9);
+
+                ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
+                BrakeGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
+
+                foreach (var lapModel in MainViewModel.LapData)
+                {
+                    lapModel.Clear();
+                }
+
+                MainViewModel.ResetRenderCursor();
+
+                manager.GetPlayerInfo().NewLap += (s, e) =>
+                {
+                    MainViewModel.ResetRenderCursor();
+                    MainViewModel.CurrentLapCursor = (MainViewModel.CurrentLapCursor + 1) % MainViewModel.LapData.Length;
+                    MainViewModel.IndexCursor = 0;
+                };
+            }
+        }
     }
 }
