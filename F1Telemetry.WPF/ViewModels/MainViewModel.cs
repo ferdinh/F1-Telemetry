@@ -140,9 +140,6 @@ namespace F1Telemetry.WPF.ViewModels
                         }
                     }, ListeningCancellationTokenSource.Token);
                 }
-                catch (SocketException sE)
-                {
-                }
                 finally
                 {
                     UDPListener.Close();
