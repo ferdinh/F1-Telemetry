@@ -81,7 +81,7 @@
                 <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
                 <Label Content="Keep window on top" />
             </WrapPanel>
-            <Button x:Name="ListenButton"  FontWeight="Bold" Click="StartListening" Content="Start Listening" />
+            <Button x:Name="ListenButton"  FontWeight="Bold" Command="{Binding StartListeningCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Start Listening" />
         </StackPanel>
     </Grid>
 </Window>
