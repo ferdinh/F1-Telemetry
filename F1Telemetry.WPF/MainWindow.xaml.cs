@@ -10,9 +10,6 @@ namespace F1Telemetry.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private double[] currentRenderPosition = new double[1] { 0 };
-        //private double[] currentRenderValue = new double[1] { 1000 };
-
         public MainWindow()
         {
             InitializeComponent();
