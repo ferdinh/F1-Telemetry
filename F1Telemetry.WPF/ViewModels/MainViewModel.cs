@@ -62,10 +62,11 @@ namespace F1Telemetry.WPF.ViewModels
             CurrentTelemetryIndexCursor = 0;
         }
 
-        public void ResetRenderCursor()
+        private void ResetRenderCursor()
         {
             CurrentRenderPosition[0] = 0.0;
         }
+
         private void Manager_NewSession(object sender, EventArgs e)
         {
             var manager = sender as TelemetryManager;
