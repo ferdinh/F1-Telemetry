@@ -64,11 +64,9 @@ namespace F1Telemetry.WPF
 
         private void RegisterGraphRenderDispatcher()
         {
-            MainViewModel.GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(20);
             MainViewModel.GraphRenderTimer.Tick += (s, e) =>
             {
                 SpeedGraphPlot.Render(recalculateLayout: true);
-
                 GearGraphPlot.Render(recalculateLayout: true);
 
                 BrakeGraphPlot.Render(recalculateLayout: true);

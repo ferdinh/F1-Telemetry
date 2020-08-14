@@ -39,6 +39,8 @@ namespace F1Telemetry.WPF.ViewModels
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s); });
 
+            GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(20);
+
             Manager.NewSession += Manager_NewSession;
         }
 
