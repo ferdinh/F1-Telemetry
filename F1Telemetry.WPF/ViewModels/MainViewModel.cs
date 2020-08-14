@@ -5,8 +5,8 @@ using F12020Telemetry.Util.Network;
 using F1Telemetry.WPF.Command;
 using F1Telemetry.WPF.Model;
 using ScottPlot;
+using System;
 using System.ComponentModel;
-using System.Drawing.Text;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
@@ -85,61 +85,7 @@ namespace F1Telemetry.WPF.ViewModels
                 IsListening = true;
                 IndexCursor = 0;
 
-                UDPListener.BytesReceived += (s, e) =>
-                {
-                    var eventArgs = e as UDPPacketReceivedEventArgs;
-
-                    Manager.Feed(eventArgs.Bytes);
-
-                    SessionInfo.SessionType = Manager.Session != null ? Manager.Session.SessionType.GetDisplayName() : "";
-
-                    var currentTelemetry = Manager.GetPlayerInfo()?.CurrentTelemetry;
-                    var currentLapData = Manager.GetPlayerInfo()?.LapData.LastOrDefault();
-
-                    if (currentTelemetry != null)
-                    {
-                        if (currentLapData.DriverStatus == DriverStatus.InGarage)
-                        {
-                            IndexCursor = 0;
-                        }
-                        else
-                        {
-                            CurrentRenderPosition[0] = currentLapData.LapDistance;
-
-                            var currentLapDataModel = LapData[CurrentLapCursor];
-
-                            var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
-
-                            currentLapDataModel.Speed[IndexCursor] = currentTelemetry.Speed;
-                            currentLapDataModel.Distance[IndexCursor] = currentLapData.LapDistance;
-                            currentLapDataModel.Gear[IndexCursor] = currentTelemetry.Gear;
-
-                            currentLapDataModel.Throttle[IndexCursor] = currentTelemetry.Throttle;
-                            currentLapDataModel.Brake[IndexCursor] = currentTelemetry.Brake;
-
-                            SpeedGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
-                            SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                            GearGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
-                            GearGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                            BrakeGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
-                            BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                            ThrottleGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
-                            ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
-
-                            CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
-                            CurrentTelemetry.Brake = currentTelemetry.Brake;
-                            CurrentTelemetry.Throttle = currentTelemetry.Throttle;
-                            CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
-                            CurrentTelemetry.Speed = currentTelemetry.Speed;
-                            CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
-
-                            IndexCursor++;
-                        }
-                    }
-                };
+                UDPListener.BytesReceived += UDPListener_BytesReceived;
 
                 try
                 {
@@ -169,6 +115,62 @@ namespace F1Telemetry.WPF.ViewModels
                 ListeningCancellationTokenSource.Cancel();
                 GraphRenderTimer.Stop();
                 IsListening = false;
+            }
+        }
+
+        private void UDPListener_BytesReceived(object sender, EventArgs e)
+        {
+            var eventArgs = e as UDPPacketReceivedEventArgs;
+
+            Manager.Feed(eventArgs.Bytes);
+
+            SessionInfo.SessionType = Manager.Session != null ? Manager.Session.SessionType.GetDisplayName() : "";
+
+            var currentTelemetry = Manager.GetPlayerInfo()?.CurrentTelemetry;
+            var currentLapData = Manager.GetPlayerInfo()?.LapData.LastOrDefault();
+
+            if (currentTelemetry != null)
+            {
+                if (currentLapData.DriverStatus == DriverStatus.InGarage)
+                {
+                    IndexCursor = 0;
+                }
+                else
+                {
+                    CurrentRenderPosition[0] = currentLapData.LapDistance;
+
+                    var currentLapDataModel = LapData[CurrentLapCursor];
+
+                    var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
+
+                    currentLapDataModel.Speed[IndexCursor] = currentTelemetry.Speed;
+                    currentLapDataModel.Distance[IndexCursor] = currentLapData.LapDistance;
+                    currentLapDataModel.Gear[IndexCursor] = currentTelemetry.Gear;
+
+                    currentLapDataModel.Throttle[IndexCursor] = currentTelemetry.Throttle;
+                    currentLapDataModel.Brake[IndexCursor] = currentTelemetry.Brake;
+
+                    SpeedGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                    GearGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    GearGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                    BrakeGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                    ThrottleGraph[CurrentLapCursor].maxRenderIndex = IndexCursor;
+                    ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
+
+                    CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
+                    CurrentTelemetry.Brake = currentTelemetry.Brake;
+                    CurrentTelemetry.Throttle = currentTelemetry.Throttle;
+                    CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
+                    CurrentTelemetry.Speed = currentTelemetry.Speed;
+                    CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
+
+                    IndexCursor++;
+                }
             }
         }
     }
