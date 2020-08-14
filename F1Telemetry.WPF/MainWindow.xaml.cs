@@ -223,6 +223,8 @@ namespace F1Telemetry.WPF
             else
             {
                 ListeningCancellationTokenSource.Cancel();
+                Listener.Close();
+                GraphRenderTimer.Stop();
                 IsListening = !IsListening;
 
                 ListenButton.Content = "Start Listening";
