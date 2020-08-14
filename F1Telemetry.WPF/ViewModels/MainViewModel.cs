@@ -15,7 +15,7 @@ using ScottPlot;
 
 namespace F1Telemetry.WPF.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         private int CurrentTelemetryIndexCursor;
         private CancellationTokenSource ListeningCancellationTokenSource;
@@ -204,6 +204,14 @@ namespace F1Telemetry.WPF.ViewModels
                     CurrentTelemetryIndexCursor++;
                 }
             }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            ListeningCancellationTokenSource.Dispose();
         }
     }
 }
