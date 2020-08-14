@@ -18,8 +18,8 @@ namespace F1Telemetry.WPF.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         public PlottableSignalXY[] BrakeGraph = new PlottableSignalXY[3];
-        public double[] currentRenderPosition = new double[1] { 0 };
-        public double[] currentRenderValue = new double[1] { 1000 };
+        public double[] CurrentRenderPosition = new double[1] { 0 };
+        public double[] CurrentRenderValue = new double[1] { 1000 };
 
         public PlottableSignalXY[] GearGraph = new PlottableSignalXY[3];
         public DispatcherTimer GraphRenderTimer = new DispatcherTimer();
@@ -55,7 +55,7 @@ namespace F1Telemetry.WPF.ViewModels
 
         public void ResetRenderCursor()
         {
-            currentRenderPosition[0] = 0.0;
+            CurrentRenderPosition[0] = 0.0;
         }
 
         private void SetTopmost(bool topmost)
@@ -105,7 +105,7 @@ namespace F1Telemetry.WPF.ViewModels
                         }
                         else
                         {
-                            currentRenderPosition[0] = currentLapData.LapDistance;
+                            CurrentRenderPosition[0] = currentLapData.LapDistance;
 
                             var currentLapDataModel = LapData[CurrentLapCursor];
 

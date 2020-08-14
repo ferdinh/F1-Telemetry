@@ -34,20 +34,20 @@ namespace F1Telemetry.WPF
             for (int i = 0; i < MainViewModel.LapData.Length; i++)
             {
                 MainViewModel.SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Speed);
-                SpeedGraphPlot.plt.PlotBar(MainViewModel.currentRenderPosition, MainViewModel.currentRenderValue);
+                SpeedGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
                 SpeedGraphPlot.plt.YLabel("Speed");
                 SpeedGraphPlot.plt.Legend();
 
                 MainViewModel.GearGraph[i] = GearGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Gear);
-                GearGraphPlot.plt.PlotBar(MainViewModel.currentRenderPosition, MainViewModel.currentRenderValue);
+                GearGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
                 GearGraphPlot.plt.YLabel("Gear");
                 GearGraphPlot.plt.Legend();
 
                 MainViewModel.BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Brake);
                 MainViewModel.ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Throttle);
 
-                BrakeGraphPlot.plt.PlotBar(MainViewModel.currentRenderPosition, MainViewModel.currentRenderValue);
-                ThrottleGraphPlot.plt.PlotBar(MainViewModel.currentRenderPosition, MainViewModel.currentRenderValue);
+                BrakeGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
+                ThrottleGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
 
                 SpeedGraphPlot.plt.Axis(0, 6000, 0, 360);
                 GearGraphPlot.plt.Axis(0, 6000, 0, 9);
