@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -18,14 +17,6 @@ namespace F1Telemetry.WPF.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public PlottableSignalXY[] BrakeGraph = new PlottableSignalXY[3];
-        public double[] CurrentRenderPosition = new double[1] { 0 };
-        public double[] CurrentRenderValue = new double[1] { 1000 };
-
-        public PlottableSignalXY[] GearGraph = new PlottableSignalXY[3];
-        public DispatcherTimer GraphRenderTimer = new DispatcherTimer();
-        public PlottableSignalXY[] SpeedGraph = new PlottableSignalXY[3];
-        public PlottableSignalXY[] ThrottleGraph = new PlottableSignalXY[3];
         private CancellationTokenSource ListeningCancellationTokenSource;
 
         public MainViewModel()
@@ -46,26 +37,24 @@ namespace F1Telemetry.WPF.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public PlottableSignalXY[] BrakeGraph { get; } = new PlottableSignalXY[3];
         public int CurrentLapCursor { get; set; }
+        public double[] CurrentRenderPosition { get; } = new double[1] { 0 };
+        public double[] CurrentRenderValue { get; } = new double[1] { 1000 };
 
         public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
-
         public int CurrentTelemetryIndexCursor { get; internal set; }
-
+        public PlottableSignalXY[] GearGraph { get; } = new PlottableSignalXY[3];
+        public DispatcherTimer GraphRenderTimer { get; } = new DispatcherTimer();
         public bool IsListening { get; set; }
-
         public bool IsTopmost { get; internal set; }
-
         public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
-
         public TelemetryManager Manager { get; } = new TelemetryManager();
-
         public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
-
         public RelayCommand<bool> SetTopmostCommand { get; }
-
+        public PlottableSignalXY[] SpeedGraph { get; } = new PlottableSignalXY[3];
         public RelayCommand StartListeningCommand { get; }
-
+        public PlottableSignalXY[] ThrottleGraph { get; } = new PlottableSignalXY[3];
         public UDPListener UDPListener { get; private set; }
 
         public void ResetRenderCursor()
