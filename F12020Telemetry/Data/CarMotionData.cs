@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace F12020Telemetry.Data
+﻿namespace F12020Telemetry.Data
 {
     public class CarMotionData
     {
