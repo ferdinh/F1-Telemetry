@@ -29,7 +29,7 @@ namespace F1Telemetry.WPF.ViewModels
                 LapData[i] = new CurrentLapDataModel();
             }
 
-            StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s); });
+            StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
 
             GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(20);
 
@@ -112,7 +112,7 @@ namespace F1Telemetry.WPF.ViewModels
             else
             {
                 senderButton.Content = "Stop Listening";
-                await StartListening();
+                await StartListening().ConfigureAwait(false);
             }
 
             async Task StartListening()
