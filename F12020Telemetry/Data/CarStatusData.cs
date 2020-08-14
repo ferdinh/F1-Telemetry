@@ -15,7 +15,7 @@
         /// <summary>
         /// Fuel mix - 0 = lean, 1 = standard, 2 = rich, 3 = max
         /// </summary>
-        public byte FuelMix;
+        public byte FuelMix { get; set; }
 
         /// <summary>
         /// Front brake bias (percentage)

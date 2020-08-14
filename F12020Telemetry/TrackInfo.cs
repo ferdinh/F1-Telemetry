@@ -2,7 +2,7 @@
 {
     public static class TrackInfo
     {
-        public static string[] TrackNames = new string[]
+        public static string[] TrackNames { get; } = new string[]
         {
             "Melbourne",
             "Paul Ricard",
