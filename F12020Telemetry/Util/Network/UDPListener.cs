@@ -51,6 +51,8 @@ namespace F12020Telemetry.Util.Network
             }
             catch (SocketException)
             {
+                // The purpose of this catch is when Close or Dispose is called to stop listening.
+                // Should be fine until a better solution is found on cancelling ongoing listen.
             }
             catch (ObjectDisposedException)
             {
