@@ -69,6 +69,7 @@ namespace F1Telemetry.WPF.ViewModels
             if (UDPListener == null)
             {
                 UDPListener = new UDPListener(20777);
+                UDPListener.BytesReceived += UDPListener_BytesReceived;
             }
 
             var senderButton = sender as Button;
@@ -84,8 +85,6 @@ namespace F1Telemetry.WPF.ViewModels
                 GraphRenderTimer.Start();
                 IsListening = true;
                 IndexCursor = 0;
-
-                UDPListener.BytesReceived += UDPListener_BytesReceived;
 
                 try
                 {
