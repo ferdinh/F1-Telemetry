@@ -17,7 +17,7 @@ namespace F12020Telemetry.Util.Network
         public UDPListener(int port)
         {
             Listener = new UdpClient(port);
-            IPEndPoint = new IPEndPoint(IPAddress.Any, port);
+            IPEndPoint = new IPEndPoint(IPAddress.Any, 0);
         }
 
         /// <summary>
