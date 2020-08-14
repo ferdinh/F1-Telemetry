@@ -40,8 +40,8 @@ namespace F1Telemetry.WPF.ViewModels
 
         public PlottableSignalXY[] BrakeGraph { get; } = new PlottableSignalXY[3];
         public int CurrentLapCursor { get; set; }
-        public double[] CurrentRenderPosition { get; } = new double[1] { 0 };
-        public double[] CurrentRenderValue { get; } = new double[1] { 1000 };
+        public double[] CurrentRenderPosition { get; } = new double[] { 0 };
+        public double[] CurrentRenderValue { get; } = new double[] { 1000 };
 
         public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
         public PlottableSignalXY[] GearGraph { get; } = new PlottableSignalXY[3];
