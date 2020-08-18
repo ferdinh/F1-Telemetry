@@ -84,6 +84,7 @@ namespace F1Telemetry.WPF.ViewModels
                 {
                     ResetRenderCursor();
                     CurrentLapCursor = (CurrentLapCursor + 1) % LapData.Length;
+                    LapData[CurrentLapCursor].Clear();
                     ResetCurrentTelemetryIndexCursor();
                 };
             }
