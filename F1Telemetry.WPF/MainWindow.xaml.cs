@@ -10,6 +10,8 @@ namespace F1Telemetry.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly double DefaultLineWidth = 1.75;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,18 +35,18 @@ namespace F1Telemetry.WPF
         {
             for (int i = 0; i < MainViewModel.LapData.Length; i++)
             {
-                MainViewModel.SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Speed);
+                MainViewModel.SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Speed, lineWidth: DefaultLineWidth);
                 SpeedGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
                 SpeedGraphPlot.plt.YLabel("Speed");
                 SpeedGraphPlot.plt.Legend();
 
-                MainViewModel.GearGraph[i] = GearGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Gear);
+                MainViewModel.GearGraph[i] = GearGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Gear, lineWidth: DefaultLineWidth);
                 GearGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
                 GearGraphPlot.plt.YLabel("Gear");
                 GearGraphPlot.plt.Legend();
 
-                MainViewModel.BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Brake);
-                MainViewModel.ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Throttle);
+                MainViewModel.BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Brake, lineWidth: DefaultLineWidth);
+                MainViewModel.ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(MainViewModel.LapData[i].Distance, MainViewModel.LapData[i].Throttle, lineWidth: DefaultLineWidth);
 
                 BrakeGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
                 ThrottleGraphPlot.plt.PlotBar(MainViewModel.CurrentRenderPosition, MainViewModel.CurrentRenderValue);
