@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
+        xmlns:core="clr-namespace:F1Telemetry.Core.Data;assembly=F1Telemetry.Core"
         mc:Ignorable="d"
         Title="F1 Telemetry" Height="550" Width="900" Topmost="{Binding IsTopmost}">
 
@@ -72,6 +73,55 @@
                     <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
                     <Label Content="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
                     <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
+                </StackPanel>
+            </Grid>
+
+            <!--Tyre info panel-->
+            <Grid Grid.Column="1" Grid.Row="2" DataContext="{Binding CurrentTelemetry}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" TextElement.FontSize="11">
+                    <TextBlock Margin="3">FL</TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="C:" Margin="3"/>
+                        <TextBlock Name="FrontLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Text="S:" Margin="3" />
+                        <TextBlock Name="FrontLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+
+                    <TextBlock Margin="3">RL</TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="C:" Margin="3" />
+                        <TextBlock Name="RearLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Text="S:" Margin="3" />
+                        <TextBlock Name="RearLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </StackPanel>
+
+
+                <StackPanel Grid.Column="1" TextElement.FontSize="11">
+                    <TextBlock Margin="3">FR</TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="C:" Margin="3" />
+                        <TextBlock Name="FrontRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Text="S:" Margin="3" />
+                        <TextBlock Name="FrontRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+
+                    <TextBlock Margin="3">RR</TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="C:" Margin="3" />
+                        <TextBlock Name="RearRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Text="S:" Margin="3" />
+                        <TextBlock Name="RearRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>
