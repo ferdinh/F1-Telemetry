@@ -202,6 +202,16 @@ namespace F1Telemetry.WPF.ViewModels
                     CurrentTelemetry.Speed = currentTelemetry.Speed;
                     CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
 
+                    CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Current = currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft];
+                    CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Current = currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight];
+                    CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Current = currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft];
+                    CurrentTelemetry.TyreSurfaceTemperature.RearRight.Current = currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearRight];
+
+                    CurrentTelemetry.TyreCarcassTemperature.FrontLeft.Current = currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontLeft];
+                    CurrentTelemetry.TyreCarcassTemperature.FrontRight.Current = currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontRight];
+                    CurrentTelemetry.TyreCarcassTemperature.RearLeft.Current = currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft];
+                    CurrentTelemetry.TyreCarcassTemperature.RearRight.Current = currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight];
+
                     CurrentTelemetryIndexCursor++;
                 }
             }
