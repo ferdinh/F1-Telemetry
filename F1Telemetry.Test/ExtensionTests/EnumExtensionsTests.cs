@@ -1,4 +1,4 @@
-using F12020Telemetry.Util.Extensions;
+using F1Telemetry.Core.Util.Extensions;
 using FluentAssertions;
 using System.ComponentModel.DataAnnotations;
 using Xunit;

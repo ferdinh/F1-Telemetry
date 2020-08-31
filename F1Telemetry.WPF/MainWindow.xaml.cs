@@ -1,4 +1,4 @@
-﻿using F12020Telemetry;
+﻿using F1Telemetry.Core;
 using F1Telemetry.WPF.ViewModels;
 using System;
 using System.Windows;
