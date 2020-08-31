@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\F12020Telemetry\F12020Telemetry.csproj" />
+    <ProjectReference Include="..\F1Telemetry.Core\F1Telemetry.Core.csproj" />
     <ProjectReference Include="..\F1Telemetry.WPF\F1Telemetry.WPF.csproj" />
   </ItemGroup>
 
