@@ -244,12 +244,6 @@ namespace F1Telemetry.Core
                 carTelemData.Drs = (DRS)reader.ReadByte();
                 carTelemData.RevLightsPercent = reader.ReadByte();
 
-                //packetCarTelemetryData.CarTelemetryData[i].BrakesTemperature = new UInt16[NumberOfTyres];
-                //packetCarTelemetryData.CarTelemetryData[i].TyresSurfaceTemperature = new byte[NumberOfTyres];
-                //packetCarTelemetryData.CarTelemetryData[i].TyresInnerTemperature = new byte[NumberOfTyres];
-                //packetCarTelemetryData.CarTelemetryData[i].TyresPressure = new float[NumberOfTyres];
-                //packetCarTelemetryData.CarTelemetryData[i].SurfaceType = new SurfaceTypes[NumberOfTyres];
-
                 for (int j = 0; j < NumberOfTyres; j++)
                 {
                     carTelemData.BrakesTemperature[j] = reader.ReadUInt16();
