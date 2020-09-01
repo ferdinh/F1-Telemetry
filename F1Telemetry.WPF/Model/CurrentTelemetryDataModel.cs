@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using F1Telemetry.Core;
+using System.ComponentModel;
 
 namespace F1Telemetry.WPF.Model
 {
@@ -14,6 +15,8 @@ namespace F1Telemetry.WPF.Model
         public ushort EngineRPM { get; set; }
         public ushort Speed { get; set; }
         public float LapTime { get; set; }
+        public CarTyreTemperatureModel TyreCarcassTemperature { get; set; } = new CarTyreTemperatureModel();
+        public CarTyreTemperatureModel TyreSurfaceTemperature { get; set; } = new CarTyreTemperatureModel();
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

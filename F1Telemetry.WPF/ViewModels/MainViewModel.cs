@@ -1,17 +1,17 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using F1Telemetry.Core;
+﻿using F1Telemetry.Core;
 using F1Telemetry.Core.Data;
 using F1Telemetry.Core.Util.Extensions;
 using F1Telemetry.Core.Util.Network;
 using F1Telemetry.WPF.Command;
 using F1Telemetry.WPF.Model;
 using ScottPlot;
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace F1Telemetry.WPF.ViewModels
 {
@@ -201,6 +201,16 @@ namespace F1Telemetry.WPF.ViewModels
                     CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
                     CurrentTelemetry.Speed = currentTelemetry.Speed;
                     CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
+
+                    CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
+                    CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);
+                    CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft]);
+                    CurrentTelemetry.TyreSurfaceTemperature.RearRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearRight]);
+
+                    CurrentTelemetry.TyreCarcassTemperature.FrontLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontLeft]);
+                    CurrentTelemetry.TyreCarcassTemperature.FrontRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontRight]);
+                    CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
+                    CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
 
                     CurrentTelemetryIndexCursor++;
                 }
