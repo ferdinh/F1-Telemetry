@@ -58,9 +58,9 @@ namespace F1Telemetry.WPF.Model
             }
         }
 
-#pragma warning disable 169
+#pragma warning disable 169, 67
         public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore 169
+#pragma warning restore 169, 67
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
