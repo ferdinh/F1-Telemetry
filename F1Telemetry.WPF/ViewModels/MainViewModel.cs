@@ -7,6 +7,7 @@ using F1Telemetry.WPF.Model;
 using ScottPlot;
 using System;
 using System.ComponentModel;
+using System.Drawing.Text;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -195,25 +196,30 @@ namespace F1Telemetry.WPF.ViewModels
                     ThrottleGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
                     ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
-                    CurrentTelemetry.Brake = currentTelemetry.Brake;
-                    CurrentTelemetry.Throttle = currentTelemetry.Throttle;
-                    CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
-                    CurrentTelemetry.Speed = currentTelemetry.Speed;
-                    CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
-
-                    CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
-                    CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);
-                    CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft]);
-                    CurrentTelemetry.TyreSurfaceTemperature.RearRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearRight]);
-
-                    CurrentTelemetry.TyreCarcassTemperature.FrontLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontLeft]);
-                    CurrentTelemetry.TyreCarcassTemperature.FrontRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontRight]);
-                    CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
-                    CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
-
                     CurrentTelemetryIndexCursor++;
                 }
+
+                UpdateCurrentTelemetry(currentTelemetry);
+            }
+
+            void UpdateCurrentTelemetry(CarTelemetryData currentTelemetry)
+            {
+                CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
+                CurrentTelemetry.Brake = currentTelemetry.Brake;
+                CurrentTelemetry.Throttle = currentTelemetry.Throttle;
+                CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
+                CurrentTelemetry.Speed = currentTelemetry.Speed;
+                CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
+
+                CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
+                CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);
+                CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft]);
+                CurrentTelemetry.TyreSurfaceTemperature.RearRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearRight]);
+
+                CurrentTelemetry.TyreCarcassTemperature.FrontLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontLeft]);
+                CurrentTelemetry.TyreCarcassTemperature.FrontRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontRight]);
+                CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
+                CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
             }
         }
 
