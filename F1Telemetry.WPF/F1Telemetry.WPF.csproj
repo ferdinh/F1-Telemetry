@@ -15,4 +15,7 @@
     <ProjectReference Include="..\F1Telemetry.Core\F1Telemetry.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+  </ItemGroup>
 </Project>
