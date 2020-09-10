@@ -53,7 +53,7 @@
             <!--Car Info Panel--> 
             
             <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
-                <Label FontWeight="Bold">Car Info</Label>
+                <Label FontFamily="{StaticResource TitilliumBold}">Car Info</Label>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
