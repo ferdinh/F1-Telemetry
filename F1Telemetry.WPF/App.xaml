@@ -4,6 +4,15 @@
              xmlns:local="clr-namespace:F1Telemetry.WPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--Order matter. Base dependencies first.-->
+                <ResourceDictionary Source="Styles/Colour.xaml" />
+                <ResourceDictionary Source="Styles/Font.xaml" />
+                <ResourceDictionary Source="Styles/Button.xaml" />
+                <ResourceDictionary Source="Styles/Text.xaml" />
+                <ResourceDictionary Source="Styles/Window.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

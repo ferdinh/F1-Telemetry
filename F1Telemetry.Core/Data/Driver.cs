@@ -26,6 +26,8 @@ namespace F1Telemetry.Core.Data
 
         public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
 
+        public IList<CarStatusData> CarStatusData { get; internal set; } = new List<CarStatusData>();
+
         /// <summary>
         /// Gets or sets the number of laps the driver had done.
         /// </summary>
@@ -41,6 +43,8 @@ namespace F1Telemetry.Core.Data
         /// The current telemetry.
         /// </value>
         public CarTelemetryData CurrentTelemetry => CarTelemetryData.LastOrDefault();
+
+        public CarStatusData CurrentCarStatus => CarStatusData.LastOrDefault();
 
         public IReadOnlyCollection<LapData> LapData
         {
@@ -88,6 +92,11 @@ namespace F1Telemetry.Core.Data
             }
 
             CurrentLapNumber = lapData.CurrentLapNum;
+        }
+
+        public void AddCarStatusData(CarStatusData carStatusData)
+        {
+            this.CarStatusData.Add(carStatusData);
         }
 
         protected virtual void OnLapInterval()

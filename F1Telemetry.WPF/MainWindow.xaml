@@ -49,44 +49,54 @@
             <WpfPlot Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
             <WpfPlot Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
 
-            <Grid Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
+            
+            <!--Car Info Panel--> 
+            
+            <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
+                <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}">Car Info</TextBlock>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Margin="3" Text="Lap:" />
+                        <TextBlock Margin="3" Text="Time:" />
+                        <TextBlock Margin="3" Text="Spd:" />
+                        <TextBlock Margin="3" Text="RPM:" />
+                        <TextBlock Margin="3" Text="Throttle:" />
+                        <TextBlock Margin="3" Text="Brake:" />
+                    </StackPanel>
 
-                <StackPanel Grid.Column="0">
-                    <Label Content="Lap:" />
-                    <Label Content="Time:" />
-                    <Label Content="Spd:" />
-                    <Label Content="RPM:" />
-                    <Label Content="Throttle:" />
-                    <Label Content="Brake:" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="1">
-                    <Label Content="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
-                    <Label Content="{Binding LapTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToLapTimeString}}" />
-                    <Label Content="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
-                    <Label Content="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
-                    <Label Content="{Binding Throttle, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
-                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
-                    <Label Content="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
-                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
-                </StackPanel>
-            </Grid>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Margin="3" Text="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Margin="3" Text="{Binding LapTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToLapTimeString}}" />
+                        <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Margin="3" Text="{Binding Throttle, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
+                        <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
+                        <TextBlock Margin="3" Text="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
+                        <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
 
             <!--Tyre info panel-->
-            <Grid Grid.Column="1" Grid.Row="2" DataContext="{Binding CurrentTelemetry}">
+            <Grid Grid.Column="1" Grid.Row="2" DataContext="{Binding CurrentTelemetry}" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" TextElement.FontSize="11">
+                    <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}">
+                            Tyre Info
+                    </TextBlock>
+                    <TextBlock Margin="3">Compound</TextBlock>
+
                     <TextBlock Margin="3">FL</TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="C:" Margin="3"/>
+                        <TextBlock Text="C:" Margin="3" />
                         <TextBlock Name="FrontLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
 
                         <TextBlock Text="S:" Margin="3" />
@@ -103,8 +113,10 @@
                     </StackPanel>
                 </StackPanel>
 
-
                 <StackPanel Grid.Column="1" TextElement.FontSize="11">
+                    <TextBlock Margin="3"></TextBlock>
+                    <TextBlock Margin="3" Text="{Binding TyreCompound}" />
+
                     <TextBlock Margin="3">FR</TextBlock>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="C:" Margin="3" />

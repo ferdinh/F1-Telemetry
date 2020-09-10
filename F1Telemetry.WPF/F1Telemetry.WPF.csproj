@@ -7,12 +7,55 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\TitilliumWeb-Black.ttf" />
+    <None Remove="Fonts\TitilliumWeb-Bold.ttf" />
+    <None Remove="Fonts\TitilliumWeb-BoldItalic.ttf" />
+    <None Remove="Fonts\TitilliumWeb-ExtraLight.ttf" />
+    <None Remove="Fonts\TitilliumWeb-ExtraLightItalic.ttf" />
+    <None Remove="Fonts\TitilliumWeb-Italic.ttf" />
+    <None Remove="Fonts\TitilliumWeb-Light.ttf" />
+    <None Remove="Fonts\TitilliumWeb-LightItalic.ttf" />
+    <None Remove="Fonts\TitilliumWeb-Regular.ttf" />
+    <None Remove="Fonts\TitilliumWeb-SemiBold.ttf" />
+    <None Remove="Fonts\TitilliumWeb-SemiBoldItalic.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="PropertyChanged.Fody" Version="3.2.8" />
     <PackageReference Include="ScottPlot.WPF" Version="4.0.38" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\F1Telemetry.Core\F1Telemetry.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\TitilliumWeb-Black.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-Bold.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-BoldItalic.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-ExtraLight.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-Italic.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-Light.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-LightItalic.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-Regular.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-SemiBold.ttf" />
+    <Resource Include="Fonts\TitilliumWeb-SemiBoldItalic.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Styles\Colour.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Button.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Window.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Text.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>
