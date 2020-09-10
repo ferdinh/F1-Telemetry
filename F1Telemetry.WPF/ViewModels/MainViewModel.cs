@@ -169,6 +169,10 @@ namespace F1Telemetry.WPF.ViewModels
                 {
                     ResetCurrentTelemetryIndexCursor();
                 }
+                else if (currentLapData.DriverStatus == DriverStatus.InLap || currentLapData.DriverStatus == DriverStatus.OutLap)
+                {
+
+                }
                 else
                 {
                     CurrentRenderPosition[0] = currentLapData.LapDistance;
