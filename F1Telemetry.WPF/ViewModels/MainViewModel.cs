@@ -7,7 +7,6 @@ using F1Telemetry.WPF.Model;
 using ScottPlot;
 using System;
 using System.ComponentModel;
-using System.Drawing.Text;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -162,6 +161,7 @@ namespace F1Telemetry.WPF.ViewModels
 
             var currentTelemetry = Manager.GetPlayerInfo()?.CurrentTelemetry;
             var currentLapData = Manager.GetPlayerInfo()?.LapData.LastOrDefault();
+            var currentCarStatus = Manager.GetPlayerInfo()?.CurrentCarStatus;
 
             if (currentTelemetry != null)
             {
@@ -171,7 +171,6 @@ namespace F1Telemetry.WPF.ViewModels
                 }
                 else if (currentLapData.DriverStatus == DriverStatus.InLap || currentLapData.DriverStatus == DriverStatus.OutLap)
                 {
-
                 }
                 else
                 {
@@ -204,6 +203,11 @@ namespace F1Telemetry.WPF.ViewModels
                 }
 
                 UpdateCurrentTelemetry(currentTelemetry);
+            }
+
+            if (currentCarStatus != null)
+            {
+                CurrentTelemetry.TyreCompound = (TyreCompound)currentCarStatus.ActualTyreCompound;
             }
 
             void UpdateCurrentTelemetry(CarTelemetryData currentTelemetry)

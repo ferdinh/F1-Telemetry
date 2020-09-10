@@ -83,6 +83,16 @@ namespace F1Telemetry.Core
                     }
 
                     break;
+
+                case PacketCarStatusData pCarStatusData:
+
+                    for (int i = 0; i < pCarStatusData.CarStatusData.Length; i++)
+                    {
+                        var carStatusData = pCarStatusData.CarStatusData[i];
+                        Drivers[i].AddCarStatusData(carStatusData);
+                    }
+
+                    break;
             }
 
             return packetTypeReceived;
