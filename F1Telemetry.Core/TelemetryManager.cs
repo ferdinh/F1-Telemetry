@@ -37,29 +37,6 @@ namespace F1Telemetry.Core
 
             switch (packet)
             {
-                //case PacketSessionData pSessionData:
-                //    packetSessionData = pSessionData;
-                //    packetQueue.Enqueue(packetSessionData);
-                //    break;
-
-                //case PacketCarTelemetryData pCarTelemetryData:
-                //    packetCarTelemetryData = pCarTelemetryData;
-                //    packetQueue.Enqueue(packetCarTelemetryData);
-                //    break;
-
-                //case PacketLapData pLapData:
-                //    LapData = pLapData;
-                //    packetQueue.Enqueue(LapData);
-                //    break;
-
-                //case PacketMotionData pMotionData:
-                //    packetCarMotionData = pMotionData;
-                //    packetQueue.Enqueue(packetCarMotionData);
-                //    break;
-
-                //default:
-                //    break;
-
                 case PacketSessionData packetSessionData:
 
                     if (Session == null)
@@ -106,11 +83,6 @@ namespace F1Telemetry.Core
                     }
 
                     break;
-
-                    //case PacketMotionData pMotionData:
-                    //    packetCarMotionData = pMotionData;
-                    //    packetQueue.Enqueue(packetCarMotionData);
-                    //    break;
             }
 
             return packetTypeReceived;
