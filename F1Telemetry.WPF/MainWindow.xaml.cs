@@ -1,5 +1,6 @@
 ﻿using F1Telemetry.Core;
 using F1Telemetry.WPF.ViewModels;
+using F1Telemetry.WPF.Windows;
 using System;
 using System.Windows;
 
@@ -33,7 +34,7 @@ namespace F1Telemetry.WPF
         /// </summary>
         private void BindGraphToViewModel()
         {
-            BindCursorBar(); 
+            BindCursorBar();
 
             for (int i = 0; i < MainViewModel.LapData.Length; i++)
             {
