@@ -38,20 +38,22 @@
                 <ColumnDefinition  Width="30*" />
             </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="3*" />
-            </Grid.RowDefinitions>
-            <WpfPlot Name="SpeedGraphPlot" Grid.Column="0" />
-            <WpfPlot Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
-            <WpfPlot Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
-            <WpfPlot Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                </Grid.RowDefinitions>
 
-            
-            <!--Car Info Panel--> 
-            
+                <WpfPlot Name="SpeedGraphPlot" Grid.Column="0" />
+                <WpfPlot Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
+                <WpfPlot Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
+                <WpfPlot Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
+            </Grid>
+
+            <!--Car Info Panel-->
+
             <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
                 <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}">Car Info</TextBlock>
                 <Grid>
