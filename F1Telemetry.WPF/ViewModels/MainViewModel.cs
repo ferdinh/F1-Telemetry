@@ -183,32 +183,35 @@ namespace F1Telemetry.WPF.ViewModels
                 }
                 else
                 {
-                    CurrentRenderPosition[0] = currentLapData.LapDistance;
+                    if (IsLiveTelemetryEnabled)
+                    {
+                        CurrentRenderPosition[0] = currentLapData.LapDistance;
 
-                    var currentLapDataModel = LapData[CurrentLapCursor];
+                        var currentLapDataModel = LapData[CurrentLapCursor];
 
-                    var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
+                        var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
 
-                    currentLapDataModel.Speed[CurrentTelemetryIndexCursor] = currentTelemetry.Speed;
-                    currentLapDataModel.Distance[CurrentTelemetryIndexCursor] = currentLapData.LapDistance;
-                    currentLapDataModel.Gear[CurrentTelemetryIndexCursor] = currentTelemetry.Gear;
+                        currentLapDataModel.Speed[CurrentTelemetryIndexCursor] = currentTelemetry.Speed;
+                        currentLapDataModel.Distance[CurrentTelemetryIndexCursor] = currentLapData.LapDistance;
+                        currentLapDataModel.Gear[CurrentTelemetryIndexCursor] = currentTelemetry.Gear;
 
-                    currentLapDataModel.Throttle[CurrentTelemetryIndexCursor] = currentTelemetry.Throttle;
-                    currentLapDataModel.Brake[CurrentTelemetryIndexCursor] = currentTelemetry.Brake;
+                        currentLapDataModel.Throttle[CurrentTelemetryIndexCursor] = currentTelemetry.Throttle;
+                        currentLapDataModel.Brake[CurrentTelemetryIndexCursor] = currentTelemetry.Brake;
 
-                    SpeedGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
-                    SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
+                        SpeedGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
+                        SpeedGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    GearGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
-                    GearGraph[CurrentLapCursor].label = lapNumberLabel;
+                        GearGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
+                        GearGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    BrakeGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
-                    BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
+                        BrakeGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
+                        BrakeGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    ThrottleGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
-                    ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
+                        ThrottleGraph[CurrentLapCursor].maxRenderIndex = CurrentTelemetryIndexCursor;
+                        ThrottleGraph[CurrentLapCursor].label = lapNumberLabel;
 
-                    CurrentTelemetryIndexCursor++;
+                        CurrentTelemetryIndexCursor++;
+                    }
                 }
 
                 UpdateCurrentTelemetry(currentTelemetry);
