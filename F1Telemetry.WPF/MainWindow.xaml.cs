@@ -1,6 +1,5 @@
 ﻿using F1Telemetry.Core;
 using F1Telemetry.WPF.ViewModels;
-using F1Telemetry.WPF.Windows;
 using System;
 using System.Windows;
 
