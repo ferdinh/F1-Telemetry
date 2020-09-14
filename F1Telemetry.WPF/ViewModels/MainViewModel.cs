@@ -6,6 +6,7 @@ using F1Telemetry.WPF.Command;
 using F1Telemetry.WPF.Model;
 using ScottPlot;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -61,6 +62,8 @@ namespace F1Telemetry.WPF.ViewModels
         public PlottableSignalXY[] ThrottleGraph { get; } = new PlottableSignalXY[3];
         public UDPListener UDPListener { get; private set; }
 
+        public ObservableCollection<LapSummaryModel> LapSummaries { get; } = new ObservableCollection<LapSummaryModel>();
+
         private void ResetCurrentTelemetryIndexCursor()
         {
             CurrentTelemetryIndexCursor = 0;
@@ -90,6 +93,15 @@ namespace F1Telemetry.WPF.ViewModels
                     CurrentLapCursor = (CurrentLapCursor + 1) % LapData.Length;
                     LapData[CurrentLapCursor].Clear();
                     ResetCurrentTelemetryIndexCursor();
+
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        LapSummaries.Add(new LapSummaryModel
+                        {
+                            LapNumber = e.LastLapNumber,
+                            LapTime = e.LastLapTime
+                        });
+                    });
                 };
             }
         }
