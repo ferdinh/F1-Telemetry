@@ -23,6 +23,7 @@ namespace F1Telemetry.WPF.ViewModels
         public MainViewModel()
         {
             SetTopmostCommand = new RelayCommand<bool>(SetTopmost);
+            EnableLiveTelemetryCommand = new RelayCommand<bool>(EnableLiveTelemetry);
 
             for (int i = 0; i < LapData.Length; i++)
             {
@@ -43,6 +44,8 @@ namespace F1Telemetry.WPF.ViewModels
         public double[] CurrentRenderPosition { get; } = new double[] { 0 };
         public double[] CurrentRenderValue { get; } = new double[] { 1000 };
 
+        public bool IsLiveTelemetryEnabled { get; set; } = true;
+
         public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
         public PlottableSignalXY[] GearGraph { get; } = new PlottableSignalXY[3];
         public DispatcherTimer GraphRenderTimer { get; } = new DispatcherTimer();
@@ -51,6 +54,7 @@ namespace F1Telemetry.WPF.ViewModels
         public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
         public TelemetryManager Manager { get; } = new TelemetryManager();
         public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
+        public RelayCommand<bool> EnableLiveTelemetryCommand { get; }
         public RelayCommand<bool> SetTopmostCommand { get; }
         public PlottableSignalXY[] SpeedGraph { get; } = new PlottableSignalXY[3];
         public RelayCommand StartListeningCommand { get; }
@@ -93,6 +97,11 @@ namespace F1Telemetry.WPF.ViewModels
         private void SetTopmost(bool topmost)
         {
             IsTopmost = topmost;
+        }
+
+        private void EnableLiveTelemetry(bool enableLiveTelemetry)
+        {
+            IsLiveTelemetryEnabled = enableLiveTelemetry;
         }
 
         private async Task StartListeningAsync(object sender)
