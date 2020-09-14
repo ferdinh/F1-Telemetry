@@ -24,6 +24,8 @@ namespace F1Telemetry.WPF
             BindGraphToViewModel();
             RegisterGraphRenderDispatcher();
 
+            lapLeaderboard.ItemsSource = MainViewModel.LapSummaries;
+
             MainViewModel.Manager.NewSession += ManagerNewSession;
         }
 
