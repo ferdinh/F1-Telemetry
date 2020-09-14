@@ -45,7 +45,7 @@ namespace F1Telemetry.WPF.ViewModels
         public double[] CurrentRenderPosition { get; } = new double[] { 0 };
         public double[] CurrentRenderValue { get; } = new double[] { 1000 };
 
-        public bool IsLiveTelemetryEnabled { get; set; } = true;
+        public bool IsLiveTelemetryEnabled { get; set; }
 
         public CurrentTelemetryDataModel CurrentTelemetry { get; set; } = new CurrentTelemetryDataModel();
         public PlottableSignalXY[] GearGraph { get; } = new PlottableSignalXY[3];
