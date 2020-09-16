@@ -23,6 +23,11 @@ namespace F1Telemetry.WPF
             BindGraphToViewModel();
             RegisterGraphRenderDispatcher();
 
+            MainViewModel.SpeedGraphPlot = SpeedGraphPlot;
+            MainViewModel.ThrottleGraphPlot = ThrottleGraphPlot;
+            MainViewModel.BrakeGraphPlot = BrakeGraphPlot;
+            MainViewModel.GearGraphPlot = GearGraphPlot;
+
             lapLeaderboard.ItemsSource = MainViewModel.LapSummaries;
 
             MainViewModel.Manager.NewSession += ManagerNewSession;
