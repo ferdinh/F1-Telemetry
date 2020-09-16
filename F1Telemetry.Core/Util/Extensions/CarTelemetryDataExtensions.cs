@@ -9,10 +9,11 @@ namespace F1Telemetry.Core.Util.Extensions
         public static IEnumerable<CarTelemetryData> GetForLap(this IList<CarTelemetryData> carTelemetryData, IEnumerable<LapData> lapData)
         {
             var lapCarTelemetryData = new List<CarTelemetryData>();
+            var carTelemDataCopy = carTelemetryData.ToArray();
 
             foreach (var lastLap in lapData)
             {
-                lapCarTelemetryData.Add(carTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                lapCarTelemetryData.Add(carTelemDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
             }
 
             return lapCarTelemetryData;
