@@ -132,9 +132,9 @@ namespace F1Telemetry.WPF.ViewModels
             IsTopmost = topmost;
         }
 
-        private void EnableLiveTelemetry(bool enableLiveTelemetry)
+        private void EnableLiveTelemetry(bool isLiveTelemetryEnabled)
         {
-            IsLiveTelemetryEnabled = enableLiveTelemetry;
+            IsLiveTelemetryEnabled = isLiveTelemetryEnabled;
         }
 
         private void ToggleToGraph((bool shouldPlot, int lapNumber) toggleLapInfo)
