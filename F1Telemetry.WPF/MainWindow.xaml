@@ -1,15 +1,18 @@
-﻿<Window x:Class="F1Telemetry.WPF.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:core="clr-namespace:F1Telemetry.Core.Data;assembly=F1Telemetry.Core"
+        x:Name="window" x:Class="F1Telemetry.WPF.MainWindow"
         mc:Ignorable="d"
         Title="F1 Telemetry" Height="550" Width="900" Topmost="{Binding IsTopmost}">
 
     <Window.Resources>
         <local:ToPercentageConverter x:Key="ToPercentageConverter" />
         <local:ToLapTimeString x:Key="ToLapTimeString" />
+        <local:ToggleLapCommandParamaterConverter x:Key="ToggleLapCommandParameterConverter" />
     </Window.Resources>
 
     <Window.DataContext>
@@ -34,114 +37,165 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition  Width="9*" />
-                <ColumnDefinition  Width="2*" />
+                <ColumnDefinition  Width="70*" />
+                <ColumnDefinition  Width="30*" />
             </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="3*" />
-            </Grid.RowDefinitions>
-            <WpfPlot Name="SpeedGraphPlot" Grid.Column="0" />
-            <WpfPlot Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
-            <WpfPlot Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
-            <WpfPlot Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                </Grid.RowDefinitions>
 
-            
-            <!--Car Info Panel--> 
-            
-            <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
-                <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}">Car Info</TextBlock>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Margin="3" Text="Lap:" />
-                        <TextBlock Margin="3" Text="Time:" />
-                        <TextBlock Margin="3" Text="Spd:" />
-                        <TextBlock Margin="3" Text="RPM:" />
-                        <TextBlock Margin="3" Text="Throttle:" />
-                        <TextBlock Margin="3" Text="Brake:" />
-                    </StackPanel>
+                <WpfPlot x:Name="SpeedGraphPlot" Grid.Column="0" />
+                <WpfPlot x:Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
+                <WpfPlot x:Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
+                <WpfPlot x:Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
+            </Grid>
 
-                    <StackPanel Grid.Column="1">
-                        <TextBlock Margin="3" Text="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Margin="3" Text="{Binding LapTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToLapTimeString}}" />
-                        <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Margin="3" Text="{Binding Throttle, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
-                        <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
-                        <TextBlock Margin="3" Text="{Binding Brake, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ToPercentageConverter}}" />
-                        <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
+            <!--Car Info Panel-->
+            <Grid Grid.Column="2">
 
-            <!--Tyre info panel-->
-            <Grid Grid.Column="1" Grid.Row="2" DataContext="{Binding CurrentTelemetry}" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" TextElement.FontSize="11">
-                    <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}">
-                            Tyre Info
-                    </TextBlock>
-                    <TextBlock Margin="3">Compound</TextBlock>
+                <ListView x:Name="lapLeaderboard" ItemsSource="{Binding LapSummaries}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="" Width="{x:Static sys:Double.NaN}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <CheckBox Command="{Binding DataContext.ToggleToGraphCommand, ElementName=window, Mode=OneWay}">
+                                                <CheckBox.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource ToggleLapCommandParameterConverter}">
+                                                        <MultiBinding.Bindings>
+                                                            <Binding Path="IsChecked">
+                                                                <Binding.RelativeSource>
+                                                                    <RelativeSource>
+                                                                        <RelativeSource.Mode>Self</RelativeSource.Mode>
+                                                                    </RelativeSource>
+                                                                </Binding.RelativeSource>
+                                                            </Binding>
+                                                            <Binding Path="LapNumber" />
+                                                        </MultiBinding.Bindings>
+                                                    </MultiBinding>
+                                                </CheckBox.CommandParameter>
+                                            </CheckBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNumber}" Width="{x:Static sys:Double.NaN}" />
+                            <GridViewColumn Header="Time" Width="{x:Static sys:Double.NaN}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding LapTime, Converter={StaticResource ToLapTimeString}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
-                    <TextBlock Margin="3">FL</TextBlock>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="C:" Margin="3" />
-                        <TextBlock Name="FrontLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
+                        <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}"><Run Text="Car Info" /></TextBlock>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Margin="3" Text="Lap:" />
+                                <TextBlock Margin="3" Text="Time:" />
+                                <TextBlock Margin="3" Text="Spd:" />
+                                <TextBlock Margin="3" Text="RPM:" />
+                                <TextBlock Margin="3" Text="Throttle:" />
+                                <TextBlock Margin="3" Text="Brake:" />
+                            </StackPanel>
 
-                        <TextBlock Text="S:" Margin="3" />
-                        <TextBlock Name="FrontLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Margin="3" Text="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Margin="3" Text="{Binding LapTime, Converter={StaticResource ToLapTimeString}, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Margin="3" Text="{Binding Throttle, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
+                                <TextBlock Margin="3" Text="{Binding Brake, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
 
-                    <TextBlock Margin="3">RL</TextBlock>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="C:" Margin="3" />
-                        <TextBlock Name="RearLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                    <!--Tyre info panel-->
+                    <Grid Grid.Column="1" Grid.Row="2" DataContext="{Binding CurrentTelemetry}" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="S:" Margin="3" />
-                        <TextBlock Name="RearLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                </StackPanel>
+                        <StackPanel Grid.Column="0" TextElement.FontSize="11">
+                            <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}"><Run Text="Tyre Info" /></TextBlock>
+                            <TextBlock Margin="3"><Run Text="Compound" /></TextBlock>
 
-                <StackPanel Grid.Column="1" TextElement.FontSize="11">
-                    <TextBlock Margin="3"></TextBlock>
-                    <TextBlock Margin="3" Text="{Binding TyreCompound}" />
+                            <TextBlock Margin="3"><Run Text="FL" /></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="C:" Margin="3" />
+                                <TextBlock x:Name="FrontLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Margin="3">FR</TextBlock>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="C:" Margin="3" />
-                        <TextBlock Name="FrontRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Text="S:" Margin="3" />
+                                <TextBlock x:Name="FrontLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
 
-                        <TextBlock Text="S:" Margin="3" />
-                        <TextBlock Name="FrontRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
+                            <TextBlock Margin="3"><Run Text="RL" /></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="C:" Margin="3" />
+                                <TextBlock x:Name="RearLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Margin="3">RR</TextBlock>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="C:" Margin="3" />
-                        <TextBlock Name="RearRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Text="S:" Margin="3" />
+                                <TextBlock x:Name="RearLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </StackPanel>
 
-                        <TextBlock Text="S:" Margin="3" />
-                        <TextBlock Name="RearRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
+                        <StackPanel Grid.Column="1" TextElement.FontSize="11">
+                            <TextBlock Margin="3" />
+                            <TextBlock Margin="3" Text="{Binding TyreCompound}" />
+
+                            <TextBlock Margin="3"><Run Text="FR" /></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="C:" Margin="3" />
+                                <TextBlock x:Name="FrontRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <TextBlock Text="S:" Margin="3" />
+                                <TextBlock x:Name="FrontRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <TextBlock Margin="3"><Run Text="RR" /></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="C:" Margin="3" />
+                                <TextBlock x:Name="RearRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <TextBlock Text="S:" Margin="3" />
+                                <TextBlock x:Name="RearRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Grid>
         </Grid>
 
         <StackPanel Grid.Row="2">
             <WrapPanel>
-                <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
+                <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
                 <Label Content="Keep window on top" />
+
+                <CheckBox x:Name="DisableLiveTelemetryCheckbox" IsChecked="{Binding IsLiveTelemetryEnabled}" Command="{Binding EnableLiveTelemetryCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
+                <Label Content="Enable Live Telemetry" />
             </WrapPanel>
             <Button x:Name="ListenButton"  FontWeight="Bold" Command="{Binding StartListeningCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Start Listening" />
         </StackPanel>
