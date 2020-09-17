@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -125,6 +126,22 @@ namespace F1Telemetry.WPF.ViewModels
                     });
                 };
             }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                LapSummaries.Clear();
+            });
+
+
+            foreach (var plots in PlottedLapData)
+            {
+                SpeedGraphPlot.plt.Remove(plots.Value[0]);
+                ThrottleGraphPlot.plt.Remove(plots.Value[1]);
+                BrakeGraphPlot.plt.Remove(plots.Value[2]);
+                GearGraphPlot.plt.Remove(plots.Value[3]);
+            }
+
+            PlottedLapData.Clear();
         }
 
         private void SetTopmost(bool topmost)
