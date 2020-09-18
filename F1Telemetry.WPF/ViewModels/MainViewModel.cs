@@ -28,7 +28,7 @@ namespace F1Telemetry.WPF.ViewModels
             SetTopmostCommand = new RelayCommand<bool>(SetTopmost);
             EnableLiveTelemetryCommand = new RelayCommand<bool>(EnableLiveTelemetry);
             ToggleToGraphCommand = new RelayCommand<(bool, int)>(ToggleToGraph);
-            ClearAllGraphCommand = new RelayCommand(ClearAllGraph);
+            ClearAllGraphCommand = new RelayCommand(ClearAllGraph, CanClearAllGraph);
             ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph, _ => LapData != null);
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
@@ -226,6 +226,19 @@ namespace F1Telemetry.WPF.ViewModels
 
             ResetRenderCursor();
         }
+
+        /// <summary>
+        /// Determines whether this instance [can clear all graph].
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>
+        ///   <c>true</c> if this instance [can clear all graph]; otherwise, <c>false</c>.
+        /// </returns>
+        private bool CanClearAllGraph(object parameter)
+        {
+            return (LapSummaries.SingleOrDefault(s => s.IsChecked) != default) || ClearLiveTelemetryGraphCommand.CanExecute(null);
+        }
+              
 
         private void ClearAllGraph(object parameter)
         {
