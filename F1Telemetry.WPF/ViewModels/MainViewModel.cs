@@ -233,7 +233,10 @@ namespace F1Telemetry.WPF.ViewModels
 
         private void ClearAllGraph(object sender)
         {
-            ClearLiveTelemetryGraph(sender);
+            if (ClearLiveTelemetryGraphCommand.CanExecute(null))
+            {
+                ClearLiveTelemetryGraphCommand.Execute(null);
+            }
 
             foreach (var plots in PlottedLapData)
             {
