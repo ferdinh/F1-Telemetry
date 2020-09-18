@@ -157,7 +157,6 @@ namespace F1Telemetry.WPF.ViewModels
             {
                 BindLiveTelemetryGraph();
             }
-            
         }
 
         private void ToggleToGraph((bool shouldPlot, int lapNumber) toggleLapInfo)
@@ -238,7 +237,6 @@ namespace F1Telemetry.WPF.ViewModels
         {
             return (LapSummaries.SingleOrDefault(s => s.IsChecked) != default) || ClearLiveTelemetryGraphCommand.CanExecute(null);
         }
-              
 
         private void ClearAllGraph(object parameter)
         {
