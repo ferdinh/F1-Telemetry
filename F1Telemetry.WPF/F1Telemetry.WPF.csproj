@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="PropertyChanged.Fody" Version="3.2.8" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.0.38" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.0.39" />
   </ItemGroup>
 
   <ItemGroup>
