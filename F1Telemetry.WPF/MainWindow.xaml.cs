@@ -26,8 +26,6 @@ namespace F1Telemetry.WPF
             MainViewModel.GearGraphPlot = GearGraphPlot;
 
             lapLeaderboard.ItemsSource = MainViewModel.LapSummaries;
-
-            MainViewModel.Manager.NewSession += ManagerNewSession;
         }
 
         private MainViewModel MainViewModel { get; set; }
@@ -42,20 +40,6 @@ namespace F1Telemetry.WPF
                 BrakeGraphPlot.Render(recalculateLayout: true);
                 ThrottleGraphPlot.Render(recalculateLayout: true);
             };
-        }
-
-        private void ManagerNewSession(object sender, EventArgs e)
-        {
-            var manager = sender as TelemetryManager;
-
-            if (manager != null)
-            {
-                SpeedGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 360);
-                GearGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 9);
-
-                ThrottleGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
-                BrakeGraphPlot.plt.Axis(0, manager.Session.TrackLength, 0, 1.05);
-            }
         }
     }
 }
