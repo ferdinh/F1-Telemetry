@@ -28,6 +28,8 @@ namespace F1Telemetry.WPF.ViewModels
             SetTopmostCommand = new RelayCommand<bool>(SetTopmost);
             EnableLiveTelemetryCommand = new RelayCommand<bool>(EnableLiveTelemetry);
             ToggleToGraphCommand = new RelayCommand<(bool, int)>(ToggleToGraph);
+            ClearAllGraphCommand = new RelayCommand(ClearAllGraph);
+            ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph);
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
 
@@ -74,6 +76,8 @@ namespace F1Telemetry.WPF.ViewModels
         public RelayCommand<bool> EnableLiveTelemetryCommand { get; }
         public RelayCommand<bool> SetTopmostCommand { get; }
         public RelayCommand<(bool, int)> ToggleToGraphCommand { get; }
+        public RelayCommand ClearLiveTelemetryGraphCommand { get; }
+        public RelayCommand ClearAllGraphCommand { get; }
         public PlottableSignalXY[] SpeedGraph { get; } = new PlottableSignalXY[3];
         public RelayCommand StartListeningCommand { get; }
         public PlottableSignalXY[] ThrottleGraph { get; } = new PlottableSignalXY[3];
@@ -130,7 +134,6 @@ namespace F1Telemetry.WPF.ViewModels
                 LapSummaries.Clear();
             });
 
-
             foreach (var plots in PlottedLapData)
             {
                 SpeedGraphPlot.plt.Remove(plots.Value[0]);
@@ -183,13 +186,12 @@ namespace F1Telemetry.WPF.ViewModels
 
                 var speedGraphPlot = SpeedGraphPlot.plt.PlotScatter(distance.ToArray(), speed.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
                 speedGraphPlot.label = lapNumberLabel;
-                
+
                 var throttleGraphPlot = ThrottleGraphPlot.plt.PlotScatter(distance.ToArray(), throttle.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
                 throttleGraphPlot.label = lapNumberLabel;
 
                 var brakeGraphPlot = BrakeGraphPlot.plt.PlotScatter(distance.ToArray(), brake.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
                 brakeGraphPlot.label = lapNumberLabel;
-
 
                 var gearGraphPlot = GearGraphPlot.plt.PlotScatter(distance.ToArray(), gear.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
                 gearGraphPlot.label = lapNumberLabel;
@@ -198,7 +200,6 @@ namespace F1Telemetry.WPF.ViewModels
                 graphPlots[1] = throttleGraphPlot;
                 graphPlots[2] = brakeGraphPlot;
                 graphPlots[3] = gearGraphPlot;
-
 
                 PlottedLapData.Add(toggleLapInfo.lapNumber, graphPlots);
             }
@@ -214,6 +215,39 @@ namespace F1Telemetry.WPF.ViewModels
 
                     PlottedLapData.Remove(toggleLapInfo.lapNumber);
                 }
+            }
+        }
+
+        private void ClearLiveTelemetryGraph(object sender)
+        {
+            foreach (var lapModel in LapData)
+            {
+                lapModel.Clear();
+            }
+
+            UnbindLiveTelemetryGraph();
+            IsLiveTelemetryEnabled = false;
+
+            ResetRenderCursor();
+        }
+
+        private void ClearAllGraph(object sender)
+        {
+            ClearLiveTelemetryGraph(sender);
+
+            foreach (var plots in PlottedLapData)
+            {
+                SpeedGraphPlot.plt.Remove(plots.Value[0]);
+                ThrottleGraphPlot.plt.Remove(plots.Value[1]);
+                BrakeGraphPlot.plt.Remove(plots.Value[2]);
+                GearGraphPlot.plt.Remove(plots.Value[3]);
+            }
+
+            PlottedLapData.Clear();
+
+            foreach (var lapSummary in LapSummaries)
+            {
+                lapSummary.IsChecked = false;
             }
         }
 
