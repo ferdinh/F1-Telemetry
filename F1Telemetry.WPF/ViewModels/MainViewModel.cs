@@ -29,7 +29,7 @@ namespace F1Telemetry.WPF.ViewModels
             EnableLiveTelemetryCommand = new RelayCommand<bool>(EnableLiveTelemetry);
             ToggleToGraphCommand = new RelayCommand<(bool, int)>(ToggleToGraph);
             ClearAllGraphCommand = new RelayCommand(ClearAllGraph);
-            ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph);
+            ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph, _ => LapData != null);
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
 
