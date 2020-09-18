@@ -70,8 +70,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <CheckBox Command="{Binding DataContext.ToggleToGraphCommand, ElementName=window, Mode=OneWay}">
-                                                <CheckBox.CommandParameter>
+                                            <CheckBox Command="{Binding DataContext.ToggleToGraphCommand, ElementName=window, Mode=OneWay}" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                            <CheckBox.CommandParameter>
                                                     <MultiBinding Converter="{StaticResource ToggleLapCommandParameterConverter}">
                                                         <MultiBinding.Bindings>
                                                             <Binding Path="IsChecked">
