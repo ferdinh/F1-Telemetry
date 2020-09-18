@@ -29,12 +29,6 @@ namespace F1Telemetry.WPF.ViewModels
             EnableLiveTelemetryCommand = new RelayCommand<bool>(EnableLiveTelemetry);
             ToggleToGraphCommand = new RelayCommand<(bool, int)>(ToggleToGraph);
 
-
-            for (int i = 0; i < LapData.Length; i++)
-            {
-                LapData[i] = new CurrentLapDataModel();
-            }
-
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
 
             GraphRenderTimer.Interval = TimeSpan.FromMilliseconds(33);
@@ -44,10 +38,10 @@ namespace F1Telemetry.WPF.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-       
         // This is quite an unfortunate side effect of ScottPlot library and cannot control the chart rendering via
         // MVVM. For now hold the WpfPlot reference to the model to handle the adding and removal of plot.
         public WpfPlot SpeedGraphPlot { get; set; }
+
         public WpfPlot BrakeGraphPlot { get; set; }
         public WpfPlot ThrottleGraphPlot { get; set; }
         public WpfPlot GearGraphPlot { get; set; }
@@ -60,6 +54,7 @@ namespace F1Telemetry.WPF.ViewModels
         /// </value>
         private Dictionary<int, Plottable[]> PlottedLapData { get; } = new Dictionary<int, Plottable[]>();
 
+        private readonly double DefaultLineWidth = 1.75;
 
         public PlottableSignalXY[] BrakeGraph { get; } = new PlottableSignalXY[3];
         public int CurrentLapCursor { get; set; }
@@ -73,7 +68,7 @@ namespace F1Telemetry.WPF.ViewModels
         public DispatcherTimer GraphRenderTimer { get; } = new DispatcherTimer();
         public bool IsListening { get; set; }
         public bool IsTopmost { get; internal set; }
-        public CurrentLapDataModel[] LapData { get; } = new CurrentLapDataModel[3];
+        public CurrentLapDataModel[] LapData { get; set; }
         public TelemetryManager Manager { get; } = new TelemetryManager();
         public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
         public RelayCommand<bool> EnableLiveTelemetryCommand { get; }
@@ -102,9 +97,12 @@ namespace F1Telemetry.WPF.ViewModels
 
             if (manager != null)
             {
-                foreach (var lapModel in LapData)
+                if (LapData != null)
                 {
-                    lapModel.Clear();
+                    foreach (var lapModel in LapData)
+                    {
+                        lapModel.Clear();
+                    }
                 }
 
                 ResetRenderCursor();
@@ -152,6 +150,15 @@ namespace F1Telemetry.WPF.ViewModels
         private void EnableLiveTelemetry(bool isLiveTelemetryEnabled)
         {
             IsLiveTelemetryEnabled = isLiveTelemetryEnabled;
+
+            if (isLiveTelemetryEnabled)
+            {
+                BindLiveTelemetryGraph();
+            }
+            else
+            {
+                UnbindLiveTelemetryGraph();
+            }
         }
 
         private void ToggleToGraph((bool shouldPlot, int lapNumber) toggleLapInfo)
@@ -347,6 +354,73 @@ namespace F1Telemetry.WPF.ViewModels
                 CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
                 CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
             }
+        }
+
+        /// <summary>
+        /// Binds the graphs to view model.
+        /// </summary>
+        private void BindLiveTelemetryGraph()
+        {
+            BindCursorBar();
+
+            LapData = new CurrentLapDataModel[3];
+
+            for (int i = 0; i < LapData.Length; i++)
+            {
+                LapData[i] = new CurrentLapDataModel();
+            }
+
+            for (int i = 0; i < LapData.Length; i++)
+            {
+                SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Speed, lineWidth: DefaultLineWidth);
+                SpeedGraphPlot.plt.YLabel("Speed");
+                SpeedGraphPlot.plt.Legend();
+
+                GearGraph[i] = GearGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Gear, lineWidth: DefaultLineWidth);
+
+                GearGraphPlot.plt.YLabel("Gear");
+                GearGraphPlot.plt.Legend();
+
+                BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Brake, lineWidth: DefaultLineWidth);
+                ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Throttle, lineWidth: DefaultLineWidth);
+
+                SpeedGraphPlot.plt.Axis(0, 6000, 0, 360);
+                GearGraphPlot.plt.Axis(0, 6000, 0, 9);
+
+                ThrottleGraphPlot.plt.Axis(0, 6000, 0, 1.05);
+                ThrottleGraphPlot.plt.YLabel("Throttle");
+                ThrottleGraphPlot.plt.Legend();
+
+                BrakeGraphPlot.plt.Axis(0, 6000, 0, 1.05);
+                BrakeGraphPlot.plt.YLabel("Brake");
+                BrakeGraphPlot.plt.Legend();
+            }
+        }
+
+        private void BindCursorBar()
+        {
+            SpeedGraphPlot.plt.PlotBar(CurrentRenderPosition, CurrentRenderValue);
+            GearGraphPlot.plt.PlotBar(CurrentRenderPosition, CurrentRenderValue);
+            BrakeGraphPlot.plt.PlotBar(CurrentRenderPosition, CurrentRenderValue);
+            ThrottleGraphPlot.plt.PlotBar(CurrentRenderPosition, CurrentRenderValue);
+        }
+
+        private void UnbindLiveTelemetryGraph()
+        {
+            for (int i = 0; i < SpeedGraph.Length; i++)
+            {
+                SpeedGraphPlot.plt.Remove(SpeedGraph[i]);
+                ThrottleGraphPlot.plt.Remove(ThrottleGraph[i]);
+                BrakeGraphPlot.plt.Remove(BrakeGraph[i]);
+                GearGraphPlot.plt.Remove(GearGraph[i]);
+            }
+
+            Array.Clear(SpeedGraph, 0, SpeedGraph.Length);
+            Array.Clear(ThrottleGraph, 0, ThrottleGraph.Length);
+            Array.Clear(BrakeGraph, 0, BrakeGraph.Length);
+            Array.Clear(GearGraph, 0, GearGraph.Length);
+
+            LapData = null;
         }
 
         /// <summary>
