@@ -1,7 +1,6 @@
 ﻿using F1Telemetry.WPF.ViewModels;
 using FluentAssertions;
 using ScottPlot;
-using System;
 using Xunit;
 
 namespace F1Telemetry.Test.ViewModelTest
@@ -43,7 +42,6 @@ namespace F1Telemetry.Test.ViewModelTest
 
             actual.Should().BeFalse();
         }
-
 
         [Fact]
         public void ClearAllGraphCommand_Can_Execute_When_There_Is_Checked_Lap_Data()
@@ -95,5 +93,26 @@ namespace F1Telemetry.Test.ViewModelTest
             actual.Should().BeTrue();
         }
 
+        [Fact]
+        public void ClearLiveTelemetryGraphCommand_Can_Execute_When_There_Is_LapData()
+        {
+            var viewModel = new MainViewModel();
+
+            viewModel.LapData = new WPF.Model.CurrentLapDataModel[1];
+
+            var actual = viewModel.ClearAllGraphCommand.CanExecute(null);
+
+            actual.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ClearLiveTelemetryGraphCommand_Cannot_Execute_When_There_Is_No_LapData()
+        {
+            var viewModel = new MainViewModel();
+
+            var actual = viewModel.ClearAllGraphCommand.CanExecute(null);
+
+            actual.Should().BeFalse();
+        }
     }
 }
