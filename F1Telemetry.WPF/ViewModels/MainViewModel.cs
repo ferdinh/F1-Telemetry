@@ -313,6 +313,7 @@ namespace F1Telemetry.WPF.ViewModels
             Manager.Feed(eventArgs.Bytes);
 
             SessionInfo.SessionType = Manager.Session != null ? Manager.Session.SessionType.GetDisplayName() : "";
+            SessionInfo.TrackLength = (ushort)(Manager.Session != null ? Manager.Session.TrackLength : 0);
 
             var currentTelemetry = Manager.GetPlayerInfo()?.CurrentTelemetry;
             var currentLapData = Manager.GetPlayerInfo()?.LapData.LastOrDefault();
@@ -428,6 +429,11 @@ namespace F1Telemetry.WPF.ViewModels
                 BrakeGraphPlot.plt.YLabel("Brake");
                 BrakeGraphPlot.plt.Legend();
             }
+
+            SpeedGraphPlot.plt.Axis(0, SessionInfo.TrackLength, 0, 360);
+            GearGraphPlot.plt.Axis(0, SessionInfo.TrackLength, 0, 9);
+            ThrottleGraphPlot.plt.Axis(0, SessionInfo.TrackLength, 0, 1.05);
+            BrakeGraphPlot.plt.Axis(0, SessionInfo.TrackLength, 0, 1.05);
         }
 
         private void BindCursorBar()
