@@ -43,7 +43,6 @@ namespace F1Telemetry.WPF.ViewModels
         // This is quite an unfortunate side effect of ScottPlot library and cannot control the chart rendering via
         // MVVM. For now hold the WpfPlot reference to the model to handle the adding and removal of plot.
         public WpfPlot SpeedGraphPlot { get; set; }
-
         public WpfPlot BrakeGraphPlot { get; set; }
         public WpfPlot ThrottleGraphPlot { get; set; }
         public WpfPlot GearGraphPlot { get; set; }
@@ -218,7 +217,7 @@ namespace F1Telemetry.WPF.ViewModels
             }
         }
 
-        private void ClearLiveTelemetryGraph(object sender)
+        private void ClearLiveTelemetryGraph(object parameter)
         {
             foreach (var lapModel in LapData)
             {
@@ -231,7 +230,7 @@ namespace F1Telemetry.WPF.ViewModels
             ResetRenderCursor();
         }
 
-        private void ClearAllGraph(object sender)
+        private void ClearAllGraph(object parameter)
         {
             if (ClearLiveTelemetryGraphCommand.CanExecute(null))
             {
