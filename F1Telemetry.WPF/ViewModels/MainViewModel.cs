@@ -54,7 +54,7 @@ namespace F1Telemetry.WPF.ViewModels
         /// The plotted lap data.
         /// </value>
         private Dictionary<int, Plottable[]> PlottedLapData { get; } = new Dictionary<int, Plottable[]>();
-
+        
         private readonly double DefaultLineWidth = 1.75;
 
         public PlottableSignalXY[] BrakeGraph { get; } = new PlottableSignalXY[3];
@@ -157,7 +157,6 @@ namespace F1Telemetry.WPF.ViewModels
         private void EnableLiveTelemetry(bool isLiveTelemetryEnabled)
         {
             IsLiveTelemetryEnabled = isLiveTelemetryEnabled;
-
             if (isLiveTelemetryEnabled)
             {
                 BindLiveTelemetryGraph();
@@ -265,6 +264,7 @@ namespace F1Telemetry.WPF.ViewModels
                 lapSummary.IsChecked = false;
             }
         }
+
 
         private async Task StartListeningAsync(object sender)
         {
