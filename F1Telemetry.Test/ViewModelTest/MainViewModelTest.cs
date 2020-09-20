@@ -38,6 +38,17 @@ namespace F1Telemetry.Test.ViewModelTest
                 IsChecked = false
             });
 
+            viewModel.LapSummaries.Add(new WPF.Model.LapSummaryModel
+            {
+                IsChecked = false
+            });
+
+            viewModel.LapSummaries.Add(new WPF.Model.LapSummaryModel
+            {
+                IsChecked = false
+            });
+
+
             var actual = viewModel.ClearAllGraphCommand.CanExecute(null);
 
             actual.Should().BeFalse();
@@ -47,6 +58,16 @@ namespace F1Telemetry.Test.ViewModelTest
         public void ClearAllGraphCommand_Can_Execute_When_There_Is_Checked_Lap_Data()
         {
             var viewModel = new MainViewModel();
+            viewModel.LapSummaries.Add(new WPF.Model.LapSummaryModel
+            {
+                IsChecked = false
+            });
+
+            viewModel.LapSummaries.Add(new WPF.Model.LapSummaryModel
+            {
+                IsChecked = true
+            });
+
             viewModel.LapSummaries.Add(new WPF.Model.LapSummaryModel
             {
                 IsChecked = true
