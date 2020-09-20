@@ -239,7 +239,7 @@ namespace F1Telemetry.WPF.ViewModels
         /// </returns>
         private bool CanClearAllGraph(object parameter)
         {
-            return (LapSummaries.SingleOrDefault(s => s.IsChecked) != default) || ClearLiveTelemetryGraphCommand.CanExecute(null);
+            return (LapSummaries.FirstOrDefault(s => s.IsChecked) != default) || ClearLiveTelemetryGraphCommand.CanExecute(null);
         }
 
         private void ClearAllGraph(object parameter)
