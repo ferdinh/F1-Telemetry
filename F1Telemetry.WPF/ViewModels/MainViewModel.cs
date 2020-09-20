@@ -203,6 +203,11 @@ namespace F1Telemetry.WPF.ViewModels
                 graphPlots[2] = brakeGraphPlot;
                 graphPlots[3] = gearGraphPlot;
 
+                SpeedGraphPlot.plt.Legend();
+                ThrottleGraphPlot.plt.Legend();
+                BrakeGraphPlot.plt.Legend();
+                GearGraphPlot.plt.Legend();
+
                 PlottedLapData.Add(toggleLapInfo.lapNumber, graphPlots);
             }
 
