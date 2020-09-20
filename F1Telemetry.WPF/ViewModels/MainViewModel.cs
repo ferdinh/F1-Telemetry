@@ -117,10 +117,13 @@ namespace F1Telemetry.WPF.ViewModels
 
                 manager.GetPlayerInfo().NewLap += (s, e) =>
                 {
-                    ResetRenderCursor();
-                    CurrentLapCursor = (CurrentLapCursor + 1) % LapData.Length;
-                    LapData[CurrentLapCursor].Clear();
-                    ResetCurrentTelemetryIndexCursor();
+                    if (IsLiveTelemetryEnabled)
+                    {
+                        ResetRenderCursor();
+                        CurrentLapCursor = (CurrentLapCursor + 1) % LapData.Length;
+                        LapData[CurrentLapCursor].Clear();
+                        ResetCurrentTelemetryIndexCursor();
+                    }
 
                     System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
