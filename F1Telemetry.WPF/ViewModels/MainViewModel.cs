@@ -117,6 +117,7 @@ namespace F1Telemetry.WPF.ViewModels
                 SessionInfo.TrackLength = (ushort)(Manager.Session != null ? Manager.Session.TrackLength : 0);
 
                 UpdateGraphXAxisToTrackLength();
+                LimitGraphAxisBound();
 
                 ResetRenderCursor();
 
@@ -147,6 +148,14 @@ namespace F1Telemetry.WPF.ViewModels
             });
 
             ClearPlottedLapData();
+        }
+
+        private void LimitGraphAxisBound()
+        {
+            SpeedGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 360);
+            ThrottleGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 1.02);
+            BrakeGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 1.02);
+            GearGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 9);
         }
 
         private void SetTopmost(bool topmost)
