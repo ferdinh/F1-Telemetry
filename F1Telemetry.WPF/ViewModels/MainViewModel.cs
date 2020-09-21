@@ -146,15 +146,7 @@ namespace F1Telemetry.WPF.ViewModels
                 LapSummaries.Clear();
             });
 
-            foreach (var plots in PlottedLapData)
-            {
-                SpeedGraphPlot.plt.Remove(plots.Value[0]);
-                ThrottleGraphPlot.plt.Remove(plots.Value[1]);
-                BrakeGraphPlot.plt.Remove(plots.Value[2]);
-                GearGraphPlot.plt.Remove(plots.Value[3]);
-            }
-
-            PlottedLapData.Clear();
+            ClearPlottedLapData();
         }
 
         private void SetTopmost(bool topmost)
@@ -262,15 +254,7 @@ namespace F1Telemetry.WPF.ViewModels
                 ClearLiveTelemetryGraphCommand.Execute(null);
             }
 
-            foreach (var plots in PlottedLapData)
-            {
-                SpeedGraphPlot.plt.Remove(plots.Value[0]);
-                ThrottleGraphPlot.plt.Remove(plots.Value[1]);
-                BrakeGraphPlot.plt.Remove(plots.Value[2]);
-                GearGraphPlot.plt.Remove(plots.Value[3]);
-            }
-
-            PlottedLapData.Clear();
+            ClearPlottedLapData();
 
             foreach (var lapSummary in LapSummaries)
             {
@@ -484,6 +468,20 @@ namespace F1Telemetry.WPF.ViewModels
 
             ResetCurrentTelemetryIndexCursor();
             LapData = null;
+        }
+
+        private void ClearPlottedLapData()
+        {
+
+            foreach (var plots in PlottedLapData)
+            {
+                SpeedGraphPlot.plt.Remove(plots.Value[0]);
+                ThrottleGraphPlot.plt.Remove(plots.Value[1]);
+                BrakeGraphPlot.plt.Remove(plots.Value[2]);
+                GearGraphPlot.plt.Remove(plots.Value[3]);
+            }
+
+            PlottedLapData.Clear();
         }
 
         private void UpdateGraphXAxisToTrackLength()
