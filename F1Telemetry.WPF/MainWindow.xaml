@@ -126,9 +126,9 @@
                                     <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding Throttle, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
+                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" Foreground="#00b31B"/>
                                     <TextBlock Margin="3" Text="{Binding Brake, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
+                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#ED1C00" />
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
