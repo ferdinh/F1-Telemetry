@@ -477,6 +477,7 @@ namespace F1Telemetry.WPF.ViewModels
             Array.Clear(BrakeGraph, 0, BrakeGraph.Length);
             Array.Clear(GearGraph, 0, GearGraph.Length);
 
+            ResetCurrentTelemetryIndexCursor();
             LapData = null;
         }
 
