@@ -193,11 +193,9 @@
 
         <StackPanel Grid.Row="2">
             <WrapPanel>
-                <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
-                <Label Content="Keep window on top" />
+                <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" Content="Keep window on top" />
 
-                <CheckBox x:Name="DisableLiveTelemetryCheckbox" IsChecked="{Binding IsLiveTelemetryEnabled}" Command="{Binding EnableLiveTelemetryCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
-                <Label Content="Enable Live Telemetry" />
+                <CheckBox x:Name="DisableLiveTelemetryCheckbox" IsChecked="{Binding IsLiveTelemetryEnabled}" Command="{Binding EnableLiveTelemetryCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" Content="Enable Live Telemetry" />
             </WrapPanel>
 
             <WrapPanel>
@@ -212,14 +210,14 @@
                 <Button x:Name="ClearLiveTelemetryButton"
                         FontWeight="Bold"
                         Content="Clear Live Telemetry Graph"
-                        Command="{Binding ClearLiveTelemetryGraphCommand}" 
-                        ToolTip="Clears live telemetry data from the graph."/>
-                
-                <Button x:Name="ClearAllButton" 
-                        FontWeight="Bold" 
+                        Command="{Binding ClearLiveTelemetryGraphCommand}"
+                        ToolTip="Clears live telemetry data from the graph." />
+
+                <Button x:Name="ClearAllButton"
+                        FontWeight="Bold"
                         Content="Clear All Graph"
                         Command="{Binding ClearAllGraphCommand}"
-                        ToolTip="Clears all data from the graph."/>
+                        ToolTip="Clears all data from the graph." />
             </WrapPanel>
         </StackPanel>
     </Grid>
