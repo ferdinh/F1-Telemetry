@@ -31,7 +31,7 @@
 
             <StackPanel>
                 <WrapPanel DataContext="{Binding SessionInfo}">
-                    <Label Content="Session Type:" />
+                    <Label Content="Session Type: " />
                     <Label Content="{Binding SessionType, UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
             </StackPanel>
