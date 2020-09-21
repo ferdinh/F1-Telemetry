@@ -25,7 +25,7 @@ namespace F1Telemetry.WPF
             MainViewModel.BrakeGraphPlot = BrakeGraphPlot;
             MainViewModel.GearGraphPlot = GearGraphPlot;
 
-            lapLeaderboard.ItemsSource = MainViewModel.LapSummaries;
+            lapLeaderboardDataGrid.ItemsSource = MainViewModel.LapSummaries;
         }
 
         private MainViewModel MainViewModel { get; set; }

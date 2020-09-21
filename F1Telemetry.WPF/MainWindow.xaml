@@ -58,50 +58,61 @@
 
                 <!--Car Info Panel-->
                 <Grid Grid.Column="2">
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <ListView x:Name="lapLeaderboard" ItemsSource="{Binding LapSummaries}">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="" Width="{x:Static sys:Double.NaN}">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <CheckBox Command="{Binding DataContext.ToggleToGraphCommand, ElementName=window, Mode=OneWay}" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                                    <CheckBox.CommandParameter>
-                                                        <MultiBinding Converter="{StaticResource ToggleLapCommandParameterConverter}">
-                                                            <MultiBinding.Bindings>
-                                                                <Binding Path="IsChecked">
-                                                                    <Binding.RelativeSource>
-                                                                        <RelativeSource>
-                                                                            <RelativeSource.Mode>Self</RelativeSource.Mode>
-                                                                        </RelativeSource>
-                                                                    </Binding.RelativeSource>
-                                                                </Binding>
-                                                                <Binding Path="LapNumber" />
-                                                            </MultiBinding.Bindings>
-                                                        </MultiBinding>
-                                                    </CheckBox.CommandParameter>
-                                                </CheckBox>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNumber}" Width="{x:Static sys:Double.NaN}" />
-                                <GridViewColumn Header="Time" Width="{x:Static sys:Double.NaN}">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding LapTime, Converter={StaticResource ToLapTimeString}}" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                    <DataGrid x:Name="lapLeaderboardDataGrid" 
+                              ItemsSource="{Binding LapSummaries}" 
+                              HeadersVisibility="Column"
+                              IsReadOnly="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserReorderColumns="False"
+                              AutoGenerateColumns="False"
+                              SelectionMode="Single">
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn IsReadOnly="False" Width="23">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <CheckBox Command="{Binding DataContext.ToggleToGraphCommand, ElementName=window, Mode=OneWay}" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                                <CheckBox.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource ToggleLapCommandParameterConverter}">
+                                                        <MultiBinding.Bindings>
+                                                            <Binding Path="IsChecked">
+                                                                <Binding.RelativeSource>
+                                                                    <RelativeSource>
+                                                                        <RelativeSource.Mode>Self</RelativeSource.Mode>
+                                                                    </RelativeSource>
+                                                                </Binding.RelativeSource>
+                                                            </Binding>
+                                                            <Binding Path="LapNumber" />
+                                                        </MultiBinding.Bindings>
+                                                    </MultiBinding>
+                                                </CheckBox.CommandParameter>
+                                            </CheckBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn 
+                                Header="Lap"
+                                Binding="{Binding LapNumber}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}"/>
+                            <DataGridTextColumn
+                                Header="Time"
+                                Binding="{Binding LapTime, Converter={StaticResource ToLapTimeString}}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}"
+                                />
+                        </DataGrid.Columns>
+
+                    </DataGrid>
 
                     <StackPanel Grid.Column="1">
                         <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
