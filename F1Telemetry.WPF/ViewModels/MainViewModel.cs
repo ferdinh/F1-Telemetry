@@ -117,6 +117,7 @@ namespace F1Telemetry.WPF.ViewModels
                 SessionInfo.TrackLength = (ushort)(Manager.Session != null ? Manager.Session.TrackLength : 0);
 
                 UpdateGraphXAxisToTrackLength();
+                LimitGraphAxisBound();
 
                 ResetRenderCursor();
 
@@ -147,6 +148,14 @@ namespace F1Telemetry.WPF.ViewModels
             });
 
             ClearPlottedLapData();
+        }
+
+        private void LimitGraphAxisBound()
+        {
+            SpeedGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 360);
+            ThrottleGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 1.02);
+            BrakeGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 1.02);
+            GearGraphPlot.plt.AxisBounds(minX: 0, maxX: Manager.Session.TrackLength, minY: 0, maxY: 9);
         }
 
         private void SetTopmost(bool topmost)
@@ -428,14 +437,9 @@ namespace F1Telemetry.WPF.ViewModels
                 BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Brake, lineWidth: DefaultLineWidth);
                 ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Throttle, lineWidth: DefaultLineWidth);
 
-                SpeedGraphPlot.plt.Axis(0, 6000, 0, 360);
-                GearGraphPlot.plt.Axis(0, 6000, 0, 9);
-
-                ThrottleGraphPlot.plt.Axis(0, 6000, 0, 1.05);
                 ThrottleGraphPlot.plt.YLabel("Throttle");
                 ThrottleGraphPlot.plt.Legend();
 
-                BrakeGraphPlot.plt.Axis(0, 6000, 0, 1.05);
                 BrakeGraphPlot.plt.YLabel("Brake");
                 BrakeGraphPlot.plt.Legend();
             }
