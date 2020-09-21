@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:core="clr-namespace:F1Telemetry.Core.Data;assembly=F1Telemetry.Core"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         x:Name="window" x:Class="F1Telemetry.WPF.MainWindow"
         mc:Ignorable="d"
+        ui:WindowHelper.UseModernWindowStyle="True"
         Title="F1 Telemetry" Height="550" Width="900" Topmost="{Binding IsTopmost}">
 
     <Window.Resources>
