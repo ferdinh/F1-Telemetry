@@ -22,7 +22,7 @@
     </Window.DataContext>
 
     <ScrollViewer>
-        <Grid>
+        <Grid Margin="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="8*" />
