@@ -63,8 +63,8 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <DataGrid x:Name="lapLeaderboardDataGrid" 
-                              ItemsSource="{Binding LapSummaries}" 
+                    <DataGrid x:Name="lapLeaderboardDataGrid"
+                              ItemsSource="{Binding LapSummaries}"
                               HeadersVisibility="Column"
                               IsReadOnly="False"
                               CanUserAddRows="False"
@@ -97,24 +97,21 @@
                                         </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn 
+                            <DataGridTextColumn
                                 Header="Lap"
                                 Binding="{Binding LapNumber}"
                                 IsReadOnly="True"
-                                ElementStyle="{StaticResource CenterDataGridCell}"/>
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
                             <DataGridTextColumn
                                 Header="Time"
                                 Binding="{Binding LapTime, Converter={StaticResource ToLapTimeString}}"
                                 IsReadOnly="True"
-                                ElementStyle="{StaticResource CenterDataGridCell}"
-                                />
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
                         </DataGrid.Columns>
-
                     </DataGrid>
 
-                    <StackPanel Grid.Column="1">
+                    <ui:SimpleStackPanel Grid.Column="1">
                         <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
                             <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}"><Run Text="Car Info" /></TextBlock>
                             <Grid>
@@ -137,7 +134,7 @@
                                     <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding Throttle, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" Foreground="#00b31B"/>
+                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" Foreground="#00b31B" />
                                     <TextBlock Margin="3" Text="{Binding Brake, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
                                     <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#ED1C00" />
                                 </StackPanel>
@@ -145,59 +142,91 @@
                         </StackPanel>
 
                         <!--Tyre info panel-->
-                        <Grid Grid.Column="1" Grid.Row="2" DataContext="{Binding CurrentTelemetry}" Grid.RowSpan="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                        <ui:SimpleStackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBlock FontFamily="{StaticResource TitilliumBold}">Tyre Info</TextBlock>
+                            <Grid DataContext="{Binding CurrentTelemetry}" Grid.RowSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0" TextElement.FontSize="11">
-                                <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}"><Run Text="Tyre Info" /></TextBlock>
-                                <TextBlock Margin="3"><Run Text="Compound" /></TextBlock>
+                                <ui:SimpleStackPanel Grid.Column="0" Spacing="5">
+                                    <TextBlock Text="Tyre" />
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                <TextBlock Margin="3"><Run Text="FL" /></TextBlock>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="C:" Margin="3" />
-                                    <TextBlock x:Name="FrontLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        <ui:SimpleStackPanel Grid.Column="0">
+                                            <TextBlock Text="" />
+                                            <TextBlock Text="C:" />
+                                            <TextBlock Text="S:" />
+                                        </ui:SimpleStackPanel>
 
-                                    <TextBlock Text="S:" Margin="3" />
-                                    <TextBlock x:Name="FrontLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="FL" />
+                                            <TextBlock x:Name="FrontLeftCarcass" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="FrontLeftSurface" Text="{Binding TyreSurfaceTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
 
-                                <TextBlock Margin="3"><Run Text="RL" /></TextBlock>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="C:" Margin="3" />
-                                    <TextBlock x:Name="RearLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="S:" Margin="3" />
-                                    <TextBlock x:Name="RearLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </StackPanel>
+                                        <ui:SimpleStackPanel Grid.Column="0">
+                                            <TextBlock Text="" />
+                                            <TextBlock Text="C:" />
+                                            <TextBlock Text="S:" />
+                                        </ui:SimpleStackPanel>
 
-                            <StackPanel Grid.Column="1" TextElement.FontSize="11">
-                                <TextBlock Margin="3" />
-                                <TextBlock Margin="3" Text="{Binding TyreCompound}" />
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="RL" />
+                                            <TextBlock x:Name="RearLeftCarcass" Text="{Binding TyreCarcassTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="RearLeftSurface" Text="{Binding TyreSurfaceTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+                                </ui:SimpleStackPanel>
 
-                                <TextBlock Margin="3"><Run Text="FR" /></TextBlock>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="C:" Margin="3" />
-                                    <TextBlock x:Name="FrontRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                <ui:SimpleStackPanel Grid.Column="1" Spacing="5">
+                                    <TextBlock Text="{Binding TyreCompound}" />
 
-                                    <TextBlock Text="S:" Margin="3" />
-                                    <TextBlock x:Name="FrontRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                <TextBlock Margin="3"><Run Text="RR" /></TextBlock>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="C:" Margin="3" />
-                                    <TextBlock x:Name="RearRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="FR" />
+                                            <TextBlock x:Name="FrontRightCarcass"  Text="{Binding TyreCarcassTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="FrontRightSurface"  Text="{Binding TyreSurfaceTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
 
-                                    <TextBlock Text="S:" Margin="3" />
-                                    <TextBlock x:Name="RearRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="RR" />
+                                            <TextBlock x:Name="RearRightCarcass" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="RearRightSurface" Text="{Binding TyreSurfaceTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+                                </ui:SimpleStackPanel>
+                            </Grid>
+                        </ui:SimpleStackPanel>
+                    </ui:SimpleStackPanel>
                 </Grid>
             </Grid>
 
