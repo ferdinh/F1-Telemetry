@@ -94,6 +94,11 @@ namespace F1Telemetry.WPF.ViewModels
             CurrentRenderPosition[0] = 0.0;
         }
 
+        private void ResetCurrentLapCursor()
+        {
+            CurrentLapCursor = 0;
+        }
+
         private void Manager_NewSession(object sender, EventArgs e)
         {
             var manager = sender as TelemetryManager;
@@ -234,7 +239,7 @@ namespace F1Telemetry.WPF.ViewModels
 
             UnbindLiveTelemetryGraph();
             IsLiveTelemetryEnabled = false;
-
+            ResetCurrentLapCursor();
             ResetRenderCursor();
         }
 
