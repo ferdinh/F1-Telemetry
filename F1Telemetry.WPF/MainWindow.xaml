@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:F1Telemetry.WPF.Converter" xmlns:viewmodels="clr-namespace:F1Telemetry.WPF.ViewModels"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:core="clr-namespace:F1Telemetry.Core.Data;assembly=F1Telemetry.Core"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         x:Name="window" x:Class="F1Telemetry.WPF.MainWindow"
         mc:Ignorable="d"
+        ui:WindowHelper.UseModernWindowStyle="True"
         Title="F1 Telemetry" Height="550" Width="900" Topmost="{Binding IsTopmost}">
 
     <Window.Resources>
@@ -19,59 +21,65 @@
         <viewmodels:MainViewModel />
     </Window.DataContext>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="8*" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
+    <ScrollViewer>
+        <Grid Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="8*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
 
-        <GroupBox ScrollViewer.CanContentScroll="True">
             <StackPanel>
                 <WrapPanel DataContext="{Binding SessionInfo}">
-                    <Label Content="Session Type:" />
+                    <Label Content="Session Type: " />
                     <Label Content="{Binding SessionType, UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
             </StackPanel>
-        </GroupBox>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition  Width="70*" />
-                <ColumnDefinition  Width="30*" />
-            </Grid.ColumnDefinitions>
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="3*" />
-                </Grid.RowDefinitions>
-
-                <WpfPlot x:Name="SpeedGraphPlot" Grid.Column="0" />
-                <WpfPlot x:Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
-                <WpfPlot x:Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
-                <WpfPlot x:Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
-            </Grid>
-
-            <!--Car Info Panel-->
-            <Grid Grid.Column="2">
-
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition  Width="70*" />
+                    <ColumnDefinition  Width="30*" />
                 </Grid.ColumnDefinitions>
 
-                <ListView x:Name="lapLeaderboard" ItemsSource="{Binding LapSummaries}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="" Width="{x:Static sys:Double.NaN}">
-                                <GridViewColumn.CellTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="3*" />
+                    </Grid.RowDefinitions>
+
+                    <WpfPlot x:Name="SpeedGraphPlot" Grid.Column="0" />
+                    <WpfPlot x:Name="ThrottleGraphPlot" Grid.Column="0" Grid.Row="1" />
+                    <WpfPlot x:Name="BrakeGraphPlot" Grid.Column="0" Grid.Row="2" />
+                    <WpfPlot x:Name="GearGraphPlot" Grid.Column="0" Grid.Row="3" />
+                </Grid>
+
+                <!--Car Info Panel-->
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <DataGrid x:Name="lapLeaderboardDataGrid"
+                              ItemsSource="{Binding LapSummaries}"
+                              HeadersVisibility="Column"
+                              IsReadOnly="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserReorderColumns="False"
+                              AutoGenerateColumns="False"
+                              SelectionMode="Single">
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn IsReadOnly="False" Width="23">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
                                             <CheckBox Command="{Binding DataContext.ToggleToGraphCommand, ElementName=window, Mode=OneWay}" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                            <CheckBox.CommandParameter>
+                                                <CheckBox.CommandParameter>
                                                     <MultiBinding Converter="{StaticResource ToggleLapCommandParameterConverter}">
                                                         <MultiBinding.Bindings>
                                                             <Binding Path="IsChecked">
@@ -88,137 +96,163 @@
                                             </CheckBox>
                                         </Grid>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Lap" DisplayMemberBinding="{Binding LapNumber}" Width="{x:Static sys:Double.NaN}" />
-                            <GridViewColumn Header="Time" Width="{x:Static sys:Double.NaN}">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding LapTime, Converter={StaticResource ToLapTimeString}}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn
+                                Header="Lap"
+                                Binding="{Binding LapNumber}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
+                            <DataGridTextColumn
+                                Header="Time"
+                                Binding="{Binding LapTime, Converter={StaticResource ToLapTimeString}}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-                <StackPanel Grid.Column="1">
-                    <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
-                        <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}"><Run Text="Car Info" /></TextBlock>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Margin="3" Text="Lap:" />
-                                <TextBlock Margin="3" Text="Time:" />
-                                <TextBlock Margin="3" Text="Spd:" />
-                                <TextBlock Margin="3" Text="RPM:" />
-                                <TextBlock Margin="3" Text="Throttle:" />
-                                <TextBlock Margin="3" Text="Brake:" />
-                            </StackPanel>
+                    <ui:SimpleStackPanel Grid.Column="1">
+                        <StackPanel Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding CurrentTelemetry}">
+                            <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}"><Run Text="Car Info" /></TextBlock>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Margin="3" Text="Lap:" />
+                                    <TextBlock Margin="3" Text="Time:" />
+                                    <TextBlock Margin="3" Text="Spd:" />
+                                    <TextBlock Margin="3" Text="RPM:" />
+                                    <TextBlock Margin="3" Text="Throttle:" />
+                                    <TextBlock Margin="3" Text="Brake:" />
+                                </StackPanel>
 
-                            <StackPanel Grid.Column="1">
-                                <TextBlock Margin="3" Text="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBlock Margin="3" Text="{Binding LapTime, Converter={StaticResource ToLapTimeString}, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBlock Margin="3" Text="{Binding Throttle, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" />
-                                <TextBlock Margin="3" Text="{Binding Brake, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                                <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#FFF81010" />
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
-
-                    <!--Tyre info panel-->
-                    <Grid Grid.Column="1" Grid.Row="2" DataContext="{Binding CurrentTelemetry}" Grid.RowSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" TextElement.FontSize="11">
-                            <TextBlock Margin="3" FontFamily="{StaticResource TitilliumBold}"><Run Text="Tyre Info" /></TextBlock>
-                            <TextBlock Margin="3"><Run Text="Compound" /></TextBlock>
-
-                            <TextBlock Margin="3"><Run Text="FL" /></TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="C:" Margin="3" />
-                                <TextBlock x:Name="FrontLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
-
-                                <TextBlock Text="S:" Margin="3" />
-                                <TextBlock x:Name="FrontLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-
-                            <TextBlock Margin="3"><Run Text="RL" /></TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="C:" Margin="3" />
-                                <TextBlock x:Name="RearLeftCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
-
-                                <TextBlock Text="S:" Margin="3" />
-                                <TextBlock x:Name="RearLeftSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Margin="3" Text="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Margin="3" Text="{Binding LapTime, Converter={StaticResource ToLapTimeString}, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Margin="3" Text="{Binding Throttle, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" Foreground="#00b31B" />
+                                    <TextBlock Margin="3" Text="{Binding Brake, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                                    <ProgressBar Minimum="0" Maximum="1" Value="{Binding Brake}" Foreground="#ED1C00" />
+                                </StackPanel>
+                            </Grid>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" TextElement.FontSize="11">
-                            <TextBlock Margin="3" />
-                            <TextBlock Margin="3" Text="{Binding TyreCompound}" />
+                        <!--Tyre info panel-->
+                        <ui:SimpleStackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBlock FontFamily="{StaticResource TitilliumBold}">Tyre Info</TextBlock>
+                            <Grid DataContext="{Binding CurrentTelemetry}" Grid.RowSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Margin="3"><Run Text="FR" /></TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="C:" Margin="3" />
-                                <TextBlock x:Name="FrontRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                <ui:SimpleStackPanel Grid.Column="0" Spacing="5">
+                                    <TextBlock Text="Tyre" />
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="S:" Margin="3" />
-                                <TextBlock x:Name="FrontRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
+                                        <ui:SimpleStackPanel Grid.Column="0">
+                                            <TextBlock Text="" />
+                                            <TextBlock Text="C:" />
+                                            <TextBlock Text="S:" />
+                                        </ui:SimpleStackPanel>
 
-                            <TextBlock Margin="3"><Run Text="RR" /></TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="C:" Margin="3" />
-                                <TextBlock x:Name="RearRightCarcass" Margin="3" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="FL" />
+                                            <TextBlock x:Name="FrontLeftCarcass" Text="{Binding TyreCarcassTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="FrontLeftSurface" Text="{Binding TyreSurfaceTemperature.FrontLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
 
-                                <TextBlock Text="S:" Margin="3" />
-                                <TextBlock x:Name="RearRightSurface" Margin="3" Text="{Binding TyreSurfaceTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <ui:SimpleStackPanel Grid.Column="0">
+                                            <TextBlock Text="" />
+                                            <TextBlock Text="C:" />
+                                            <TextBlock Text="S:" />
+                                        </ui:SimpleStackPanel>
+
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="RL" />
+                                            <TextBlock x:Name="RearLeftCarcass" Text="{Binding TyreCarcassTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="RearLeftSurface" Text="{Binding TyreSurfaceTemperature.RearLeft.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+                                </ui:SimpleStackPanel>
+
+                                <ui:SimpleStackPanel Grid.Column="1" Spacing="5">
+                                    <TextBlock Text="{Binding TyreCompound}" />
+
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="FR" />
+                                            <TextBlock x:Name="FrontRightCarcass"  Text="{Binding TyreCarcassTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="FrontRightSurface"  Text="{Binding TyreSurfaceTemperature.FrontRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <ui:SimpleStackPanel Grid.Column="1">
+                                            <TextBlock Text="RR" />
+                                            <TextBlock x:Name="RearRightCarcass" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                            <TextBlock x:Name="RearRightSurface" Text="{Binding TyreSurfaceTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+                                </ui:SimpleStackPanel>
+                            </Grid>
+                        </ui:SimpleStackPanel>
+                    </ui:SimpleStackPanel>
+                </Grid>
             </Grid>
-        </Grid>
 
-        <StackPanel Grid.Row="2">
-            <WrapPanel>
-                <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
-                <Label Content="Keep window on top" />
+            <StackPanel Grid.Row="2">
+                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="5">
+                    <CheckBox x:Name="TopmostCheckbox" Command="{Binding SetTopmostCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" Content="Keep window on top" />
 
-                <CheckBox x:Name="DisableLiveTelemetryCheckbox" IsChecked="{Binding IsLiveTelemetryEnabled}" Command="{Binding EnableLiveTelemetryCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" />
-                <Label Content="Enable Live Telemetry" />
-            </WrapPanel>
+                    <CheckBox x:Name="DisableLiveTelemetryCheckbox" IsChecked="{Binding IsLiveTelemetryEnabled}" Command="{Binding EnableLiveTelemetryCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" Content="Enable Live Telemetry" />
+                </ui:SimpleStackPanel>
 
-            <WrapPanel>
-                <WrapPanel.Resources>
-                    <Style TargetType="Button">
-                        <Setter Property="Margin" Value="0,0,3,0" />
-                        <Setter Property="Padding" Value="3" />
-                    </Style>
-                </WrapPanel.Resources>
-                <Button x:Name="ListenButton" FontWeight="Bold" Command="{Binding StartListeningCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Start Listening" />
+                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="5">
+                    <Button x:Name="ListenButton" FontWeight="Bold" Command="{Binding StartListeningCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Start Listening" />
 
-                <Button x:Name="ClearLiveTelemetryButton"
+                    <Button x:Name="ClearLiveTelemetryButton"
                         FontWeight="Bold"
                         Content="Clear Live Telemetry Graph"
-                        Command="{Binding ClearLiveTelemetryGraphCommand}" 
-                        ToolTip="Clears live telemetry data from the graph."/>
-                
-                <Button x:Name="ClearAllButton" 
-                        FontWeight="Bold" 
+                        Command="{Binding ClearLiveTelemetryGraphCommand}"
+                        ToolTip="Clears live telemetry data from the graph." />
+
+                    <Button x:Name="ClearAllButton"
+                        FontWeight="Bold"
                         Content="Clear All Graph"
                         Command="{Binding ClearAllGraphCommand}"
-                        ToolTip="Clears all data from the graph."/>
-            </WrapPanel>
-        </StackPanel>
-    </Grid>
+                        ToolTip="Clears all data from the graph." />
+                </ui:SimpleStackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Window>
