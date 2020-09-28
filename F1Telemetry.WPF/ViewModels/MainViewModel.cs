@@ -335,7 +335,7 @@ namespace F1Telemetry.WPF.ViewModels
             Manager.Feed(eventArgs.Bytes);
 
             var currentTelemetry = Manager.GetPlayerInfo()?.CurrentTelemetry;
-            var currentLapData = Manager.GetPlayerInfo()?.LapData.LastOrDefault();
+            var currentLapData = Manager.GetPlayerInfo()?.CurrentLapData;
             var currentCarStatus = Manager.GetPlayerInfo()?.CurrentCarStatus;
 
             if (currentTelemetry != null)

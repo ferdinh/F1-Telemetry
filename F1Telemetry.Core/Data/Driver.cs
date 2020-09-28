@@ -42,6 +42,8 @@ namespace F1Telemetry.Core.Data
 
         public CarStatusData CurrentCarStatus => CarStatusData.LastOrDefault();
 
+        public LapData CurrentLapData { get; private set; }
+
         public IReadOnlyCollection<LapData> LapData
         {
             get { return lapData.AsReadOnly(); }
@@ -51,6 +53,7 @@ namespace F1Telemetry.Core.Data
 
         public void AddLapData(LapData lapData)
         {
+            CurrentLapData = lapData;
             this.lapData.Add(lapData);
 
             if (CurrentLapNumber == 0)
