@@ -46,7 +46,7 @@ namespace F1Telemetry.Core.Data
 
         public IReadOnlyCollection<LapData> LapData
         {
-            get { return lapData.AsReadOnly(); }
+            get { return lapData.ToList().AsReadOnly(); }
         }
 
         public TelemetryManager Manager { get; }
