@@ -20,6 +20,8 @@ namespace F1Telemetry.Core.Data
 
         public event EventHandler<NewLapEventArgs> NewLap;
 
+        public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
+
         public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
 
         public IList<CarStatusData> CarStatusData { get; internal set; } = new List<CarStatusData>();
@@ -99,6 +101,10 @@ namespace F1Telemetry.Core.Data
         protected virtual void OnNewLap(NewLapEventArgs e)
         {
             NewLap?.Invoke(this, e);
+        private void UpdateDriverStatusInfo(LapData lapData)
+        {
+            CurrentStatus.PitStatus = lapData.PitStatus;
+            CurrentStatus.Status = lapData.DriverStatus;
         }
     }
 
