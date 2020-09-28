@@ -140,6 +140,10 @@ namespace F1Telemetry.WPF.ViewModels
                         });
                     });
                 };
+
+                manager.GetPlayerInfo().Pitting += (s, e) => {
+                    manager.GetPlayerInfo().RemoveLap(CurrentTelemetry.LapNumber);
+                };
             }
 
             Application.Current.Dispatcher.Invoke(() =>
