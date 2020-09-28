@@ -1,4 +1,5 @@
-﻿using System;
+﻿using F1Telemetry.Core.Util.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +20,8 @@ namespace F1Telemetry.Core.Data
         }
 
         public event EventHandler<NewLapEventArgs> NewLap;
+
+        public event EventHandler Pitting;
 
         public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
 
@@ -53,10 +56,25 @@ namespace F1Telemetry.Core.Data
 
         public TelemetryManager Manager { get; }
 
+        /// <summary>
+        /// Adds the valid lap data.
+        /// </summary>
+        /// <param name="lapData">The lap data.</param>
         public void AddLapData(LapData lapData)
         {
             CurrentLapData = lapData;
-            this.lapData.Add(lapData);
+
+            if (lapData.PitStatus == PitStatus.Pitting && (CurrentStatus.PitStatus != PitStatus.Invalid && CurrentStatus.PitStatus != PitStatus.Pitting))
+            {
+                OnPitting();
+            }
+
+            UpdateDriverStatusInfo(lapData);
+
+            if (IsLapDataValid(lapData))
+            {
+                this.lapData.Add(lapData);
+            }
 
             if (CurrentLapNumber == 0)
             {
@@ -81,6 +99,15 @@ namespace F1Telemetry.Core.Data
                 };
 
                 OnNewLap(newLapEventArgs);
+            }
+
+            CurrentLapNumber = lapData.CurrentLapNum;
+        }
+
+        private bool IsLapDataValid(LapData lapData)
+        {
+            return lapData.PitStatus == PitStatus.None && (lapData.DriverStatus.Equals(DriverStatus.FlyingLap) || lapData.DriverStatus.Equals(DriverStatus.OnTrack));
+        }
 
         /// <summary>
         /// Removes the lap data of the specified lap number.
@@ -107,14 +134,16 @@ namespace F1Telemetry.Core.Data
             this.CarStatusData.Add(carStatusData);
         }
 
-        protected virtual void OnLapInterval()
-        {
-            LapInterval?.Invoke(this, EventArgs.Empty);
-        }
-
         protected virtual void OnNewLap(NewLapEventArgs e)
         {
             NewLap?.Invoke(this, e);
+        }
+
+        protected virtual void OnPitting()
+        {
+            Pitting?.Invoke(this, EventArgs.Empty);
+        }
+
         private void UpdateDriverStatusInfo(LapData lapData)
         {
             CurrentStatus.PitStatus = lapData.PitStatus;
