@@ -178,7 +178,7 @@ namespace F1Telemetry.WPF.ViewModels
             {
                 var player = Manager.GetPlayerInfo();
 
-                var lapData = player.LapData.GetLap(toggleLapInfo.lapNumber).ToArray();
+                var lapData = player.LapData.GetLap(toggleLapInfo.lapNumber);
                 var carData = player.CarTelemetryData.GetForLap(lapData);
 
                 var lapNumberLabel = $"Lap {toggleLapInfo.lapNumber}";
