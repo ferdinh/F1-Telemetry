@@ -81,7 +81,6 @@ namespace F1Telemetry.Core.Data
                 OnNewLap(newLapEventArgs);
 
 
-                CurrentLapInterval++;
             }
 
             CurrentLapNumber = lapData.CurrentLapNum;
