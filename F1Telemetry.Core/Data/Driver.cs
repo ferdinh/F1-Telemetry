@@ -9,8 +9,6 @@ namespace F1Telemetry.Core.Data
     /// </summary>
     public class Driver
     {
-        private int CurrentLapInterval = 1;
-
         // TODO: Try using Dictionary to hold all of the packets of a particular lap. Use Lap number as the key? It also needs to match the
         // session ID.
         private readonly List<LapData> lapData = new List<LapData>();
@@ -19,8 +17,6 @@ namespace F1Telemetry.Core.Data
         {
             Manager = manager;
         }
-
-        public event EventHandler LapInterval;
 
         public event EventHandler<NewLapEventArgs> NewLap;
 
@@ -51,7 +47,6 @@ namespace F1Telemetry.Core.Data
             get { return lapData.AsReadOnly(); }
         }
 
-        public int LapIntervalThreshold { get; set; } = 3;
         public TelemetryManager Manager { get; }
 
         public void AddLapData(LapData lapData)
@@ -82,11 +77,6 @@ namespace F1Telemetry.Core.Data
 
                 OnNewLap(newLapEventArgs);
 
-                if (CurrentLapInterval == LapIntervalThreshold)
-                {
-                    OnLapInterval();
-                    CurrentLapInterval = 0;
-                }
 
                 CurrentLapInterval++;
             }
