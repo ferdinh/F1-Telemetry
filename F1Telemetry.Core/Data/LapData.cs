@@ -186,6 +186,8 @@ namespace F1Telemetry.Core.Data
         Pitting,
 
         [Display(Name = "In Pit Area")]
-        InPitArea
+        InPitArea,
+
+        Invalid
     }
 }
