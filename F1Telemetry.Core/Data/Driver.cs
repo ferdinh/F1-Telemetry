@@ -82,10 +82,24 @@ namespace F1Telemetry.Core.Data
 
                 OnNewLap(newLapEventArgs);
 
+        /// <summary>
+        /// Removes the lap data of the specified lap number.
+        /// </summary>
+        /// <param name="lapNumber">The lap number.</param>
+        public void RemoveLap(int lapNumber)
+        {
+            var lapDataToRemove = lapData.GetLap(lapNumber).ToList();
+            var carDataToRemove = CarTelemetryData.GetForLap(lapDataToRemove);
 
+            foreach (var lapData in lapDataToRemove)
+            {
+                this.lapData.Remove(lapData);
             }
 
-            CurrentLapNumber = lapData.CurrentLapNum;
+            foreach (var item in carDataToRemove)
+            {
+                CarTelemetryData.Remove(item);
+            }
         }
 
         public void AddCarStatusData(CarStatusData carStatusData)
