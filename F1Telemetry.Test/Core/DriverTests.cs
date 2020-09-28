@@ -82,7 +82,11 @@ namespace F1Telemetry.Test.Core
                     CurrentLapNum = 2
                 });
 
-                monitoredDriver.Should().Raise(nameof(Driver.NewLap), because: "It is not considered as a new lap on first assignment.");
+                monitoredDriver
+                    .Should()
+                    .Raise(nameof(Driver.NewLap), because: "It is a new lap.")
+                    .WithSender(driver)
+                    .WithArgs<NewLapEventArgs>(e => e.LastLapNumber.Equals(1));
             }
         }
     }
