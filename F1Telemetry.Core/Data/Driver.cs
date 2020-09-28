@@ -23,11 +23,10 @@ namespace F1Telemetry.Core.Data
 
         public event EventHandler Pitting;
 
-        public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
-
-        public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
-
         public IList<CarStatusData> CarStatusData { get; internal set; } = new List<CarStatusData>();
+        public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
+        public CarStatusData CurrentCarStatus => CarStatusData.LastOrDefault();
+        public LapData CurrentLapData { get; private set; }
 
         /// <summary>
         /// Gets or sets the number of laps the driver had done.
@@ -37,6 +36,8 @@ namespace F1Telemetry.Core.Data
         /// </value>
         public int CurrentLapNumber { get; private set; } = 0;
 
+        public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
+
         /// <summary>
         /// Gets the current telemetry.
         /// </summary>
@@ -45,16 +46,17 @@ namespace F1Telemetry.Core.Data
         /// </value>
         public CarTelemetryData CurrentTelemetry => CarTelemetryData.LastOrDefault();
 
-        public CarStatusData CurrentCarStatus => CarStatusData.LastOrDefault();
-
-        public LapData CurrentLapData { get; private set; }
-
         public IReadOnlyCollection<LapData> LapData
         {
             get { return lapData.ToList().AsReadOnly(); }
         }
 
         public TelemetryManager Manager { get; }
+
+        public void AddCarStatusData(CarStatusData carStatusData)
+        {
+            this.CarStatusData.Add(carStatusData);
+        }
 
         /// <summary>
         /// Adds the valid lap data.
@@ -104,11 +106,6 @@ namespace F1Telemetry.Core.Data
             CurrentLapNumber = lapData.CurrentLapNum;
         }
 
-        private bool IsLapDataValid(LapData lapData)
-        {
-            return lapData.PitStatus == PitStatus.None && (lapData.DriverStatus.Equals(DriverStatus.FlyingLap) || lapData.DriverStatus.Equals(DriverStatus.OnTrack));
-        }
-
         /// <summary>
         /// Removes the lap data of the specified lap number.
         /// </summary>
@@ -129,11 +126,6 @@ namespace F1Telemetry.Core.Data
             }
         }
 
-        public void AddCarStatusData(CarStatusData carStatusData)
-        {
-            this.CarStatusData.Add(carStatusData);
-        }
-
         protected virtual void OnNewLap(NewLapEventArgs e)
         {
             NewLap?.Invoke(this, e);
@@ -142,6 +134,11 @@ namespace F1Telemetry.Core.Data
         protected virtual void OnPitting()
         {
             Pitting?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool IsLapDataValid(LapData lapData)
+        {
+            return lapData.PitStatus == PitStatus.None && (lapData.DriverStatus.Equals(DriverStatus.FlyingLap) || lapData.DriverStatus.Equals(DriverStatus.OnTrack));
         }
 
         private void UpdateDriverStatusInfo(LapData lapData)
