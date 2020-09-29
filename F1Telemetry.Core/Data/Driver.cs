@@ -1,4 +1,5 @@
-﻿using System;
+﻿using F1Telemetry.Core.Util.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,8 +10,6 @@ namespace F1Telemetry.Core.Data
     /// </summary>
     public class Driver
     {
-        private int CurrentLapInterval = 1;
-
         // TODO: Try using Dictionary to hold all of the packets of a particular lap. Use Lap number as the key? It also needs to match the
         // session ID.
         private readonly List<LapData> lapData = new List<LapData>();
@@ -20,13 +19,14 @@ namespace F1Telemetry.Core.Data
             Manager = manager;
         }
 
-        public event EventHandler LapInterval;
-
         public event EventHandler<NewLapEventArgs> NewLap;
 
-        public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
+        public event EventHandler Pitting;
 
         public IList<CarStatusData> CarStatusData { get; internal set; } = new List<CarStatusData>();
+        public IList<CarTelemetryData> CarTelemetryData { get; internal set; } = new List<CarTelemetryData>();
+        public CarStatusData CurrentCarStatus => CarStatusData.LastOrDefault();
+        public LapData CurrentLapData { get; private set; }
 
         /// <summary>
         /// Gets or sets the number of laps the driver had done.
@@ -36,6 +36,8 @@ namespace F1Telemetry.Core.Data
         /// </value>
         public int CurrentLapNumber { get; private set; } = 0;
 
+        public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
+
         /// <summary>
         /// Gets the current telemetry.
         /// </summary>
@@ -44,19 +46,37 @@ namespace F1Telemetry.Core.Data
         /// </value>
         public CarTelemetryData CurrentTelemetry => CarTelemetryData.LastOrDefault();
 
-        public CarStatusData CurrentCarStatus => CarStatusData.LastOrDefault();
-
         public IReadOnlyCollection<LapData> LapData
         {
-            get { return lapData.AsReadOnly(); }
+            get { return lapData.ToList().AsReadOnly(); }
         }
 
-        public int LapIntervalThreshold { get; set; } = 3;
         public TelemetryManager Manager { get; }
 
+        public void AddCarStatusData(CarStatusData carStatusData)
+        {
+            this.CarStatusData.Add(carStatusData);
+        }
+
+        /// <summary>
+        /// Adds the valid lap data.
+        /// </summary>
+        /// <param name="lapData">The lap data.</param>
         public void AddLapData(LapData lapData)
         {
-            this.lapData.Add(lapData);
+            CurrentLapData = lapData;
+
+            if (lapData.PitStatus == PitStatus.Pitting && (CurrentStatus.PitStatus != PitStatus.Invalid && CurrentStatus.PitStatus != PitStatus.Pitting))
+            {
+                OnPitting();
+            }
+
+            UpdateDriverStatusInfo(lapData);
+
+            if (IsLapDataValid(lapData))
+            {
+                this.lapData.Add(lapData);
+            }
 
             if (CurrentLapNumber == 0)
             {
@@ -81,32 +101,50 @@ namespace F1Telemetry.Core.Data
                 };
 
                 OnNewLap(newLapEventArgs);
-
-                if (CurrentLapInterval == LapIntervalThreshold)
-                {
-                    OnLapInterval();
-                    CurrentLapInterval = 0;
-                }
-
-                CurrentLapInterval++;
             }
 
             CurrentLapNumber = lapData.CurrentLapNum;
         }
 
-        public void AddCarStatusData(CarStatusData carStatusData)
+        /// <summary>
+        /// Removes the lap data of the specified lap number.
+        /// </summary>
+        /// <param name="lapNumber">The lap number.</param>
+        public void RemoveLap(int lapNumber)
         {
-            this.CarStatusData.Add(carStatusData);
-        }
+            var lapDataToRemove = lapData.GetLap(lapNumber).ToList();
+            var carDataToRemove = CarTelemetryData.GetForLap(lapDataToRemove);
 
-        protected virtual void OnLapInterval()
-        {
-            LapInterval?.Invoke(this, EventArgs.Empty);
+            foreach (var lapData in lapDataToRemove)
+            {
+                this.lapData.Remove(lapData);
+            }
+
+            foreach (var item in carDataToRemove)
+            {
+                CarTelemetryData.Remove(item);
+            }
         }
 
         protected virtual void OnNewLap(NewLapEventArgs e)
         {
             NewLap?.Invoke(this, e);
+        }
+
+        protected virtual void OnPitting()
+        {
+            Pitting?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool IsLapDataValid(LapData lapData)
+        {
+            return lapData.PitStatus == PitStatus.None && (lapData.DriverStatus.Equals(DriverStatus.FlyingLap) || lapData.DriverStatus.Equals(DriverStatus.OnTrack));
+        }
+
+        private void UpdateDriverStatusInfo(LapData lapData)
+        {
+            CurrentStatus.PitStatus = lapData.PitStatus;
+            CurrentStatus.Status = lapData.DriverStatus;
         }
     }
 

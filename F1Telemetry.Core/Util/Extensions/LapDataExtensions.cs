@@ -8,7 +8,7 @@ namespace F1Telemetry.Core.Util.Extensions
     {
         public static IEnumerable<LapData> GetLap(this IReadOnlyCollection<LapData> lapData, int lapNumber)
         {
-            return lapData.Where(l => lapNumber.Equals(l.CurrentLapNum) && !l.DriverStatus.Equals(DriverStatus.InGarage));
+            return lapData.Where(l => lapNumber.Equals(l.CurrentLapNum) && !l.DriverStatus.Equals(DriverStatus.InGarage) && l.PitStatus.Equals(PitStatus.None)).ToList();
         }
     }
 }
