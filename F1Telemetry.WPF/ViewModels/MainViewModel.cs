@@ -171,12 +171,8 @@ namespace F1Telemetry.WPF.ViewModels
         {
             if (isLiveTelemetryEnabled)
             {
+                UnbindLiveTelemetryGraph();
                 BindLiveTelemetryGraph();
-            }
-
-            if (!isLiveTelemetryEnabled)
-            {
-                ClearLiveTelemetryGraph(null);
             }
 
             IsLiveTelemetryEnabled = isLiveTelemetryEnabled;
