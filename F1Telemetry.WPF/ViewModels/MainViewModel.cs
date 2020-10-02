@@ -344,7 +344,7 @@ namespace F1Telemetry.WPF.ViewModels
 
             if (currentTelemetry != null)
             {
-                if (currentLapData.DriverStatus == DriverStatus.InGarage)
+                if (currentLapData?.DriverStatus == DriverStatus.InGarage)
                 {
                     ResetCurrentTelemetryIndexCursor();
                 }
