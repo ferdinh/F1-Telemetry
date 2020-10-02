@@ -169,7 +169,6 @@ namespace F1Telemetry.WPF.ViewModels
 
         private void EnableLiveTelemetry(bool isLiveTelemetryEnabled)
         {
-            IsLiveTelemetryEnabled = isLiveTelemetryEnabled;
             if (isLiveTelemetryEnabled)
             {
                 BindLiveTelemetryGraph();
@@ -179,6 +178,8 @@ namespace F1Telemetry.WPF.ViewModels
             {
                 ClearLiveTelemetryGraph(null);
             }
+
+            IsLiveTelemetryEnabled = isLiveTelemetryEnabled;
         }
 
         private void ToggleToGraph((bool shouldPlot, int lapNumber) toggleLapInfo)
