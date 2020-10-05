@@ -17,8 +17,14 @@ namespace F1Telemetry.Core
 
         private int PlayerCarIndex;
 
+        /// <summary>
+        /// Invoked when there is a new F1 game session.
+        /// </summary>
         public event EventHandler NewSession;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TelemetryManager"/> class.
+        /// </summary>
         public TelemetryManager()
         {
             drivers = NewDriverList();
@@ -57,6 +63,10 @@ namespace F1Telemetry.Core
             return packetTypeReceived;
         }
 
+        /// <summary>
+        /// Gets the player information.
+        /// </summary>
+        /// <returns></returns>
         public Driver GetPlayerInfo()
         {
             return Drivers[PlayerCarIndex];
