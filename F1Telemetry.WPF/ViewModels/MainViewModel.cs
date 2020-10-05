@@ -357,43 +357,7 @@ namespace F1Telemetry.WPF.ViewModels
                 {
                     if (IsLiveTelemetryEnabled)
                     {
-                        CurrentRenderPosition[0] = currentLapData.LapDistance;
-
-                        if (LapData != null)
-                        {
-                            var currentLapDataModel = LapData[CurrentLapCursor];
-
-                            var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
-
-                            currentLapDataModel.Speed[CurrentTelemetryIndexCursor] = currentTelemetry.Speed;
-                            currentLapDataModel.Distance[CurrentTelemetryIndexCursor] = currentLapData.LapDistance;
-                            currentLapDataModel.Gear[CurrentTelemetryIndexCursor] = currentTelemetry.Gear;
-
-                            currentLapDataModel.Throttle[CurrentTelemetryIndexCursor] = currentTelemetry.Throttle;
-                            currentLapDataModel.Brake[CurrentTelemetryIndexCursor] = currentTelemetry.Brake;
-
-                            var currentSpeedGraph = SpeedGraph[CurrentLapCursor];
-                            var currentGearGraph = GearGraph[CurrentLapCursor];
-                            var currentThrottleGraph = ThrottleGraph[CurrentLapCursor];
-                            var currentBrakeGraph = BrakeGraph[CurrentLapCursor];
-
-                            if (currentSpeedGraph != null && currentGearGraph != null && currentThrottleGraph != null && currentBrakeGraph != null)
-                            {
-                                currentSpeedGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
-                                currentSpeedGraph.label = lapNumberLabel;
-
-                                currentGearGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
-                                currentGearGraph.label = lapNumberLabel;
-
-                                currentThrottleGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
-                                currentThrottleGraph.label = lapNumberLabel;
-
-                                currentBrakeGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
-                                currentBrakeGraph.label = lapNumberLabel;
-                            }
-                        }
-
-                        CurrentTelemetryIndexCursor++;
+                        UpdateLiveTelemetry(currentTelemetry, currentLapData);
                     }
                 }
 
@@ -424,6 +388,47 @@ namespace F1Telemetry.WPF.ViewModels
                 CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
                 CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
             }
+        }
+
+        private void UpdateLiveTelemetry(CarTelemetryData currentTelemetry, LapData currentLapData)
+        {
+            CurrentRenderPosition[0] = currentLapData.LapDistance;
+
+            if (LapData != null)
+            {
+                var currentLapDataModel = LapData[CurrentLapCursor];
+
+                var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
+
+                currentLapDataModel.Speed[CurrentTelemetryIndexCursor] = currentTelemetry.Speed;
+                currentLapDataModel.Distance[CurrentTelemetryIndexCursor] = currentLapData.LapDistance;
+                currentLapDataModel.Gear[CurrentTelemetryIndexCursor] = currentTelemetry.Gear;
+
+                currentLapDataModel.Throttle[CurrentTelemetryIndexCursor] = currentTelemetry.Throttle;
+                currentLapDataModel.Brake[CurrentTelemetryIndexCursor] = currentTelemetry.Brake;
+
+                var currentSpeedGraph = SpeedGraph[CurrentLapCursor];
+                var currentGearGraph = GearGraph[CurrentLapCursor];
+                var currentThrottleGraph = ThrottleGraph[CurrentLapCursor];
+                var currentBrakeGraph = BrakeGraph[CurrentLapCursor];
+
+                if (currentSpeedGraph != null && currentGearGraph != null && currentThrottleGraph != null && currentBrakeGraph != null)
+                {
+                    currentSpeedGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
+                    currentSpeedGraph.label = lapNumberLabel;
+
+                    currentGearGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
+                    currentGearGraph.label = lapNumberLabel;
+
+                    currentThrottleGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
+                    currentThrottleGraph.label = lapNumberLabel;
+
+                    currentBrakeGraph.maxRenderIndex = CurrentTelemetryIndexCursor;
+                    currentBrakeGraph.label = lapNumberLabel;
+                }
+            }
+
+            CurrentTelemetryIndexCursor++;
         }
 
         /// <summary>
