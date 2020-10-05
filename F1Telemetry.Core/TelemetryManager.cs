@@ -33,67 +33,26 @@ namespace F1Telemetry.Core
         {
             IPacket packet = Decode.Packet(bytes);
 
-            var packetTypeReceived = PacketTypes.Invalid;
-
             switch (packet)
             {
                 case PacketSessionData packetSessionData:
-
-                    if (Session == null)
-                    {
-                        PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
-                        Session = packetSessionData;
-                        packetTypeReceived = PacketTypes.Session;
-                        NewSession?.Invoke(this, EventArgs.Empty);
-                    }
-                    else
-                    {
-                        bool isNewSession = !packetSessionData.Equals(Session);
-
-                        if (isNewSession)
-                        {
-                            PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
-                            Session = packetSessionData;
-                            packetTypeReceived = PacketTypes.Session;
-
-                            drivers = NewDriverList();
-
-                            NewSession?.Invoke(this, EventArgs.Empty);
-                        }
-                    }
-
+                    ProcessPacketSessionData(packetSessionData);
                     break;
 
                 case PacketCarTelemetryData packetCarTelemetryData:
-
-                    for (int i = 0; i < packetCarTelemetryData.CarTelemetryData.Length; i++)
-                    {
-                        var carTelemData = packetCarTelemetryData.CarTelemetryData[i];
-                        Drivers[i].CarTelemetryData.Add(carTelemData);
-                    }
-
+                    ProcessPacketCarTelemetryData(packetCarTelemetryData);
                     break;
 
-                case PacketLapData pLapData:
-
-                    for (int i = 0; i < pLapData.LapData.Length; i++)
-                    {
-                        var lapData = pLapData.LapData[i];
-                        Drivers[i].AddLapData(lapData);
-                    }
-
+                case PacketLapData packetLapData:
+                    ProcessPacketLapData(packetLapData);
                     break;
 
-                case PacketCarStatusData pCarStatusData:
-
-                    for (int i = 0; i < pCarStatusData.CarStatusData.Length; i++)
-                    {
-                        var carStatusData = pCarStatusData.CarStatusData[i];
-                        Drivers[i].AddCarStatusData(carStatusData);
-                    }
-
+                case PacketCarStatusData packetCarStatusData:
+                    ProcessPacketCarStatusData(packetCarStatusData);
                     break;
             }
+
+            var packetTypeReceived = packet == null ? PacketTypes.Invalid : packet.Header.PacketTypes;
 
             return packetTypeReceived;
         }
@@ -116,6 +75,57 @@ namespace F1Telemetry.Core
                 newDrivers.Add(new Driver(this));
             }
             return newDrivers;
+        }
+
+        private void ProcessPacketSessionData(PacketSessionData packetSessionData)
+        {
+            if (Session == null)
+            {
+                PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
+                Session = packetSessionData;
+                NewSession?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                bool isNewSession = !packetSessionData.Equals(Session);
+
+                if (isNewSession)
+                {
+                    PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
+                    Session = packetSessionData;
+
+                    drivers = NewDriverList();
+
+                    NewSession?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        private void ProcessPacketCarTelemetryData(PacketCarTelemetryData packetCarTelemetryData)
+        {
+            for (int i = 0; i < packetCarTelemetryData.CarTelemetryData.Length; i++)
+            {
+                var carTelemData = packetCarTelemetryData.CarTelemetryData[i];
+                Drivers[i].CarTelemetryData.Add(carTelemData);
+            }
+        }
+
+        private void ProcessPacketCarStatusData(PacketCarStatusData packetCarStatusData)
+        {
+            for (int i = 0; i < packetCarStatusData.CarStatusData.Length; i++)
+            {
+                var carStatusData = packetCarStatusData.CarStatusData[i];
+                Drivers[i].AddCarStatusData(carStatusData);
+            }
+        }
+
+        private void ProcessPacketLapData(PacketLapData packetLapData)
+        {
+            for (int i = 0; i < packetLapData.LapData.Length; i++)
+            {
+                var lapData = packetLapData.LapData[i];
+                Drivers[i].AddLapData(lapData);
+            }
         }
     }
 }
