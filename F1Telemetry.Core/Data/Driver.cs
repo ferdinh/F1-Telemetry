@@ -84,12 +84,14 @@ namespace F1Telemetry.Core.Data
             }
             else if (lapData.CurrentLapNum > CurrentLapNumber)
             {
-                var lastLapData = LapData.Where(l => (lapData.CurrentLapNum - 1).Equals(l.CurrentLapNum)).ToList().AsReadOnly();
+                var lastLapData = LapData.Where(l => (lapData.CurrentLapNum - 1).Equals(l.CurrentLapNum)).ToList();
                 var lastCarTelemetryData = new List<CarTelemetryData>();
+                var lastCarStatusData = new List<CarStatusData>();
 
                 foreach (var lastLap in lastLapData)
                 {
                     lastCarTelemetryData.Add(CarTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                    lastCarStatusData.Add(CarStatusData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
                 }
 
                 var newLapEventArgs = new NewLapEventArgs

@@ -1,6 +1,6 @@
 ﻿namespace F1Telemetry.Core.Data
 {
-    public class CarStatusData
+    public class CarStatusData : BasePacketData
     {
         /// <summary>
         /// The traction control [0 (off) - 2 (high)]
@@ -161,5 +161,14 @@
         /// ERS energy deployed this lap
         /// </summary>
         public float ErsDeployedThisLap { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CarStatusData"/> class.
+        /// </summary>
+        /// <param name="sessionUID">The session uid.</param>
+        /// <param name="sessionTime">The session time.</param>
+        public CarStatusData(ulong sessionUID, float sessionTime) : base(sessionUID, sessionTime)
+        {
+        }
     }
 }
