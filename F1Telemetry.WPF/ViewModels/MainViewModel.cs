@@ -186,41 +186,45 @@ namespace F1Telemetry.WPF.ViewModels
 
                 var lapNumberLabel = $"Lap {toggleLapInfo.lapNumber}";
 
-                player.LapSummaries.TryGetValue(toggleLapInfo.lapNumber, out var lapSummary);
+                if (player.LapSummaries.TryGetValue(toggleLapInfo.lapNumber, out var lapSummary))
+                {
+                    var carData = lapSummary.CarTelemetryData;
+                    var distance = lapSummary.LapData.Select(l => (double)l.LapDistance);
 
-                var carData = lapSummary.CarTelemetryData;
-                var distance = lapSummary.LapData.Select(l => (double)l.LapDistance);
+                    if (carData != null)
+                    {
+                        var speed = carData.Select(c => (double)c.Speed);
+                        var throttle = carData.Select(c => (double)c.Throttle);
+                        var brake = carData.Select(c => (double)c.Brake);
+                        var gear = carData.Select(c => (double)c.Gear);
 
-                var speed = carData.Select(c => (double)c.Speed);
-                var throttle = carData.Select(c => (double)c.Throttle);
-                var brake = carData.Select(c => (double)c.Brake);
-                var gear = carData.Select(c => (double)c.Gear);
+                        var graphPlots = new Plottable[4];
 
-                var graphPlots = new Plottable[4];
+                        var speedGraphPlot = SpeedGraphPlot.plt.PlotScatter(distance.ToArray(), speed.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        speedGraphPlot.label = lapNumberLabel;
 
-                var speedGraphPlot = SpeedGraphPlot.plt.PlotScatter(distance.ToArray(), speed.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
-                speedGraphPlot.label = lapNumberLabel;
+                        var throttleGraphPlot = ThrottleGraphPlot.plt.PlotScatter(distance.ToArray(), throttle.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        throttleGraphPlot.label = lapNumberLabel;
 
-                var throttleGraphPlot = ThrottleGraphPlot.plt.PlotScatter(distance.ToArray(), throttle.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
-                throttleGraphPlot.label = lapNumberLabel;
+                        var brakeGraphPlot = BrakeGraphPlot.plt.PlotScatter(distance.ToArray(), brake.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        brakeGraphPlot.label = lapNumberLabel;
 
-                var brakeGraphPlot = BrakeGraphPlot.plt.PlotScatter(distance.ToArray(), brake.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
-                brakeGraphPlot.label = lapNumberLabel;
+                        var gearGraphPlot = GearGraphPlot.plt.PlotScatter(distance.ToArray(), gear.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        gearGraphPlot.label = lapNumberLabel;
 
-                var gearGraphPlot = GearGraphPlot.plt.PlotScatter(distance.ToArray(), gear.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
-                gearGraphPlot.label = lapNumberLabel;
+                        graphPlots[0] = speedGraphPlot;
+                        graphPlots[1] = throttleGraphPlot;
+                        graphPlots[2] = brakeGraphPlot;
+                        graphPlots[3] = gearGraphPlot;
 
-                graphPlots[0] = speedGraphPlot;
-                graphPlots[1] = throttleGraphPlot;
-                graphPlots[2] = brakeGraphPlot;
-                graphPlots[3] = gearGraphPlot;
+                        SpeedGraphPlot.plt.Legend();
+                        ThrottleGraphPlot.plt.Legend();
+                        BrakeGraphPlot.plt.Legend();
+                        GearGraphPlot.plt.Legend();
 
-                SpeedGraphPlot.plt.Legend();
-                ThrottleGraphPlot.plt.Legend();
-                BrakeGraphPlot.plt.Legend();
-                GearGraphPlot.plt.Legend();
-
-                PlottedLapData.Add(toggleLapInfo.lapNumber, graphPlots);
+                        PlottedLapData.Add(toggleLapInfo.lapNumber, graphPlots);
+                    }
+                }
             }
 
             if (!toggleLapInfo.shouldPlot)
