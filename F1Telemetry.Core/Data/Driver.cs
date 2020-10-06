@@ -90,10 +90,13 @@ namespace F1Telemetry.Core.Data
                 var lastCarTelemetryData = new List<CarTelemetryData>();
                 var lastCarStatusData = new List<CarStatusData>();
 
+                var carTelemetryDataCopy = CarTelemetryData.ToList();
+                var carStatusDataCopy = CarStatusData.ToList();
+
                 foreach (var lastLap in lastLapData)
                 {
-                    lastCarTelemetryData.Add(CarTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
-                    lastCarStatusData.Add(CarStatusData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                    lastCarTelemetryData.Add(carTelemetryDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                    lastCarStatusData.Add(carStatusDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
                 }
 
                 var newLapEventArgs = new NewLapEventArgs
