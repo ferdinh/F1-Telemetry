@@ -184,12 +184,12 @@ namespace F1Telemetry.WPF.ViewModels
             {
                 var player = Manager.GetPlayerInfo();
 
-                var lapData = player.LapData.GetLap(toggleLapInfo.lapNumber);
-                var carData = player.CarTelemetryData.GetForLap(lapData);
-
                 var lapNumberLabel = $"Lap {toggleLapInfo.lapNumber}";
 
-                var distance = lapData.Select(l => (double)l.LapDistance);
+                player.LapSummaries.TryGetValue(toggleLapInfo.lapNumber, out var lapSummary);
+
+                var carData = lapSummary.CarTelemetryData;
+                var distance = lapSummary.LapData.Select(l => (double)l.LapDistance);
 
                 var speed = carData.Select(c => (double)c.Speed);
                 var throttle = carData.Select(c => (double)c.Throttle);
