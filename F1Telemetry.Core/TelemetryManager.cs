@@ -17,10 +17,15 @@ namespace F1Telemetry.Core
 
         private int PlayerCarIndex;
 
+        private float PreviousSessionTime;
+        public float CurrentSessionTime { get; private set; }
+
         /// <summary>
         /// Invoked when there is a new F1 game session.
         /// </summary>
         public event EventHandler NewSession;
+
+        public event EventHandler OnRestart;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TelemetryManager"/> class.
@@ -60,7 +65,28 @@ namespace F1Telemetry.Core
 
             var packetTypeReceived = packet == null ? PacketTypes.Invalid : packet.Header.PacketTypes;
 
+            if (packet != null)
+            {
+                if (packet.Header.SessionTime < PreviousSessionTime)
+                {
+                    OnRestarting();
+                    PreviousSessionTime = CurrentSessionTime = packet.Header.SessionTime;
+                } 
+                else
+                {
+                    PreviousSessionTime = CurrentSessionTime;
+                    CurrentSessionTime = packet == null ? 0.0f : packet.Header.SessionTime;
+                }
+
+            }
+
             return packetTypeReceived;
+        }
+
+        private void OnRestarting()
+        {
+            OnRestart?.Invoke(this, EventArgs.Empty);
+            Console.WriteLine("Restarting");
         }
 
         /// <summary>
