@@ -93,7 +93,7 @@ namespace F1Telemetry.Core
             {
                 PlayerCarIndex = packetSessionData.Header.PlayerCarIndex;
                 Session = packetSessionData;
-                NewSession?.Invoke(this, EventArgs.Empty);
+                OnNewSession();
             }
             else
             {
@@ -106,7 +106,7 @@ namespace F1Telemetry.Core
 
                     drivers = NewDriverList();
 
-                    NewSession?.Invoke(this, EventArgs.Empty);
+                    OnNewSession();
                 }
             }
         }
@@ -136,6 +136,16 @@ namespace F1Telemetry.Core
                 var lapData = packetLapData.LapData[i];
                 Drivers[i].AddLapData(lapData);
             }
+        }
+
+        private void OnNewSession()
+        {
+            NewSession?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ResetSessionTime()
+        {
+            PreviousSessionTime = CurrentSessionTime = 0.0f;
         }
     }
 }
