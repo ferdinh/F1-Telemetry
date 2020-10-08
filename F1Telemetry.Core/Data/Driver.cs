@@ -28,8 +28,6 @@ namespace F1Telemetry.Core.Data
         public CarStatusData CurrentCarStatus => CarStatusData.LastOrDefault();
         public LapData CurrentLapData { get; private set; }
 
-        public Dictionary<int, LapSummary> LapSummaries { get; } = new Dictionary<int, LapSummary>();
-
         /// <summary>
         /// Gets or sets the number of laps the driver had done.
         /// </summary>
@@ -53,6 +51,7 @@ namespace F1Telemetry.Core.Data
             get { return lapData.ToList().AsReadOnly(); }
         }
 
+        public Dictionary<int, LapSummary> LapSummaries { get; } = new Dictionary<int, LapSummary>();
         public TelemetryManager Manager { get; }
 
         public void AddCarStatusData(CarStatusData carStatusData)
