@@ -138,7 +138,7 @@
         public sbyte VehicleFiaFlags { get; set; }
 
         /// <summary>
-        /// T ERS energy store in Joules
+        /// The ERS energy store in Joules
         /// </summary>
         public float ErsStoreEnergy { get; set; }
 
