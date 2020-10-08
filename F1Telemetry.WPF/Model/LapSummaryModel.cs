@@ -1,3 +1,4 @@
+using F1Telemetry.Core.Data;
 using System.ComponentModel;
 
 namespace F1Telemetry.WPF.Model
@@ -7,6 +8,7 @@ namespace F1Telemetry.WPF.Model
         public bool IsChecked { get; set; }
         public int LapNumber { get; set; }
         public float LapTime { get; set; }
+        public TyreCompound TyreCompoundUsed { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

@@ -43,6 +43,7 @@ namespace F1Telemetry.WPF.ViewModels
         // This is quite an unfortunate side effect of ScottPlot library and cannot control the chart rendering via
         // MVVM. For now hold the WpfPlot reference to the model to handle the adding and removal of plot.
         public WpfPlot SpeedGraphPlot { get; set; }
+
         public WpfPlot BrakeGraphPlot { get; set; }
         public WpfPlot ThrottleGraphPlot { get; set; }
         public WpfPlot GearGraphPlot { get; set; }
@@ -54,7 +55,7 @@ namespace F1Telemetry.WPF.ViewModels
         /// The plotted lap data.
         /// </value>
         private Dictionary<int, Plottable[]> PlottedLapData { get; } = new Dictionary<int, Plottable[]>();
-        
+
         private readonly double DefaultLineWidth = 1.75;
 
         public PlottableSignalXY[] BrakeGraph { get; } = new PlottableSignalXY[3];
@@ -133,15 +134,19 @@ namespace F1Telemetry.WPF.ViewModels
 
                     System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
+                        var lapSummary = e.LapSummary;
+
                         LapSummaries.Add(new LapSummaryModel
                         {
-                            LapNumber = e.LastLapNumber,
-                            LapTime = e.LastLapTime
+                            LapNumber = lapSummary.LapNumber,
+                            LapTime = lapSummary.LapTime,
+                            TyreCompoundUsed = lapSummary.TyreCompoundUsed
                         });
                     });
                 };
 
-                manager.GetPlayerInfo().Pitting += (s, e) => {
+                manager.GetPlayerInfo().Pitting += (s, e) =>
+                {
                     manager.GetPlayerInfo().RemoveLap(CurrentTelemetry.LapNumber);
                 };
             }
@@ -280,7 +285,6 @@ namespace F1Telemetry.WPF.ViewModels
                 lapSummary.IsChecked = false;
             }
         }
-
 
         private async Task StartListeningAsync(object sender)
         {
@@ -502,7 +506,6 @@ namespace F1Telemetry.WPF.ViewModels
 
         private void ClearPlottedLapData()
         {
-
             foreach (var plots in PlottedLapData)
             {
                 SpeedGraphPlot.plt.Remove(plots.Value[0]);
