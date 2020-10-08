@@ -86,7 +86,6 @@ namespace F1Telemetry.Core
         private void OnRestarting()
         {
             OnRestart?.Invoke(this, EventArgs.Empty);
-            Console.WriteLine("Restarting");
         }
 
         /// <summary>
