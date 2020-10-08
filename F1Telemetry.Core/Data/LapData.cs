@@ -2,10 +2,16 @@
 
 namespace F1Telemetry.Core.Data
 {
-    public class LapData
+    public class LapData : BasePacketData
     {
-        public ulong SessionUID { get; set; }
-        public float SessionTime { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LapData"/> class.
+        /// </summary>
+        /// <param name="sessionUID">The session uid.</param>
+        /// <param name="sessionTime">The session time.</param>
+        public LapData(ulong sessionUID, float sessionTime) : base(sessionUID, sessionTime)
+        {
+        }
 
         /// <summary>
         /// Last lap time in seconds

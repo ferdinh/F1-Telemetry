@@ -1,6 +1,8 @@
-﻿using F1Telemetry.Core.Packet;
+﻿
 
-namespace F1Telemetry.Core.Data
+using F1Telemetry.Core.Data;
+
+namespace F1Telemetry.Core.Packet
 {
     public class PacketMotionData : IPacket
     {

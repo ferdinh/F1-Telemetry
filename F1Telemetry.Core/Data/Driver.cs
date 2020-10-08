@@ -51,6 +51,7 @@ namespace F1Telemetry.Core.Data
             get { return lapData.ToList().AsReadOnly(); }
         }
 
+        public Dictionary<int, LapSummary> LapSummaries { get; } = new Dictionary<int, LapSummary>();
         public TelemetryManager Manager { get; }
 
         public void AddCarStatusData(CarStatusData carStatusData)
@@ -84,22 +85,25 @@ namespace F1Telemetry.Core.Data
             }
             else if (lapData.CurrentLapNum > CurrentLapNumber)
             {
-                var lastLapData = LapData.Where(l => (lapData.CurrentLapNum - 1).Equals(l.CurrentLapNum)).ToList().AsReadOnly();
+                var previousLapNum = lapData.CurrentLapNum - 1;
+                var lastLapData = LapData.Where(l => (previousLapNum).Equals(l.CurrentLapNum)).ToList();
                 var lastCarTelemetryData = new List<CarTelemetryData>();
+                var lastCarStatusData = new List<CarStatusData>();
+
+                var carTelemetryDataCopy = CarTelemetryData.ToList();
+                var carStatusDataCopy = CarStatusData.ToList();
 
                 foreach (var lastLap in lastLapData)
                 {
-                    lastCarTelemetryData.Add(CarTelemetryData.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                    lastCarTelemetryData.Add(carTelemetryDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                    lastCarStatusData.Add(carStatusDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
                 }
 
-                var newLapEventArgs = new NewLapEventArgs
-                {
-                    LastLapNumber = lapData.CurrentLapNum - 1,
-                    LastLapTime = lapData.LastLapTime,
-                    LastLapData = lastLapData,
-                    LastCarTelemetryData = lastCarTelemetryData.AsReadOnly()
-                };
+                var lapSummary = new LapSummary(previousLapNum, lapData.LastLapTime, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
 
+                LapSummaries.Add(CurrentLapNumber, lapSummary);
+
+                var newLapEventArgs = new NewLapEventArgs(lapSummary);
                 OnNewLap(newLapEventArgs);
             }
 
@@ -150,9 +154,11 @@ namespace F1Telemetry.Core.Data
 
     public class NewLapEventArgs : EventArgs
     {
-        public IReadOnlyList<CarTelemetryData> LastCarTelemetryData { get; set; }
-        public IReadOnlyList<LapData> LastLapData { get; set; }
-        public int LastLapNumber { get; set; }
-        public float LastLapTime { get; set; }
+        public NewLapEventArgs(LapSummary lapSummary)
+        {
+            LapSummary = lapSummary;
+        }
+
+        public LapSummary LapSummary { get; }
     }
 }

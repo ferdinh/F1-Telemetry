@@ -9,6 +9,7 @@
         C4 = 17,
         C5 = 16,
         Inter = 7,
-        Wet = 8
+        Wet = 8,
+        Unknown
     }
 }

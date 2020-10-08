@@ -1,8 +1,5 @@
 ﻿using F1Telemetry.Core.Data;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace F1Telemetry.Test.Core
@@ -14,14 +11,14 @@ namespace F1Telemetry.Test.Core
         {
             var driver = new Driver(new F1Telemetry.Core.TelemetryManager());
 
-            using(var monitoredDriver = driver.Monitor())
+            using (var monitoredDriver = driver.Monitor())
             {
-                driver.AddLapData(new LapData
+                driver.AddLapData(new LapData(0, 0)
                 {
                     PitStatus = PitStatus.None
                 });
 
-                driver.AddLapData(new LapData
+                driver.AddLapData(new LapData(0, 0)
                 {
                     PitStatus = PitStatus.Pitting
                 });
@@ -37,7 +34,7 @@ namespace F1Telemetry.Test.Core
 
             using (var monitoredDriver = driver.Monitor())
             {
-                driver.AddLapData(new LapData
+                driver.AddLapData(new LapData(0, 0)
                 {
                     PitStatus = PitStatus.Pitting
                 });
@@ -56,7 +53,7 @@ namespace F1Telemetry.Test.Core
 
             using (var monitoredDriver = driver.Monitor())
             {
-                driver.AddLapData(new LapData
+                driver.AddLapData(new LapData(0, 0)
                 {
                     CurrentLapNum = lapNumber
                 });
@@ -72,12 +69,12 @@ namespace F1Telemetry.Test.Core
 
             using (var monitoredDriver = driver.Monitor())
             {
-                driver.AddLapData(new LapData
+                driver.AddLapData(new LapData(0, 0)
                 {
                     CurrentLapNum = 1
                 });
 
-                driver.AddLapData(new LapData
+                driver.AddLapData(new LapData(0, 0)
                 {
                     CurrentLapNum = 2
                 });
@@ -86,7 +83,7 @@ namespace F1Telemetry.Test.Core
                     .Should()
                     .Raise(nameof(Driver.NewLap), because: "It is a new lap.")
                     .WithSender(driver)
-                    .WithArgs<NewLapEventArgs>(e => e.LastLapNumber.Equals(1));
+                    .WithArgs<NewLapEventArgs>(e => e.LapSummary.LapNumber.Equals(1));
             }
         }
     }

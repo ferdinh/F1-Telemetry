@@ -177,9 +177,7 @@ namespace F1Telemetry.Core
 
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
-                var lapData = new LapData();
-                lapData.SessionUID = packetHeader.SessionUID;
-                lapData.SessionTime = packetHeader.SessionTime;
+                var lapData = new LapData(packetHeader.SessionUID, packetHeader.SessionTime);
 
                 lapData.LastLapTime = reader.ReadSingle();
                 lapData.CurrentLapTime = reader.ReadSingle();
@@ -230,9 +228,7 @@ namespace F1Telemetry.Core
 
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
-                var carTelemData = new CarTelemetryData();
-                carTelemData.SessionUID = packetHeader.SessionUID;
-                carTelemData.SessionTime = packetHeader.SessionTime;
+                var carTelemData = new CarTelemetryData(packetHeader.SessionUID, packetHeader.SessionTime);
 
                 carTelemData.Speed = reader.ReadUInt16();
                 carTelemData.Throttle = reader.ReadSingle();
@@ -290,7 +286,7 @@ namespace F1Telemetry.Core
 
             for (int i = 0; i < MaxNumberOfCarsOnTrack; i++)
             {
-                var carStatusData = new CarStatusData();
+                var carStatusData = new CarStatusData(packetHeader.SessionUID, packetHeader.SessionTime);
                 packetCarStatus.CarStatusData[i] = carStatusData;
 
                 carStatusData.TractionControl = reader.ReadByte();

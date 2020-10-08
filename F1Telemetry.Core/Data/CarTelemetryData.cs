@@ -1,9 +1,15 @@
 ﻿namespace F1Telemetry.Core.Data
 {
-    public class CarTelemetryData
+    public class CarTelemetryData : BasePacketData
     {
-        public ulong SessionUID { get; set; }
-        public float SessionTime { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CarTelemetryData"/> class.
+        /// </summary>
+        /// <param name="sessionUID">The session uid.</param>
+        /// <param name="sessionTime">The session time.</param>
+        public CarTelemetryData(ulong sessionUID, float sessionTime) : base(sessionUID, sessionTime)
+        {
+        }
 
         /// <summary>
         /// Speed of car in kilometres per hour

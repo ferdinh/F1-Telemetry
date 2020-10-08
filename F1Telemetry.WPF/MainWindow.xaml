@@ -108,6 +108,12 @@
                                 Binding="{Binding LapTime, Converter={StaticResource ToLapTimeString}}"
                                 IsReadOnly="True"
                                 ElementStyle="{StaticResource CenterDataGridCell}" />
+                            <DataGridTextColumn
+                                Header="Tyre"
+                                Binding="{Binding TyreCompoundUsed}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}"
+                                />
                         </DataGrid.Columns>
                     </DataGrid>
 
