@@ -8,7 +8,7 @@
         public ulong SessionUID { get; }
         public float SessionTime { get; }
 
-        public BasePacketData(ulong sessionUID, float sessionTime)
+        protected BasePacketData(ulong sessionUID, float sessionTime)
         {
             SessionUID = sessionUID;
             SessionTime = sessionTime;
