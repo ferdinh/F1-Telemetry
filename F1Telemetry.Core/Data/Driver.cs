@@ -99,18 +99,11 @@ namespace F1Telemetry.Core.Data
                     lastCarStatusData.Add(carStatusDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
                 }
 
-                var newLapEventArgs = new NewLapEventArgs
-                {
-                    LastLapNumber = lapData.CurrentLapNum - 1,
-                    LastLapTime = lapData.LastLapTime,
-                    LastLapData = lastLapData,
-                    LastCarTelemetryData = lastCarTelemetryData.AsReadOnly()
-                };
-
-                var lapSummary = new LapSummary(lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
+                var lapSummary = new LapSummary(previousLapNum, lapData.LastLapTime, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
 
                 LapSummaries.Add(CurrentLapNumber, lapSummary);
 
+                var newLapEventArgs = new NewLapEventArgs(lapSummary);
                 OnNewLap(newLapEventArgs);
             }
 
@@ -161,9 +154,11 @@ namespace F1Telemetry.Core.Data
 
     public class NewLapEventArgs : EventArgs
     {
-        public IReadOnlyList<CarTelemetryData> LastCarTelemetryData { get; set; }
-        public IReadOnlyList<LapData> LastLapData { get; set; }
-        public int LastLapNumber { get; set; }
-        public float LastLapTime { get; set; }
+        public NewLapEventArgs(LapSummary lapSummary)
+        {
+            LapSummary = lapSummary;
+        }
+
+        public LapSummary LapSummary { get; }
     }
 }
