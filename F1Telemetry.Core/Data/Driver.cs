@@ -86,7 +86,8 @@ namespace F1Telemetry.Core.Data
             }
             else if (lapData.CurrentLapNum > CurrentLapNumber)
             {
-                var lastLapData = LapData.Where(l => (lapData.CurrentLapNum - 1).Equals(l.CurrentLapNum)).ToList();
+                var previousLapNum = lapData.CurrentLapNum - 1;
+                var lastLapData = LapData.Where(l => (previousLapNum).Equals(l.CurrentLapNum)).ToList();
                 var lastCarTelemetryData = new List<CarTelemetryData>();
                 var lastCarStatusData = new List<CarStatusData>();
 
