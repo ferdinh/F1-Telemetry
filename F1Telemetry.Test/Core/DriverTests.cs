@@ -83,7 +83,7 @@ namespace F1Telemetry.Test.Core
                     .Should()
                     .Raise(nameof(Driver.NewLap), because: "It is a new lap.")
                     .WithSender(driver)
-                    .WithArgs<NewLapEventArgs>(e => e.LastLapNumber.Equals(1));
+                    .WithArgs<NewLapEventArgs>(e => e.LapSummary.LapNumber.Equals(1));
             }
         }
     }
