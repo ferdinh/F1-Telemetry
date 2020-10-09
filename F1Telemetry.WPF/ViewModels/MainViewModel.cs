@@ -387,6 +387,7 @@ namespace F1Telemetry.WPF.ViewModels
                 CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
                 CurrentTelemetry.Speed = currentTelemetry.Speed;
                 CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
+                CurrentTelemetry.BestLapTime = currentLapData.BestLapTime;
 
                 CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
                 CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);

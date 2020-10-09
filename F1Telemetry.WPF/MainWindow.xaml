@@ -133,6 +133,7 @@
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Margin="3" Text="Lap:" />
                                     <TextBlock Margin="3" Text="Time:" />
+                                    <TextBlock Margin="3" Text="Best:"/>
                                     <TextBlock Margin="3" Text="Spd:" />
                                     <TextBlock Margin="3" Text="RPM:" />
                                     <TextBlock Margin="3" Text="Throttle:" />
@@ -142,6 +143,7 @@
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Margin="3" Text="{Binding LapNumber, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding LapTime, Converter={StaticResource ToLapTimeString}, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Margin="3" Text="{Binding BestLapTime, Converter={StaticResource ToLapTimeString}, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding Throttle, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
