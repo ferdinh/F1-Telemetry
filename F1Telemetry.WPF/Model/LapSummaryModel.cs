@@ -9,6 +9,8 @@ namespace F1Telemetry.WPF.Model
         public int LapNumber { get; set; }
         public float LapTime { get; set; }
         public TyreCompound TyreCompoundUsed { get; set; }
+        public float ERSDeployed { get; set; }
+        public float ERSDeployedPercentage { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
