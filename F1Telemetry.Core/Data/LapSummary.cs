@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace F1Telemetry.Core.Data
@@ -14,6 +15,9 @@ namespace F1Telemetry.Core.Data
         public IReadOnlyList<CarStatusData> CarStatusData { get; }
         public IReadOnlyList<CarTelemetryData> CarTelemetryData { get; }
         public TyreCompound TyreCompoundUsed { get; }
+        public float ERSEnergyStore { get; }
+        public float ERSDeployed { get; set; }
+        public float ERSDeployedPercentage => ERSDeployed/CarInfo.F1.MaxDeployableERS;
 
         public LapSummary(int lapNumber, float lapTime, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
         {
@@ -22,10 +26,13 @@ namespace F1Telemetry.Core.Data
             CarTelemetryData = carTelemetryDatas.AsReadOnly();
             LapNumber = lapNumber;
             LapTime = lapTime;
+            
 
             var carStatus = carStatusDatas.LastOrDefault();
 
             TyreCompoundUsed = carStatus != null ? (TyreCompound)carStatus.ActualTyreCompound : TyreCompound.Unknown;
+            ERSEnergyStore = carStatus != null ? carStatus.ErsStoreEnergy : 0.0f;
+            ERSDeployed = carStatus != null ? carStatus.ErsDeployedThisLap : 0.0f;
         }
     }
 }

@@ -140,7 +140,9 @@ namespace F1Telemetry.WPF.ViewModels
                         {
                             LapNumber = lapSummary.LapNumber,
                             LapTime = lapSummary.LapTime,
-                            TyreCompoundUsed = lapSummary.TyreCompoundUsed
+                            TyreCompoundUsed = lapSummary.TyreCompoundUsed,
+                            ERSDeployed = lapSummary.ERSDeployed,
+                            ERSDeployedPercentage = lapSummary.ERSDeployedPercentage
                         });
                     });
                 };

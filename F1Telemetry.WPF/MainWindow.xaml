@@ -114,6 +114,11 @@
                                 IsReadOnly="True"
                                 ElementStyle="{StaticResource CenterDataGridCell}"
                                 />
+                            <DataGridTextColumn
+                                Header="ERS Dep."
+                                Binding="{Binding ERSDeployedPercentage, Converter={StaticResource ToPercentageConverter}}"
+                                ElementStyle="{StaticResource CenterDataGridCell}"
+                                />
                         </DataGrid.Columns>
                     </DataGrid>
 
