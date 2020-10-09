@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace F1Telemetry.Core.Data
+﻿namespace F1Telemetry.Core.Data
 {
     /// <summary>
     /// Contains the Driver Status.

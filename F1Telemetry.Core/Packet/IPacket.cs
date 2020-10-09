@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace F1Telemetry.Core.Packet
+﻿namespace F1Telemetry.Core.Packet
 {
     public interface IPacket
     {
