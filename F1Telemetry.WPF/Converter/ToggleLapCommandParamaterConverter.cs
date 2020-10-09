@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 
 namespace F1Telemetry.WPF.Converter
@@ -10,7 +8,6 @@ namespace F1Telemetry.WPF.Converter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            
             return ((bool)values[0], (int)values[1]);
         }
 

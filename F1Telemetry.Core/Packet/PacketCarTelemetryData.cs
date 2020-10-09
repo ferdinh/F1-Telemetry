@@ -1,5 +1,4 @@
 ﻿using F1Telemetry.Core.Data;
-using System;
 
 namespace F1Telemetry.Core.Packet
 {

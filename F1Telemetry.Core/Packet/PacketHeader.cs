@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace F1Telemetry.Core.Packet
+﻿namespace F1Telemetry.Core.Packet
 {
     public class PacketHeader
     {

@@ -1,6 +1,4 @@
-﻿using F1Telemetry.Core;
-using F1Telemetry.WPF.ViewModels;
-using System;
+﻿using F1Telemetry.WPF.ViewModels;
 using System.Windows;
 
 namespace F1Telemetry.WPF

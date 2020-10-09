@@ -26,7 +26,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
 
             var actual = lapSummary.ERSDeployedPercentage;
 

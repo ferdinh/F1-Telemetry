@@ -16,6 +16,7 @@ namespace F1Telemetry.WPF.Model
         public ushort EngineRPM { get; set; }
         public ushort Speed { get; set; }
         public float LapTime { get; set; }
+        public float BestLapTime { get; set; }
         public CarTyreTemperatureModel TyreCarcassTemperature { get; set; } = new CarTyreTemperatureModel();
         public CarTyreTemperatureModel TyreSurfaceTemperature { get; set; } = new CarTyreTemperatureModel();
 

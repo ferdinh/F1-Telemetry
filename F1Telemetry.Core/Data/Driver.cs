@@ -10,8 +10,6 @@ namespace F1Telemetry.Core.Data
     /// </summary>
     public class Driver
     {
-        // TODO: Try using Dictionary to hold all of the packets of a particular lap. Use Lap number as the key? It also needs to match the
-        // session ID.
         private readonly List<LapData> lapData = new List<LapData>();
 
         public Driver(TelemetryManager manager)
@@ -34,7 +32,15 @@ namespace F1Telemetry.Core.Data
         /// <value>
         /// The number of laps.
         /// </value>
-        public int CurrentLapNumber { get; private set; } = 0;
+        public int CurrentLapNumber { get; private set; }
+
+        /// <summary>
+        /// Gets the best lap time for the driver.
+        /// </summary>
+        /// <value>
+        /// The best lap time.
+        /// </value>
+        public float BestLapTime { get; protected set; }
 
         public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
 
@@ -66,6 +72,7 @@ namespace F1Telemetry.Core.Data
         public void AddLapData(LapData lapData)
         {
             CurrentLapData = lapData;
+            BestLapTime = lapData.BestLapTime;
 
             if (lapData.PitStatus == PitStatus.Pitting && (CurrentStatus.PitStatus != PitStatus.Invalid && CurrentStatus.PitStatus != PitStatus.Pitting))
             {
@@ -73,11 +80,6 @@ namespace F1Telemetry.Core.Data
             }
 
             UpdateDriverStatusInfo(lapData);
-
-            if (IsLapDataValid(lapData))
-            {
-                this.lapData.Add(lapData);
-            }
 
             if (CurrentLapNumber == 0)
             {
@@ -95,16 +97,43 @@ namespace F1Telemetry.Core.Data
 
                 foreach (var lastLap in lastLapData)
                 {
-                    lastCarTelemetryData.Add(carTelemetryDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
-                    lastCarStatusData.Add(carStatusDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
+                    var carTelemData = carTelemetryDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID));
+                    var carStatData = carStatusDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID));
+
+                    if (carTelemData != null)
+                    {
+                        lastCarTelemetryData.Add(carTelemData);
+                    }
+                    else
+                    {
+                        lastCarTelemetryData.Add(lastCarTelemetryData.Last());
+                    }
+
+                    if (carStatData != null)
+                    {
+                        lastCarStatusData.Add(carStatData);
+                    }
+                    else
+                    {
+                        lastCarStatusData.Add(lastCarStatusData.Last());
+                    }
                 }
 
-                var lapSummary = new LapSummary(previousLapNum, lapData.LastLapTime, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
+                var lapSummary = new LapSummary(previousLapNum, lapData.LastLapTime, lapData.BestLapTime, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
 
                 LapSummaries.Add(CurrentLapNumber, lapSummary);
 
                 var newLapEventArgs = new NewLapEventArgs(lapSummary);
                 OnNewLap(newLapEventArgs);
+
+                this.lapData.Clear();
+                CarTelemetryData.Clear();
+                CarStatusData.Clear();
+            }
+
+            if (IsLapDataValid(lapData))
+            {
+                this.lapData.Add(lapData);
             }
 
             CurrentLapNumber = lapData.CurrentLapNum;
