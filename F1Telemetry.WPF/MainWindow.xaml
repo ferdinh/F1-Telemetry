@@ -14,6 +14,7 @@
     <Window.Resources>
         <local:ToPercentageConverter x:Key="ToPercentageConverter" />
         <local:ToLapTimeString x:Key="ToLapTimeString" />
+        <local:ToDeltaTimeString x:Key="ToDeltaTimeString" />
         <local:ToggleLapCommandParamaterConverter x:Key="ToggleLapCommandParameterConverter" />
     </Window.Resources>
 
@@ -121,7 +122,7 @@
                                 />
                             <DataGridTextColumn 
                                 Header="Delta Time"
-                                Binding="{Binding DeltaToBestTime, Converter={StaticResource ToLapTimeString}}"
+                                Binding="{Binding DeltaToBestTime, Converter={StaticResource ToDeltaTimeString}}"
                                 ElementStyle="{StaticResource CenterDataGridCell}"/>
                         </DataGrid.Columns>
                     </DataGrid>
