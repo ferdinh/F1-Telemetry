@@ -136,10 +136,22 @@ namespace F1Telemetry.WPF.ViewModels
                     {
                         var lapSummary = e.LapSummary;
 
+                        var currentBestLapTime = manager.GetPlayerInfo().BestLapTime;
+                        var deltaToFastestTime = 0.0f;
+
+                        foreach (var lapSum in LapSummaries)
+                        {
+                            var updatedDeltaTime = lapSum.LapTime - lapSummary.BestLapTime;
+                            lapSum.DeltaToBestTime = updatedDeltaTime;
+                        }
+
+                        deltaToFastestTime = lapSummary.LapTime - lapSummary.BestLapTime;
+
                         LapSummaries.Add(new LapSummaryModel
                         {
                             LapNumber = lapSummary.LapNumber,
                             LapTime = lapSummary.LapTime,
+                            DeltaToBestTime = deltaToFastestTime,
                             TyreCompoundUsed = lapSummary.TyreCompoundUsed,
                             ERSDeployed = lapSummary.ERSDeployed,
                             ERSDeployedPercentage = lapSummary.ERSDeployedPercentage

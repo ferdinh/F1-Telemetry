@@ -119,6 +119,10 @@
                                 Binding="{Binding ERSDeployedPercentage, Converter={StaticResource ToPercentageConverter}}"
                                 ElementStyle="{StaticResource CenterDataGridCell}"
                                 />
+                            <DataGridTextColumn 
+                                Header="Delta Time"
+                                Binding="{Binding DeltaToBestTime, Converter={StaticResource ToLapTimeString}}"
+                                ElementStyle="{StaticResource CenterDataGridCell}"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
