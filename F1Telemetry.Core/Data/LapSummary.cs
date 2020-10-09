@@ -11,6 +11,7 @@ namespace F1Telemetry.Core.Data
     {
         public int LapNumber { get; }
         public float LapTime { get; }
+        public float BestLapTime { get; }
         public IReadOnlyList<LapData> LapData { get; }
         public IReadOnlyList<CarStatusData> CarStatusData { get; }
         public IReadOnlyList<CarTelemetryData> CarTelemetryData { get; }
@@ -19,13 +20,14 @@ namespace F1Telemetry.Core.Data
         public float ERSDeployed { get; set; }
         public float ERSDeployedPercentage => ERSDeployed/CarInfo.F1.MaxDeployableERS;
 
-        public LapSummary(int lapNumber, float lapTime, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
+        public LapSummary(int lapNumber, float lapTime, float bestLapTime, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
         {
             LapData = lapDatas.AsReadOnly();
             CarStatusData = carStatusDatas.AsReadOnly();
             CarTelemetryData = carTelemetryDatas.AsReadOnly();
             LapNumber = lapNumber;
             LapTime = lapTime;
+            BestLapTime = bestLapTime;
             
 
             var carStatus = carStatusDatas.LastOrDefault();

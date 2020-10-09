@@ -34,6 +34,14 @@ namespace F1Telemetry.Core.Data
         /// </value>
         public int CurrentLapNumber { get; private set; }
 
+        /// <summary>
+        /// Gets the best lap time for the driver.
+        /// </summary>
+        /// <value>
+        /// The best lap time.
+        /// </value>
+        public float BestLapTime { get; protected set; }
+
         public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
 
         /// <summary>
@@ -64,6 +72,7 @@ namespace F1Telemetry.Core.Data
         public void AddLapData(LapData lapData)
         {
             CurrentLapData = lapData;
+            BestLapTime = lapData.BestLapTime;
 
             if (lapData.PitStatus == PitStatus.Pitting && (CurrentStatus.PitStatus != PitStatus.Invalid && CurrentStatus.PitStatus != PitStatus.Pitting))
             {
@@ -97,7 +106,7 @@ namespace F1Telemetry.Core.Data
                     lastCarStatusData.Add(carStatusDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID)));
                 }
 
-                var lapSummary = new LapSummary(previousLapNum, lapData.LastLapTime, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
+                var lapSummary = new LapSummary(previousLapNum, lapData.LastLapTime, lapData.BestLapTime, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
 
                 LapSummaries.Add(CurrentLapNumber, lapSummary);
 
