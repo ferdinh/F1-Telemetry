@@ -34,7 +34,7 @@ namespace F1Telemetry.Core.Data
         /// <value>
         /// The number of laps.
         /// </value>
-        public int CurrentLapNumber { get; private set; } = 0;
+        public int CurrentLapNumber { get; private set; }
 
         public DriverStatusInfo CurrentStatus { get; } = new DriverStatusInfo();
 
