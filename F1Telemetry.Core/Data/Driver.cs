@@ -10,8 +10,6 @@ namespace F1Telemetry.Core.Data
     /// </summary>
     public class Driver
     {
-        // TODO: Try using Dictionary to hold all of the packets of a particular lap. Use Lap number as the key? It also needs to match the
-        // session ID.
         private readonly List<LapData> lapData = new List<LapData>();
 
         public Driver(TelemetryManager manager)
