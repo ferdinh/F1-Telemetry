@@ -136,7 +136,6 @@ namespace F1Telemetry.WPF.ViewModels
                     {
                         var lapSummary = e.LapSummary;
 
-                        var currentBestLapTime = manager.GetPlayerInfo().BestLapTime;
                         var deltaToFastestTime = 0.0f;
 
                         foreach (var lapSum in LapSummaries)
