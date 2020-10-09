@@ -207,27 +207,27 @@ namespace F1Telemetry.WPF.ViewModels
                 if (player.LapSummaries.TryGetValue(toggleLapInfo.lapNumber, out var lapSummary))
                 {
                     var carData = lapSummary.CarTelemetryData;
-                    var distance = lapSummary.LapData.Select(l => (double)l.LapDistance);
+                    var distance = lapSummary.LapData.Select(l => (double)l.LapDistance).ToArray();
 
                     if (carData != null)
                     {
-                        var speed = carData.Select(c => (double)c.Speed);
-                        var throttle = carData.Select(c => (double)c.Throttle);
-                        var brake = carData.Select(c => (double)c.Brake);
-                        var gear = carData.Select(c => (double)c.Gear);
+                        var speed = carData.Select(c => (double)c.Speed).ToArray();
+                        var throttle = carData.Select(c => (double)c.Throttle).ToArray();
+                        var brake = carData.Select(c => (double)c.Brake).ToArray();
+                        var gear = carData.Select(c => (double)c.Gear).ToArray();
 
                         var graphPlots = new Plottable[4];
 
-                        var speedGraphPlot = SpeedGraphPlot.plt.PlotScatter(distance.ToArray(), speed.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var speedGraphPlot = SpeedGraphPlot.plt.PlotScatter(distance, speed, lineWidth: 1.75, markerShape: MarkerShape.none);
                         speedGraphPlot.label = lapNumberLabel;
 
-                        var throttleGraphPlot = ThrottleGraphPlot.plt.PlotScatter(distance.ToArray(), throttle.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var throttleGraphPlot = ThrottleGraphPlot.plt.PlotScatter(distance, throttle, lineWidth: 1.75, markerShape: MarkerShape.none);
                         throttleGraphPlot.label = lapNumberLabel;
 
-                        var brakeGraphPlot = BrakeGraphPlot.plt.PlotScatter(distance.ToArray(), brake.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var brakeGraphPlot = BrakeGraphPlot.plt.PlotScatter(distance, brake, lineWidth: 1.75, markerShape: MarkerShape.none);
                         brakeGraphPlot.label = lapNumberLabel;
 
-                        var gearGraphPlot = GearGraphPlot.plt.PlotScatter(distance.ToArray(), gear.ToArray(), lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var gearGraphPlot = GearGraphPlot.plt.PlotScatter(distance, gear, lineWidth: 1.75, markerShape: MarkerShape.none);
                         gearGraphPlot.label = lapNumberLabel;
 
                         graphPlots[0] = speedGraphPlot;
