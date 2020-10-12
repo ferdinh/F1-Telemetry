@@ -63,7 +63,7 @@ namespace F1Telemetry.Core
                     ProcessPacketCarStatusData(packetCarStatusData);
                     break;
                 default:
-                    return PacketTypes.Invalid;
+                    return packetTypeReceived;
             }
 
             packetTypeReceived = packet.Header.PacketTypes;
@@ -78,12 +78,6 @@ namespace F1Telemetry.Core
                 PreviousSessionTime = CurrentSessionTime;
                 CurrentSessionTime = packet.Header.SessionTime;
             }
-
-            //if (packet != null)
-            //{
-
-
-            //}
 
             return packetTypeReceived;
         }
