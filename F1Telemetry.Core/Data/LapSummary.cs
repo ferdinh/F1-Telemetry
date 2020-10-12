@@ -32,9 +32,13 @@ namespace F1Telemetry.Core.Data
 
             var carStatus = carStatusDatas.LastOrDefault();
 
-            TyreCompoundUsed = carStatus != null ? (TyreCompound)carStatus.ActualTyreCompound : TyreCompound.Unknown;
-            ERSEnergyStore = carStatus != null ? carStatus.ErsStoreEnergy : 0.0f;
-            ERSDeployed = carStatus != null ? carStatus.ErsDeployedThisLap : 0.0f;
+            if (carStatus != null)
+            {
+                TyreCompoundUsed = (TyreCompound)carStatus.ActualTyreCompound;
+                ERSEnergyStore = carStatus.ErsStoreEnergy;
+                ERSDeployed = carStatus.ErsDeployedThisLap;
+            }
+
         }
 
         private float CalculateFuelUsage()
