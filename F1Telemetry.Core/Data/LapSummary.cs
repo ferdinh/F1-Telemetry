@@ -15,7 +15,7 @@ namespace F1Telemetry.Core.Data
         public IReadOnlyList<LapData> LapData { get; }
         public IReadOnlyList<CarStatusData> CarStatusData { get; }
         public IReadOnlyList<CarTelemetryData> CarTelemetryData { get; }
-        public TyreCompound TyreCompoundUsed { get; }
+        public TyreCompound TyreCompoundUsed { get; } = TyreCompound.Unknown;
         public float ERSEnergyStore { get; }
         public float ERSDeployed { get; set; }
         public float ERSDeployedPercentage => ERSDeployed / CarInfo.F1.MaxDeployableERS;
