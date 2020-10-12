@@ -11,6 +11,7 @@ namespace F1Telemetry.WPF.Model
         public float DeltaToBestTime { get; set; }
         public TyreCompound TyreCompoundUsed { get; set; }
         public float ERSDeployed { get; set; }
+        public float TotalERSHarvestedPercentage { get; set; }
         public float ERSDeployedPercentage { get; set; }
         public float FuelUsed { get; set; }
 

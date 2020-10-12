@@ -17,6 +17,10 @@ namespace F1Telemetry.Core.Data
         public IReadOnlyList<CarTelemetryData> CarTelemetryData { get; }
         public TyreCompound TyreCompoundUsed { get; } = TyreCompound.Unknown;
         public float ERSEnergyStore { get; }
+        public float ERSHarvestedThisLapMGUK { get; }
+        public float ERSHarvestedThisLapMGUH { get; }
+        public float TotalERSHarvested => ERSHarvestedThisLapMGUH + ERSHarvestedThisLapMGUK;
+        public float TotalERSHarvestedPercentage => TotalERSHarvested / CarInfo.F1.MaxDeployableERS;
         public float ERSDeployed { get; set; }
         public float ERSDeployedPercentage => ERSDeployed / CarInfo.F1.MaxDeployableERS;
         public float FuelUsed => CalculateFuelUsage();
@@ -37,8 +41,9 @@ namespace F1Telemetry.Core.Data
                 TyreCompoundUsed = (TyreCompound)carStatus.ActualTyreCompound;
                 ERSEnergyStore = carStatus.ErsStoreEnergy;
                 ERSDeployed = carStatus.ErsDeployedThisLap;
+                ERSHarvestedThisLapMGUK = carStatus.ErsHarvestedThisLapMGUK;
+                ERSHarvestedThisLapMGUH = carStatus.ErsHarvestedThisLapMGUH;
             }
-
         }
 
         private float CalculateFuelUsage()
