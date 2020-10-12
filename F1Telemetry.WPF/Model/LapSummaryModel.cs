@@ -12,6 +12,7 @@ namespace F1Telemetry.WPF.Model
         public TyreCompound TyreCompoundUsed { get; set; }
         public float ERSDeployed { get; set; }
         public float ERSDeployedPercentage { get; set; }
+        public float FuelUsed { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

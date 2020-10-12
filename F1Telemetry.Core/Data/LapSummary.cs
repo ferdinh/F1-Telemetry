@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace F1Telemetry.Core.Data
@@ -18,6 +19,7 @@ namespace F1Telemetry.Core.Data
         public float ERSEnergyStore { get; }
         public float ERSDeployed { get; set; }
         public float ERSDeployedPercentage => ERSDeployed / CarInfo.F1.MaxDeployableERS;
+        public float FuelUsed => CalculateFuelUsage();
 
         public LapSummary(int lapNumber, float lapTime, float bestLapTime, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
         {
@@ -33,6 +35,21 @@ namespace F1Telemetry.Core.Data
             TyreCompoundUsed = carStatus != null ? (TyreCompound)carStatus.ActualTyreCompound : TyreCompound.Unknown;
             ERSEnergyStore = carStatus != null ? carStatus.ErsStoreEnergy : 0.0f;
             ERSDeployed = carStatus != null ? carStatus.ErsDeployedThisLap : 0.0f;
+        }
+
+        private float CalculateFuelUsage()
+        {
+            var fuelUsed = 0.0f;
+
+            if (CarStatusData.Any())
+            {
+                var initialFuel = CarStatusData.First().FuelInTank;
+                var endFuel = CarStatusData.Last().FuelInTank;
+
+                fuelUsed = Math.Max(0, initialFuel - endFuel);
+            }
+
+            return fuelUsed;
         }
     }
 }
