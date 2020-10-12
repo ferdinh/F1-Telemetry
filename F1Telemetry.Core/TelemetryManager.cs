@@ -61,6 +61,8 @@ namespace F1Telemetry.Core
                 case PacketCarStatusData packetCarStatusData:
                     ProcessPacketCarStatusData(packetCarStatusData);
                     break;
+                default:
+                    return PacketTypes.Invalid;
             }
 
             var packetTypeReceived = packet == null ? PacketTypes.Invalid : packet.Header.PacketTypes;
