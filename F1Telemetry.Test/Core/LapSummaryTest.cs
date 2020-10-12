@@ -33,8 +33,55 @@ namespace F1Telemetry.Test.Core
             actual.Should().BeApproximately(expected, 0.01f);
         }
 
+        [Theory]
+        [InlineData(100.12f)]
+        [InlineData(2000.0f)]
+        [InlineData(30000.0f)]
+        [InlineData(1234.45f)]
+        public void Given_TotalERSHarvested_Percentage_Should_Return_Based_On_TheMax_DeployableERS(float ersHarvested)
+        {
+            var expected = (float)Math.Round(ersHarvested / CarInfo.F1.MaxDeployableERS, 2);
+
+            var carStatusData = new List<CarStatusData>
+            {
+                new CarStatusData(0, 0)
+                {
+                    ErsHarvestedThisLapMGUH = ersHarvested
+                }
+            };
+
+            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+
+            var actual = lapSummary.TotalERSHarvestedPercentage;
+
+            actual.Should().BeApproximately(expected, 0.01f);
+        }
+
+        [Theory]
+        [InlineData(100.0f, 150.0f)]
+        [InlineData(2000.0f, 4000.0f)]
+        [InlineData(30000.0f, 30000.0f)]
+        [InlineData(1234.45f, 1234.45f)]
+        public void Given_TotalERSHarvested_Should_Return_Combined_ERSHarvested(float ersHarvestedMGUK, float ersHarvestedMGUH)
+        {
+            var expected = ersHarvestedMGUH + ersHarvestedMGUK;
+
+            var carStatusData = new List<CarStatusData>
+            {
+                new CarStatusData(0, 0)
+                {
+                    ErsHarvestedThisLapMGUH = ersHarvestedMGUH,
+                    ErsHarvestedThisLapMGUK = ersHarvestedMGUK
+                }
+            };
+
+            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+
+            var actual = lapSummary.TotalERSHarvested;
+
             actual.Should().BeApproximately(expected, 0.05f);
         }
+
 
         [Fact]
         public void FuelUsed_Should_Return_The_Difference_Between_Fuel_At_The_Start_Of_The_Lap_and_End_Of_Lap()
