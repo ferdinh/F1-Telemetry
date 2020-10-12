@@ -153,7 +153,8 @@ namespace F1Telemetry.WPF.ViewModels
                             DeltaToBestTime = deltaToFastestTime,
                             TyreCompoundUsed = lapSummary.TyreCompoundUsed,
                             ERSDeployed = lapSummary.ERSDeployed,
-                            ERSDeployedPercentage = lapSummary.ERSDeployedPercentage
+                            ERSDeployedPercentage = lapSummary.ERSDeployedPercentage,
+                            FuelUsed = lapSummary.FuelUsed
                         });
                     });
                 };
@@ -399,6 +400,11 @@ namespace F1Telemetry.WPF.ViewModels
                 CurrentTelemetry.Speed = currentTelemetry.Speed;
                 CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
                 CurrentTelemetry.BestLapTime = currentLapData.BestLapTime;
+
+                if (currentCarStatus != null)
+                {
+                    CurrentTelemetry.FuelRemainingLap = currentCarStatus.FuelRemainingLaps;
+                }
 
                 CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
                 CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);

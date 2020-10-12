@@ -116,6 +116,11 @@
                                 ElementStyle="{StaticResource CenterDataGridCell}"
                                 />
                             <DataGridTextColumn
+                                Header="Fuel Used (kg)"
+                                Binding="{Binding FuelUsed, StringFormat=N2}"
+                                ElementStyle="{StaticResource CenterDataGridCell}"
+                                />
+                            <DataGridTextColumn
                                 Header="ERS Dep."
                                 Binding="{Binding ERSDeployedPercentage, Converter={StaticResource ToPercentageConverter}}"
                                 ElementStyle="{StaticResource CenterDataGridCell}"
@@ -141,6 +146,7 @@
                                     <TextBlock Margin="3" Text="Best:"/>
                                     <TextBlock Margin="3" Text="Spd:" />
                                     <TextBlock Margin="3" Text="RPM:" />
+                                    <TextBlock Margin="3" Text="Fuel (lap):" />
                                     <TextBlock Margin="3" Text="Throttle:" />
                                     <TextBlock Margin="3" Text="Brake:" />
                                 </StackPanel>
@@ -151,6 +157,7 @@
                                     <TextBlock Margin="3" Text="{Binding BestLapTime, Converter={StaticResource ToLapTimeString}, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding EngineRPM, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Margin="3" Text="{Binding FuelRemainingLap, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Margin="3" Text="{Binding Throttle, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
                                     <ProgressBar Minimum="0" Maximum="1" Value="{Binding Throttle}" Foreground="#00b31B" />
                                     <TextBlock Margin="3" Text="{Binding Brake, Converter={StaticResource ToPercentageConverter}, UpdateSourceTrigger=PropertyChanged}" />
