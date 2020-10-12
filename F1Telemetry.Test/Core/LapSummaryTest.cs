@@ -49,8 +49,7 @@ namespace F1Telemetry.Test.Core
                 new CarStatusData(0, 0)
                 {
                     FuelInTank = 96
-                }
-                ,
+                },
                 new CarStatusData(0, 0)
                 {
                     FuelInTank = 94
