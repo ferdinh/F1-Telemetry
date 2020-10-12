@@ -401,6 +401,11 @@ namespace F1Telemetry.WPF.ViewModels
                 CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
                 CurrentTelemetry.BestLapTime = currentLapData.BestLapTime;
 
+                if (currentCarStatus != null)
+                {
+                    CurrentTelemetry.FuelRemainingLap = currentCarStatus.FuelRemainingLaps;
+                }
+
                 CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
                 CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);
                 CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft]);
