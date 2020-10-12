@@ -32,5 +32,62 @@ namespace F1Telemetry.Test.Core
 
             actual.Should().BeApproximately(expected, 0.05f);
         }
+
+        [Fact]
+        public void FuelUsed_Should_Return_The_Difference_Between_Fuel_At_The_Start_Of_The_Lap_and_End_Of_Lap()
+        {
+            var carStatusData = new List<CarStatusData>
+            {
+                new CarStatusData(0, 0)
+                {
+                    FuelInTank = 100
+                },
+                new CarStatusData(0, 0)
+                {
+                    FuelInTank = 98
+                },
+                new CarStatusData(0, 0)
+                {
+                    FuelInTank = 96
+                }
+                ,
+                new CarStatusData(0, 0)
+                {
+                    FuelInTank = 94
+                }
+            };
+
+            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+
+            lapSummary.FuelUsed.Should().BeApproximately(6.0f, 0.01f);
+        }
+
+        [Fact]
+        public void FuelUsed_Should_Not_Return_Negative_If_There_Is_Incorrect_Data()
+        {
+            var carStatusData = new List<CarStatusData>
+            {
+                new CarStatusData(0, 0)
+                {
+                    FuelInTank = 94
+                },
+                new CarStatusData(0, 0)
+                {
+                    FuelInTank = 100
+                }
+            };
+
+            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+
+            lapSummary.FuelUsed.Should().BeGreaterOrEqualTo(0.0f, because: "There is no refueling and a lap should always consume fuel. You can't make fuel from thin air.");
+        }
+
+        [Fact]
+        public void FuelUsed_Should_Return_Zero_When_There_Is_No_Data()
+        {
+            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
+
+            lapSummary.FuelUsed.Should().Be(0.0f);
+        }
     }
 }
