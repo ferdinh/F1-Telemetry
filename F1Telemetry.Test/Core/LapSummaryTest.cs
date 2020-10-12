@@ -26,9 +26,12 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             var actual = lapSummary.ERSDeployedPercentage;
+
+            actual.Should().BeApproximately(expected, 0.01f);
+        }
 
             actual.Should().BeApproximately(expected, 0.05f);
         }
