@@ -153,6 +153,7 @@ namespace F1Telemetry.WPF.ViewModels
                             DeltaToBestTime = deltaToFastestTime,
                             TyreCompoundUsed = lapSummary.TyreCompoundUsed,
                             ERSDeployed = lapSummary.ERSDeployed,
+                            TotalERSHarvestedPercentage = lapSummary.TotalERSHarvestedPercentage,
                             ERSDeployedPercentage = lapSummary.ERSDeployedPercentage,
                             FuelUsed = lapSummary.FuelUsed
                         });

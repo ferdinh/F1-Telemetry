@@ -43,7 +43,8 @@ namespace F1Telemetry.Core
         public PacketTypes Feed(byte[] bytes)
         {
             IPacket packet = Decode.Packet(bytes);
-
+            var packetTypeReceived = PacketTypes.Invalid;
+            
             switch (packet)
             {
                 case PacketSessionData packetSessionData:
@@ -61,23 +62,21 @@ namespace F1Telemetry.Core
                 case PacketCarStatusData packetCarStatusData:
                     ProcessPacketCarStatusData(packetCarStatusData);
                     break;
+                default:
+                    return packetTypeReceived;
             }
 
-            var packetTypeReceived = packet == null ? PacketTypes.Invalid : packet.Header.PacketTypes;
+            packetTypeReceived = packet.Header.PacketTypes;
 
-            if (packet != null)
+            if (packet.Header.SessionTime < PreviousSessionTime)
             {
-                if (packet.Header.SessionTime < PreviousSessionTime)
-                {
-                    OnRestarting();
-                    PreviousSessionTime = CurrentSessionTime = packet.Header.SessionTime;
-                } 
-                else
-                {
-                    PreviousSessionTime = CurrentSessionTime;
-                    CurrentSessionTime = packet == null ? 0.0f : packet.Header.SessionTime;
-                }
-
+                OnRestarting();
+                PreviousSessionTime = CurrentSessionTime = packet.Header.SessionTime;
+            }
+            else
+            {
+                PreviousSessionTime = CurrentSessionTime;
+                CurrentSessionTime = packet.Header.SessionTime;
             }
 
             return packetTypeReceived;
