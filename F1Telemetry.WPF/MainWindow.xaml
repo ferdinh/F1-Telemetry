@@ -110,6 +110,21 @@
                                 IsReadOnly="True"
                                 ElementStyle="{StaticResource CenterDataGridCell}" />
                             <DataGridTextColumn
+                                Header="Sector 1"
+                                Binding="{Binding SectorTime.Sector1, Converter={StaticResource ToLapTimeString}}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
+                            <DataGridTextColumn
+                                Header="Sector 2"
+                                Binding="{Binding SectorTime.Sector2, Converter={StaticResource ToLapTimeString}}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
+                            <DataGridTextColumn
+                                Header="Sector 3"
+                                Binding="{Binding SectorTime.Sector3, Converter={StaticResource ToLapTimeString}}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
+                            <DataGridTextColumn
                                 Header="Tyre"
                                 Binding="{Binding TyreCompoundUsed}"
                                 IsReadOnly="True"

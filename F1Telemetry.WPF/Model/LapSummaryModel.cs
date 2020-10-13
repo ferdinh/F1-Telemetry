@@ -8,6 +8,7 @@ namespace F1Telemetry.WPF.Model
         public bool IsChecked { get; set; }
         public int LapNumber { get; set; }
         public float LapTime { get; set; }
+        public SectorTime SectorTime { get; set; }
         public float DeltaToBestTime { get; set; }
         public TyreCompound TyreCompoundUsed { get; set; }
         public float ERSDeployed { get; set; }

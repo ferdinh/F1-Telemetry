@@ -11,6 +11,7 @@ namespace F1Telemetry.Core.Data
     {
         public int LapNumber { get; }
         public float LapTime { get; }
+        public SectorTime SectorTime { get; }
         public float BestLapTime { get; }
         public IReadOnlyList<LapData> LapData { get; }
         public IReadOnlyList<CarStatusData> CarStatusData { get; }
@@ -41,6 +42,17 @@ namespace F1Telemetry.Core.Data
             LapNumber = latestLapData.CurrentLapNum - 1;
             LapTime = latestLapData.LastLapTime;
             BestLapTime = latestLapData.BestLapTime;
+
+            var lapData = lapDatas.LastOrDefault();
+
+            if (lapData != null)
+            {
+                var sector1 = lapData.Sector1TimeInMS / 1000.0f;
+                var sector2 = lapData.Sector2TimeInMS / 1000.0f;
+                var sector3 = LapTime - sector1 - sector2;
+
+                SectorTime = new SectorTime(sector1, sector2, sector3);
+            }
 
             var carStatus = carStatusDatas.LastOrDefault();
 
