@@ -11,6 +11,7 @@ namespace F1Telemetry.Core.Data
     {
         public int LapNumber { get; }
         public float LapTime { get; }
+        public SectorTime SectorTime { get; }
         public float BestLapTime { get; }
         public IReadOnlyList<LapData> LapData { get; }
         public IReadOnlyList<CarStatusData> CarStatusData { get; }
@@ -25,14 +26,35 @@ namespace F1Telemetry.Core.Data
         public float ERSDeployedPercentage => ERSDeployed / CarInfo.F1.MaxDeployableERS;
         public float FuelUsed => CalculateFuelUsage();
 
-        public LapSummary(int lapNumber, float lapTime, float bestLapTime, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LapSummary"/> class.
+        /// </summary>
+        /// <param name="latestLapData">The latest lap data given from the game. This is usually the next packet after a new lap.</param>
+        /// <param name="lapDatas">The lap datas.</param>
+        /// <param name="carStatusDatas">The car status datas.</param>
+        /// <param name="carTelemetryDatas">The car telemetry datas.</param>
+        public LapSummary(LapData latestLapData, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
         {
-            LapData = lapDatas.AsReadOnly();
-            CarStatusData = carStatusDatas.AsReadOnly();
-            CarTelemetryData = carTelemetryDatas.AsReadOnly();
-            LapNumber = lapNumber;
-            LapTime = lapTime;
-            BestLapTime = bestLapTime;
+            _ = latestLapData ?? throw new ArgumentNullException(nameof(latestLapData));
+
+            LapData = lapDatas ?? throw new ArgumentNullException(nameof(lapDatas));
+            CarStatusData = carStatusDatas ?? throw new ArgumentNullException(nameof(carStatusDatas));
+            CarTelemetryData = carTelemetryDatas ?? throw new ArgumentNullException(nameof(carTelemetryDatas));
+
+            LapNumber = latestLapData.CurrentLapNum - 1;
+            LapTime = latestLapData.LastLapTime;
+            BestLapTime = latestLapData.BestLapTime;
+
+            var lapData = lapDatas.LastOrDefault();
+
+            if (lapData != null)
+            {
+                var sector1 = lapData.Sector1TimeInMS / 1000.0f;
+                var sector2 = lapData.Sector2TimeInMS / 1000.0f;
+                var sector3 = LapTime - sector1 - sector2;
+
+                SectorTime = new SectorTime(sector1, sector2, sector3);
+            }
 
             var carStatus = carStatusDatas.LastOrDefault();
 

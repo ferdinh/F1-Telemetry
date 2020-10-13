@@ -9,6 +9,38 @@ namespace F1Telemetry.Test.Core
 {
     public class LapSummaryTest
     {
+        [Fact]
+        public void Contructor_Should_Throw_NullReference_If_No_Latest_LapData_Given()
+        {
+            Action action = () => new LapSummary(null, null, null, null);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Contructor_Should_Throw_NullReference_If_No_LapDatas_Given()
+        {
+            Action action = () => new LapSummary(new LapData(0, 0), null, null, null);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Contructor_Should_Throw_NullReference_If_No_CarStatusDatas_Given()
+        {
+            Action action = () => new LapSummary(new LapData(0, 0), new List<LapData>(), null, null);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Contructor_Should_Throw_NullReference_If_No_CarTelemetryDatas_Given()
+        {
+            Action action = () => new LapSummary(new LapData(0, 0), new List<LapData>(), new List<CarStatusData>(), null);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
         [Theory]
         [InlineData(100.12f)]
         [InlineData(2000.0f)]
@@ -26,7 +58,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             var actual = lapSummary.ERSDeployedPercentage;
 
@@ -50,7 +82,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             var actual = lapSummary.TotalERSHarvestedPercentage;
 
@@ -75,13 +107,12 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             var actual = lapSummary.TotalERSHarvested;
 
             actual.Should().BeApproximately(expected, 0.05f);
         }
-
 
         [Fact]
         public void FuelUsed_Should_Return_The_Difference_Between_Fuel_At_The_Start_Of_The_Lap_and_End_Of_Lap()
@@ -106,7 +137,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             lapSummary.FuelUsed.Should().BeApproximately(6.0f, 0.01f);
         }
@@ -126,7 +157,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             lapSummary.FuelUsed.Should().BeGreaterOrEqualTo(0.0f, because: "There is no refueling and a lap should always consume fuel. You can't make fuel from thin air.");
         }
@@ -134,9 +165,19 @@ namespace F1Telemetry.Test.Core
         [Fact]
         public void FuelUsed_Should_Return_Zero_When_There_Is_No_Data()
         {
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
 
             lapSummary.FuelUsed.Should().Be(0.0f);
+        }
+
+        [Fact]
+        public void LapSummary_Should_Return_SectorTime_in_Seconds()
+        {
+            var lapSummary = new LapSummary(new LapData(0, 0) { LastLapTime = 3 }, new List<LapData> { new LapData(0, 0) { Sector1TimeInMS = 1000, Sector2TimeInMS = 1000 } }, new List<CarStatusData>(), new List<CarTelemetryData>());
+
+            var expected = new SectorTime(1, 1, 1);
+
+            lapSummary.SectorTime.Should().BeEquivalentTo(expected);
         }
     }
 }

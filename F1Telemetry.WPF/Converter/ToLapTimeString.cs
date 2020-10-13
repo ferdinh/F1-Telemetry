@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 using System.Windows.Data;
 
 namespace F1Telemetry.WPF.Converter
@@ -9,8 +10,16 @@ namespace F1Telemetry.WPF.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var time = TimeSpan.FromSeconds(double.Parse(value.ToString()));
+            var lapTimeStringBuilder = new StringBuilder();
 
-            return $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:000}";
+            if (time.Minutes > 0)
+            {
+                lapTimeStringBuilder.Append($"{time.Minutes:00}:");
+            }
+
+            lapTimeStringBuilder.Append($"{time.Seconds:00}.{Math.Abs(time.Milliseconds):000}");
+
+            return lapTimeStringBuilder.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -150,6 +150,7 @@ namespace F1Telemetry.WPF.ViewModels
                         {
                             LapNumber = lapSummary.LapNumber,
                             LapTime = lapSummary.LapTime,
+                            SectorTime = lapSummary.SectorTime,
                             DeltaToBestTime = deltaToFastestTime,
                             TyreCompoundUsed = lapSummary.TyreCompoundUsed,
                             ERSDeployed = lapSummary.ERSDeployed,
