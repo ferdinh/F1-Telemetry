@@ -12,6 +12,7 @@ namespace F1Telemetry.Test.ConverterTests
     public class ToLapTimeStringTest
     {
         [Theory]
+        [InlineData(10, "10.000")]
         [InlineData(60, "01:00.000")]
         [InlineData(70, "01:10.000")]
         [InlineData(155.364, "02:35.364")]
