@@ -140,17 +140,17 @@ namespace F1Telemetry.Core.Data
         }
 
         /// <summary>
-        /// Removes the lap data of the specified lap number.
+        /// Removes the lap data buffer of the specified lap number.
         /// </summary>
         /// <param name="lapNumber">The lap number.</param>
-        public void RemoveLap(int lapNumber)
+        public void RemoveOngoingLapData(int lapNumber)
         {
             var lapDataToRemove = lapData.GetLap(lapNumber).ToList();
             var carDataToRemove = CarTelemetryData.GetForLap(lapDataToRemove);
 
-            foreach (var lapData in lapDataToRemove)
+            foreach (var lap in lapDataToRemove)
             {
-                this.lapData.Remove(lapData);
+                lapData.Remove(lap);
             }
 
             foreach (var item in carDataToRemove)
