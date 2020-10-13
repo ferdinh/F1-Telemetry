@@ -35,9 +35,11 @@ namespace F1Telemetry.Core.Data
         /// <param name="carTelemetryDatas">The car telemetry datas.</param>
         public LapSummary(LapData latestLapData, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
         {
-            LapData = lapDatas.AsReadOnly();
-            CarStatusData = carStatusDatas.AsReadOnly();
-            CarTelemetryData = carTelemetryDatas.AsReadOnly();
+            _ = latestLapData ?? throw new ArgumentNullException(nameof(latestLapData));
+
+            LapData = lapDatas ?? throw new ArgumentNullException(nameof(lapDatas));
+            CarStatusData = carStatusDatas ?? throw new ArgumentNullException(nameof(carStatusDatas));
+            CarTelemetryData = carTelemetryDatas ?? throw new ArgumentNullException(nameof(carTelemetryDatas));
 
             LapNumber = latestLapData.CurrentLapNum - 1;
             LapTime = latestLapData.LastLapTime;
