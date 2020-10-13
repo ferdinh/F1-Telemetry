@@ -119,7 +119,7 @@ namespace F1Telemetry.Core.Data
                     }
                 }
 
-                var lapSummary = new LapSummary(previousLapNum, lapData.LastLapTime, lapData.BestLapTime, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
+                var lapSummary = new LapSummary(lapData, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
 
                 LapSummaries.Add(CurrentLapNumber, lapSummary);
 

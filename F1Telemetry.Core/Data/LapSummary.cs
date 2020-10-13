@@ -25,14 +25,22 @@ namespace F1Telemetry.Core.Data
         public float ERSDeployedPercentage => ERSDeployed / CarInfo.F1.MaxDeployableERS;
         public float FuelUsed => CalculateFuelUsage();
 
-        public LapSummary(int lapNumber, float lapTime, float bestLapTime, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LapSummary"/> class.
+        /// </summary>
+        /// <param name="latestLapData">The latest lap data given from the game. This is usually the next packet after a new lap.</param>
+        /// <param name="lapDatas">The lap datas.</param>
+        /// <param name="carStatusDatas">The car status datas.</param>
+        /// <param name="carTelemetryDatas">The car telemetry datas.</param>
+        public LapSummary(LapData latestLapData, List<LapData> lapDatas, List<CarStatusData> carStatusDatas, List<CarTelemetryData> carTelemetryDatas)
         {
             LapData = lapDatas.AsReadOnly();
             CarStatusData = carStatusDatas.AsReadOnly();
             CarTelemetryData = carTelemetryDatas.AsReadOnly();
-            LapNumber = lapNumber;
-            LapTime = lapTime;
-            BestLapTime = bestLapTime;
+
+            LapNumber = latestLapData.CurrentLapNum - 1;
+            LapTime = latestLapData.LastLapTime;
+            BestLapTime = latestLapData.BestLapTime;
 
             var carStatus = carStatusDatas.LastOrDefault();
 

@@ -26,7 +26,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             var actual = lapSummary.ERSDeployedPercentage;
 
@@ -50,7 +50,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             var actual = lapSummary.TotalERSHarvestedPercentage;
 
@@ -75,7 +75,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             var actual = lapSummary.TotalERSHarvested;
 
@@ -106,7 +106,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             lapSummary.FuelUsed.Should().BeApproximately(6.0f, 0.01f);
         }
@@ -126,7 +126,7 @@ namespace F1Telemetry.Test.Core
                 }
             };
 
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
 
             lapSummary.FuelUsed.Should().BeGreaterOrEqualTo(0.0f, because: "There is no refueling and a lap should always consume fuel. You can't make fuel from thin air.");
         }
@@ -134,7 +134,7 @@ namespace F1Telemetry.Test.Core
         [Fact]
         public void FuelUsed_Should_Return_Zero_When_There_Is_No_Data()
         {
-            var lapSummary = new LapSummary(0, 0, 0, new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), new List<CarStatusData>(), new List<CarTelemetryData>());
 
             lapSummary.FuelUsed.Should().Be(0.0f);
         }
