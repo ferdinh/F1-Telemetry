@@ -74,7 +74,9 @@ namespace F1Telemetry.Core.Data
             CurrentLapData = lapData;
             BestLapTime = lapData.BestLapTime;
 
-            if (lapData.PitStatus == PitStatus.Pitting && (CurrentStatus.PitStatus != PitStatus.Invalid && CurrentStatus.PitStatus != PitStatus.Pitting))
+            var isDriverPitting = lapData.PitStatus == PitStatus.Pitting && (CurrentStatus.PitStatus != PitStatus.Invalid && CurrentStatus.PitStatus != PitStatus.Pitting);
+
+            if (isDriverPitting)
             {
                 OnPitting();
             }
@@ -88,36 +90,13 @@ namespace F1Telemetry.Core.Data
             else if (lapData.CurrentLapNum > CurrentLapNumber)
             {
                 var previousLapNum = lapData.CurrentLapNum - 1;
-                var lastLapData = LapData.Where(l => (previousLapNum).Equals(l.CurrentLapNum)).ToList();
-                var lastCarTelemetryData = new List<CarTelemetryData>();
-                var lastCarStatusData = new List<CarStatusData>();
+                var lastLapData = LapData.Where(l => previousLapNum.Equals(l.CurrentLapNum)).ToList();
 
                 var carTelemetryDataCopy = CarTelemetryData.ToList();
                 var carStatusDataCopy = CarStatusData.ToList();
 
-                foreach (var lastLap in lastLapData)
-                {
-                    var carTelemData = carTelemetryDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID));
-                    var carStatData = carStatusDataCopy.SingleOrDefault(c => c.SessionTime.Equals(lastLap.SessionTime) && c.SessionUID.Equals(lastLap.SessionUID));
-
-                    if (carTelemData != null)
-                    {
-                        lastCarTelemetryData.Add(carTelemData);
-                    }
-                    else
-                    {
-                        lastCarTelemetryData.Add(lastCarTelemetryData.Last());
-                    }
-
-                    if (carStatData != null)
-                    {
-                        lastCarStatusData.Add(carStatData);
-                    }
-                    else
-                    {
-                        lastCarStatusData.Add(lastCarStatusData.Last());
-                    }
-                }
+                var lastCarTelemetryData = carTelemetryDataCopy.GetForLap(lastLapData).ToList();
+                var lastCarStatusData = carStatusDataCopy.GetForLap(lastLapData).ToList();
 
                 var lapSummary = new LapSummary(lapData, lapDatas: lastLapData, carTelemetryDatas: lastCarTelemetryData, carStatusDatas: lastCarStatusData);
 
