@@ -34,7 +34,7 @@
             <ui:SimpleStackPanel>
                 <Menu Grid.Row="0">
                     <MenuItem Header="_Export As">
-                        <MenuItem Header="CSV" />
+                        <MenuItem Header="CSV" Command="{Binding ExportLapSummaryAsCsvCommand}" />
                     </MenuItem>
 
                 </Menu>
