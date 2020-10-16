@@ -44,7 +44,7 @@ namespace F1Telemetry.Core
         {
             IPacket packet = Decode.Packet(bytes);
             var packetTypeReceived = PacketTypes.Invalid;
-            
+
             switch (packet)
             {
                 case PacketSessionData packetSessionData:
@@ -62,6 +62,7 @@ namespace F1Telemetry.Core
                 case PacketCarStatusData packetCarStatusData:
                     ProcessPacketCarStatusData(packetCarStatusData);
                     break;
+
                 default:
                     return packetTypeReceived;
             }
