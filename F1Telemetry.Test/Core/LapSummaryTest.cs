@@ -179,5 +179,71 @@ namespace F1Telemetry.Test.Core
 
             lapSummary.SectorTime.Should().BeEquivalentTo(expected);
         }
+
+        [Fact]
+        public void TyreWearPercentage_Should_Measure_The_Difference_Of_The_Wear_Of_The_Same_Tyre()
+        {
+            var carStatusData = new List<CarStatusData>
+            {
+                new CarStatusData(0, 0)
+                {
+                    TyresWear = new byte[]
+                    {
+                        2,
+                        1,
+                        4, // <- Should compare this
+                        5
+                    }
+                },
+                new CarStatusData(0, 0)
+                {
+                    TyresWear = new byte[]
+                    {
+                        3,
+                        2,
+                        20, // <- Should compare this
+                        13
+                    }
+                }
+            };
+
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var expected = 0.16f;
+
+            lapSummary.TyreWearPercentage.Should().BeApproximately(expected, 0.01f);
+        }
+
+        [Fact]
+        public void TyreWearPercentage_Should_Return_Minus_One_If_Data_Is_Corrupted()
+        {
+            var carStatusData = new List<CarStatusData>
+            {
+                new CarStatusData(0, 0)
+                {
+                    TyresWear = new byte[]
+                    {
+                        2,
+                        1,
+                        25, 
+                        5
+                    }
+                },
+                new CarStatusData(0, 0)
+                {
+                    TyresWear = new byte[]
+                    {
+                        3,
+                        2,
+                        20,
+                        13
+                    }
+                }
+            };
+
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+            var expected = -1.0f;
+
+            lapSummary.TyreWearPercentage.Should().BeApproximately(expected, 0.01f);
+        }
     }
 }

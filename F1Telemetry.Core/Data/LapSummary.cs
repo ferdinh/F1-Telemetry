@@ -25,6 +25,7 @@ namespace F1Telemetry.Core.Data
         public float ERSDeployed { get; set; }
         public float ERSDeployedPercentage => ERSDeployed / CarInfo.F1.MaxDeployableERS;
         public float FuelUsed => CalculateFuelUsage();
+        public float TyreWearPercentage { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LapSummary"/> class.
@@ -56,16 +57,34 @@ namespace F1Telemetry.Core.Data
                 SectorTime = new SectorTime(sector1, sector2, sector3);
             }
 
-            var carStatus = carStatusDatas.LastOrDefault();
+            var initialCarStatus = carStatusDatas.FirstOrDefault() ?? new Data.CarStatusData(0, 0);
+            var endingCarStatus = carStatusDatas.LastOrDefault();
 
-            if (carStatus != null)
+            if (endingCarStatus != null)
             {
-                TyreCompoundUsed = (TyreCompound)carStatus.ActualTyreCompound;
-                ERSEnergyStore = carStatus.ErsStoreEnergy;
-                ERSDeployed = carStatus.ErsDeployedThisLap;
-                ERSHarvestedThisLapMGUK = carStatus.ErsHarvestedThisLapMGUK;
-                ERSHarvestedThisLapMGUH = carStatus.ErsHarvestedThisLapMGUH;
+                TyreCompoundUsed = (TyreCompound)endingCarStatus.ActualTyreCompound;
+                ERSEnergyStore = endingCarStatus.ErsStoreEnergy;
+                ERSDeployed = endingCarStatus.ErsDeployedThisLap;
+                ERSHarvestedThisLapMGUK = endingCarStatus.ErsHarvestedThisLapMGUK;
+                ERSHarvestedThisLapMGUH = endingCarStatus.ErsHarvestedThisLapMGUH;
+                TyreWearPercentage = CalculateTyreWearChange(initialCarStatus, endingCarStatus);
             }
+        }
+
+        /// <summary>
+        /// Calculates the tyre wear percentage change.
+        /// </summary>
+        /// <param name="initialCarStatus">The initial car status.</param>
+        /// <param name="endingCarStatus">The ending car status.</param>
+        /// <returns>Tyre Wear Change; -1 if invalid.</returns>
+        private float CalculateTyreWearChange(CarStatusData initialCarStatus, CarStatusData endingCarStatus)
+        {
+            // Compare the difference of the tyre that has the maximum wear.
+            var maxEndTyreValue = endingCarStatus.TyresWear.Max();
+            var tyreIndexToCompare = Array.IndexOf(endingCarStatus.TyresWear, maxEndTyreValue);
+            var percentageChange = (endingCarStatus.TyresWear.Max() - initialCarStatus.TyresWear[tyreIndexToCompare]) / 100.0f;
+
+            return percentageChange > 0 ? percentageChange : -1.0f;
         }
 
         private float CalculateFuelUsage()
