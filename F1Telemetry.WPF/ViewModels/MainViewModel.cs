@@ -1,9 +1,11 @@
 ﻿using F1Telemetry.Core;
 using F1Telemetry.Core.Data;
+using F1Telemetry.Core.Util.Export;
 using F1Telemetry.Core.Util.Extensions;
 using F1Telemetry.Core.Util.Network;
 using F1Telemetry.WPF.Command;
 using F1Telemetry.WPF.Model;
+using Microsoft.Win32;
 using ScottPlot;
 using System;
 using System.Collections.Generic;
@@ -30,6 +32,7 @@ namespace F1Telemetry.WPF.ViewModels
             ToggleToGraphCommand = new RelayCommand<(bool, int)>(ToggleToGraph);
             ClearAllGraphCommand = new RelayCommand(ClearAllGraph, CanClearAllGraph);
             ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph, _ => LapData != null);
+            ExportLapSummaryAsCsvCommand = new RelayCommand(ExportLapSummaryAsCsv);
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
 
@@ -80,6 +83,7 @@ namespace F1Telemetry.WPF.ViewModels
         public RelayCommand ClearAllGraphCommand { get; }
         public PlottableSignalXY[] SpeedGraph { get; } = new PlottableSignalXY[3];
         public RelayCommand StartListeningCommand { get; }
+        public RelayCommand ExportLapSummaryAsCsvCommand { get; }
         public PlottableSignalXY[] ThrottleGraph { get; } = new PlottableSignalXY[3];
         public UDPListener UDPListener { get; private set; }
 
@@ -163,7 +167,7 @@ namespace F1Telemetry.WPF.ViewModels
 
                 manager.GetPlayerInfo().Pitting += (s, e) =>
                 {
-                    manager.GetPlayerInfo().RemoveLap(CurrentTelemetry.LapNumber);
+                    manager.GetPlayerInfo().RemoveOngoingLapData(CurrentTelemetry.LapNumber);
                 };
             }
 
@@ -221,16 +225,16 @@ namespace F1Telemetry.WPF.ViewModels
 
                         var graphPlots = new Plottable[4];
 
-                        var speedGraphPlot = SpeedGraphPlot.plt.PlotScatter(distance, speed, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var speedGraphPlot = SpeedGraphPlot.plt.PlotSignalXYConst(distance, speed, lineWidth: 1.75);
                         speedGraphPlot.label = lapNumberLabel;
 
-                        var throttleGraphPlot = ThrottleGraphPlot.plt.PlotScatter(distance, throttle, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var throttleGraphPlot = ThrottleGraphPlot.plt.PlotSignalXYConst(distance, throttle, lineWidth: 1.75);
                         throttleGraphPlot.label = lapNumberLabel;
 
-                        var brakeGraphPlot = BrakeGraphPlot.plt.PlotScatter(distance, brake, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var brakeGraphPlot = BrakeGraphPlot.plt.PlotSignalXYConst(distance, brake, lineWidth: 1.75);
                         brakeGraphPlot.label = lapNumberLabel;
 
-                        var gearGraphPlot = GearGraphPlot.plt.PlotScatter(distance, gear, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var gearGraphPlot = GearGraphPlot.plt.PlotSignalXYConst(distance, gear, lineWidth: 1.75);
                         gearGraphPlot.label = lapNumberLabel;
 
                         graphPlots[0] = speedGraphPlot;
@@ -273,6 +277,24 @@ namespace F1Telemetry.WPF.ViewModels
             IsLiveTelemetryEnabled = false;
             ResetCurrentLapCursor();
             ResetRenderCursor();
+        }
+
+        /// <summary>
+        /// Exports player lap summary as CSV.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void ExportLapSummaryAsCsv(object parameter)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV (*.csv)|*.csv";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var exporter = new Exporter();
+
+                exporter.Export(Manager.GetPlayerInfo().LapSummaries).AsCsv().ToFile(saveFileDialog.FileName);
+            }
         }
 
         /// <summary>
