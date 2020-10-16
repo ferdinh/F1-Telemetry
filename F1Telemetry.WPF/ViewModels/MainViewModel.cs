@@ -225,16 +225,16 @@ namespace F1Telemetry.WPF.ViewModels
 
                         var graphPlots = new Plottable[4];
 
-                        var speedGraphPlot = SpeedGraphPlot.plt.PlotScatter(distance, speed, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var speedGraphPlot = SpeedGraphPlot.plt.PlotSignalXYConst(distance, speed, lineWidth: 1.75);
                         speedGraphPlot.label = lapNumberLabel;
 
-                        var throttleGraphPlot = ThrottleGraphPlot.plt.PlotScatter(distance, throttle, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var throttleGraphPlot = ThrottleGraphPlot.plt.PlotSignalXYConst(distance, throttle, lineWidth: 1.75);
                         throttleGraphPlot.label = lapNumberLabel;
 
-                        var brakeGraphPlot = BrakeGraphPlot.plt.PlotScatter(distance, brake, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var brakeGraphPlot = BrakeGraphPlot.plt.PlotSignalXYConst(distance, brake, lineWidth: 1.75);
                         brakeGraphPlot.label = lapNumberLabel;
 
-                        var gearGraphPlot = GearGraphPlot.plt.PlotScatter(distance, gear, lineWidth: 1.75, markerShape: MarkerShape.none);
+                        var gearGraphPlot = GearGraphPlot.plt.PlotSignalXYConst(distance, gear, lineWidth: 1.75);
                         gearGraphPlot.label = lapNumberLabel;
 
                         graphPlots[0] = speedGraphPlot;
