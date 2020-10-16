@@ -160,7 +160,8 @@ namespace F1Telemetry.WPF.ViewModels
                             ERSDeployed = lapSummary.ERSDeployed,
                             TotalERSHarvestedPercentage = lapSummary.TotalERSHarvestedPercentage,
                             ERSDeployedPercentage = lapSummary.ERSDeployedPercentage,
-                            FuelUsed = lapSummary.FuelUsed
+                            FuelUsed = lapSummary.FuelUsed,
+                            TyreWearPercentage = lapSummary.TyreWearPercentage
                         });
                     });
                 };

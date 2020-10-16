@@ -143,6 +143,12 @@
                                 ElementStyle="{StaticResource CenterDataGridCell}"
                                 />
                             <DataGridTextColumn
+                                Header="Tyre Wear"
+                                Binding="{Binding TyreWearPercentage, Converter={StaticResource ToPercentageConverter}}"
+                                IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterDataGridCell}"
+                                />
+                            <DataGridTextColumn
                                 Header="Fuel Used (kg)"
                                 Binding="{Binding FuelUsed, StringFormat=N2}"
                                 ElementStyle="{StaticResource CenterDataGridCell}"
