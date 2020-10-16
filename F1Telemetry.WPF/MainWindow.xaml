@@ -9,7 +9,7 @@
         x:Name="window" x:Class="F1Telemetry.WPF.MainWindow"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="F1 Telemetry" Height="550" Width="900" Topmost="{Binding IsTopmost}">
+        Title="F1 Telemetry" Height="575" Width="900" Topmost="{Binding IsTopmost}">
 
     <Window.Resources>
         <local:ToPercentageConverter x:Key="ToPercentageConverter" />
