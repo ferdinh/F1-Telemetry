@@ -35,7 +35,7 @@
                 <Menu Grid.Row="0">
                     <MenuItem Header="_Export As">
                         <MenuItem Header="CSV" Command="{Binding ExportLapSummaryAsCsvCommand}" />
-                        <MenuItem Header="JSON" />
+                        <MenuItem Header="JSON" Command="{Binding ExportPlayerDataAsJsonCommand}"/>
                     </MenuItem>
                 </Menu>
                 <Separator />

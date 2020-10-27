@@ -33,6 +33,7 @@ namespace F1Telemetry.WPF.ViewModels
             ClearAllGraphCommand = new RelayCommand(ClearAllGraph, CanClearAllGraph);
             ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph, _ => LapData != null);
             ExportLapSummaryAsCsvCommand = new RelayCommand(ExportLapSummaryAsCsv);
+            ExportLapSummaryAsJsonCommand = new RelayCommand(ExportLapSummaryAsJson);
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
 
@@ -84,6 +85,7 @@ namespace F1Telemetry.WPF.ViewModels
         public PlottableSignalXY[] SpeedGraph { get; } = new PlottableSignalXY[3];
         public RelayCommand StartListeningCommand { get; }
         public RelayCommand ExportLapSummaryAsCsvCommand { get; }
+        public RelayCommand ExportLapSummaryAsJsonCommand { get; }
         public PlottableSignalXY[] ThrottleGraph { get; } = new PlottableSignalXY[3];
         public UDPListener UDPListener { get; private set; }
 
@@ -295,6 +297,19 @@ namespace F1Telemetry.WPF.ViewModels
                 var exporter = new Exporter();
 
                 exporter.Export(Manager.GetPlayerInfo().LapSummaries).AsCsv().ToFile(saveFileDialog.FileName);
+            }
+        }
+
+        private void ExportLapSummaryAsJson(object parameter)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JSON (*.json)|*.json";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var exporter = new Exporter();
+
+                exporter.Export(Manager.GetPlayerInfo().LapSummaries).AsJson().ToFile(saveFileDialog.FileName);
             }
         }
 
