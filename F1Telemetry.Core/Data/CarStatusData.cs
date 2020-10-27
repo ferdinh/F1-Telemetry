@@ -171,4 +171,12 @@
         {
         }
     }
+
+    public enum ErsDeployMode : byte
+    {
+        None,
+        Medium,
+        Overtake,
+        Hotlap
+    }
 }

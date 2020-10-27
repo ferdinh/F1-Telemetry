@@ -14,6 +14,7 @@ namespace F1Telemetry.WPF.Model
         public float ERSDeployed { get; set; }
         public float TotalERSHarvestedPercentage { get; set; }
         public float ERSDeployedPercentage { get; set; }
+        public ErsDeployMode ERSDeployMode { get; set; }
         public float FuelUsed { get; set; }
         public float TyreWearPercentage { get; set; }
 
