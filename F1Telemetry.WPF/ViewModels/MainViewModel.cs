@@ -31,7 +31,7 @@ namespace F1Telemetry.WPF.ViewModels
             EnableLiveTelemetryCommand = new RelayCommand<bool>(EnableLiveTelemetry);
             ToggleToGraphCommand = new RelayCommand<(bool, int)>(ToggleToGraph);
             ClearAllGraphCommand = new RelayCommand(ClearAllGraph, CanClearAllGraph);
-            ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph, _ => LapData != null);
+            ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph, _ => LiveLapData != null);
             ExportLapSummaryAsCsvCommand = new RelayCommand(ExportLapSummaryAsCsv);
             ExportLapSummaryAsJsonCommand = new RelayCommand(ExportLapSummaryAsJson);
 
@@ -74,7 +74,7 @@ namespace F1Telemetry.WPF.ViewModels
         public DispatcherTimer GraphRenderTimer { get; } = new DispatcherTimer();
         public bool IsListening { get; set; }
         public bool IsTopmost { get; internal set; }
-        public CurrentLapDataModel[] LapData { get; set; }
+        public CurrentLapDataModel[] LiveLapData { get; set; }
         public TelemetryManager Manager { get; } = new TelemetryManager();
         public SessionViewModel SessionInfo { get; set; } = new SessionViewModel();
         public RelayCommand<bool> EnableLiveTelemetryCommand { get; }
@@ -112,9 +112,9 @@ namespace F1Telemetry.WPF.ViewModels
 
             if (manager != null)
             {
-                if (LapData != null)
+                if (LiveLapData != null)
                 {
-                    foreach (var lapModel in LapData)
+                    foreach (var lapModel in LiveLapData)
                     {
                         lapModel.Clear();
                     }
@@ -133,8 +133,8 @@ namespace F1Telemetry.WPF.ViewModels
                     if (IsLiveTelemetryEnabled)
                     {
                         ResetRenderCursor();
-                        CurrentLapCursor = (CurrentLapCursor + 1) % LapData.Length;
-                        LapData[CurrentLapCursor].Clear();
+                        CurrentLapCursor = (CurrentLapCursor + 1) % LiveLapData.Length;
+                        LiveLapData[CurrentLapCursor].Clear();
                         ResetCurrentTelemetryIndexCursor();
                     }
 
@@ -272,7 +272,7 @@ namespace F1Telemetry.WPF.ViewModels
 
         private void ClearLiveTelemetryGraph(object parameter)
         {
-            foreach (var lapModel in LapData)
+            foreach (var lapModel in LiveLapData)
             {
                 lapModel.Clear();
             }
@@ -452,9 +452,9 @@ namespace F1Telemetry.WPF.ViewModels
         {
             CurrentRenderPosition[0] = currentLapData.LapDistance;
 
-            if (LapData != null)
+            if (LiveLapData != null)
             {
-                var currentLapDataModel = LapData[CurrentLapCursor];
+                var currentLapDataModel = LiveLapData[CurrentLapCursor];
 
                 var lapNumberLabel = $"Lap {currentLapData.CurrentLapNum}";
 
@@ -496,26 +496,26 @@ namespace F1Telemetry.WPF.ViewModels
         {
             BindCursorBar();
 
-            LapData = new CurrentLapDataModel[3];
+            LiveLapData = new CurrentLapDataModel[3];
 
-            for (int i = 0; i < LapData.Length; i++)
+            for (int i = 0; i < LiveLapData.Length; i++)
             {
-                LapData[i] = new CurrentLapDataModel();
+                LiveLapData[i] = new CurrentLapDataModel();
             }
 
-            for (int i = 0; i < LapData.Length; i++)
+            for (int i = 0; i < LiveLapData.Length; i++)
             {
-                SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Speed, lineWidth: DefaultLineWidth);
+                SpeedGraph[i] = SpeedGraphPlot.plt.PlotSignalXY(LiveLapData[i].Distance, LiveLapData[i].Speed, lineWidth: DefaultLineWidth);
                 SpeedGraphPlot.plt.YLabel("Speed");
                 SpeedGraphPlot.plt.Legend();
 
-                GearGraph[i] = GearGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Gear, lineWidth: DefaultLineWidth);
+                GearGraph[i] = GearGraphPlot.plt.PlotSignalXY(LiveLapData[i].Distance, LiveLapData[i].Gear, lineWidth: DefaultLineWidth);
 
                 GearGraphPlot.plt.YLabel("Gear");
                 GearGraphPlot.plt.Legend();
 
-                BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Brake, lineWidth: DefaultLineWidth);
-                ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(LapData[i].Distance, LapData[i].Throttle, lineWidth: DefaultLineWidth);
+                BrakeGraph[i] = BrakeGraphPlot.plt.PlotSignalXY(LiveLapData[i].Distance, LiveLapData[i].Brake, lineWidth: DefaultLineWidth);
+                ThrottleGraph[i] = ThrottleGraphPlot.plt.PlotSignalXY(LiveLapData[i].Distance, LiveLapData[i].Throttle, lineWidth: DefaultLineWidth);
 
                 ThrottleGraphPlot.plt.YLabel("Throttle");
                 ThrottleGraphPlot.plt.Legend();
@@ -551,7 +551,7 @@ namespace F1Telemetry.WPF.ViewModels
             Array.Clear(GearGraph, 0, GearGraph.Length);
 
             ResetCurrentTelemetryIndexCursor();
-            LapData = null;
+            LiveLapData = null;
         }
 
         private void ClearPlottedLapData()
