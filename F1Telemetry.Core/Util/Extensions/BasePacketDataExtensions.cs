@@ -1,8 +1,6 @@
 ﻿using F1Telemetry.Core.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace F1Telemetry.Core.Util.Extensions
 {
