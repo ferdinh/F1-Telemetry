@@ -245,5 +245,35 @@ namespace F1Telemetry.Test.Core
 
             lapSummary.TyreWearPercentage.Should().BeApproximately(expected, 0.01f);
         }
+
+        [Fact]
+        public void ErsDeployMode_Should_Return_The_Highest_Mode_Used_During_The_Lap()
+        {
+            var expectedErsDeployMode = ErsDeployMode.Hotlap;
+
+            var carStatusData = new List<CarStatusData>
+            {
+                new CarStatusData(0, 0)
+                {
+                    ErsDeployMode = 0
+                },
+                new CarStatusData(0, 0)
+                {
+                    ErsDeployMode = 0
+                },
+                new CarStatusData(0, 0)
+                {
+                    ErsDeployMode = 3
+                },
+                new CarStatusData(0, 0)
+                {
+                    ErsDeployMode = 0
+                }
+            };
+
+            var lapSummary = new LapSummary(new LapData(0, 0), new List<LapData>(), carStatusData, new List<CarTelemetryData>());
+
+            lapSummary.ErsDeployMode.Should().Be(expectedErsDeployMode);
+        }
     }
 }
