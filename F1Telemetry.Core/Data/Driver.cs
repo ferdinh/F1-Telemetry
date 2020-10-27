@@ -1,4 +1,5 @@
 ﻿using F1Telemetry.Core.Util.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

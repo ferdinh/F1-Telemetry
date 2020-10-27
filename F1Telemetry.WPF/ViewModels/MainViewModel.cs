@@ -33,6 +33,7 @@ namespace F1Telemetry.WPF.ViewModels
             ClearAllGraphCommand = new RelayCommand(ClearAllGraph, CanClearAllGraph);
             ClearLiveTelemetryGraphCommand = new RelayCommand(ClearLiveTelemetryGraph, _ => LapData != null);
             ExportLapSummaryAsCsvCommand = new RelayCommand(ExportLapSummaryAsCsv);
+            ExportLapSummaryAsJsonCommand = new RelayCommand(ExportLapSummaryAsJson);
 
             StartListeningCommand = new RelayCommand(async (s) => { await StartListeningAsync(s).ConfigureAwait(false); });
 
@@ -84,6 +85,7 @@ namespace F1Telemetry.WPF.ViewModels
         public PlottableSignalXY[] SpeedGraph { get; } = new PlottableSignalXY[3];
         public RelayCommand StartListeningCommand { get; }
         public RelayCommand ExportLapSummaryAsCsvCommand { get; }
+        public RelayCommand ExportLapSummaryAsJsonCommand { get; }
         public PlottableSignalXY[] ThrottleGraph { get; } = new PlottableSignalXY[3];
         public UDPListener UDPListener { get; private set; }
 
@@ -298,6 +300,19 @@ namespace F1Telemetry.WPF.ViewModels
             }
         }
 
+        private void ExportLapSummaryAsJson(object parameter)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JSON (*.json)|*.json";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var exporter = new Exporter();
+
+                exporter.Export(Manager.GetPlayerInfo().LapSummaries).AsJson().ToFile(saveFileDialog.FileName);
+            }
+        }
+
         /// <summary>
         /// Determines whether this instance [can clear all graph].
         /// </summary>
@@ -408,39 +423,34 @@ namespace F1Telemetry.WPF.ViewModels
                     }
                 }
 
-                UpdateCurrentTelemetry(currentTelemetry);
+                UpdateCurrentTelemetry(currentTelemetry, currentLapData, currentCarStatus);
             }
+        }
+        private void UpdateCurrentTelemetry(CarTelemetryData currentTelemetry, LapData currentLapData, CarStatusData currentCarStatus)
+        {
+            CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
+            CurrentTelemetry.Brake = currentTelemetry.Brake;
+            CurrentTelemetry.Throttle = currentTelemetry.Throttle;
+            CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
+            CurrentTelemetry.Speed = currentTelemetry.Speed;
+            CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
+            CurrentTelemetry.BestLapTime = currentLapData.BestLapTime;
 
             if (currentCarStatus != null)
             {
                 CurrentTelemetry.TyreCompound = (TyreCompound)currentCarStatus.ActualTyreCompound;
+                CurrentTelemetry.FuelRemainingLap = currentCarStatus.FuelRemainingLaps;
             }
 
-            void UpdateCurrentTelemetry(CarTelemetryData currentTelemetry)
-            {
-                CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
-                CurrentTelemetry.Brake = currentTelemetry.Brake;
-                CurrentTelemetry.Throttle = currentTelemetry.Throttle;
-                CurrentTelemetry.EngineRPM = currentTelemetry.EngineRPM;
-                CurrentTelemetry.Speed = currentTelemetry.Speed;
-                CurrentTelemetry.LapTime = currentLapData.CurrentLapTime;
-                CurrentTelemetry.BestLapTime = currentLapData.BestLapTime;
+            CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
+            CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);
+            CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft]);
+            CurrentTelemetry.TyreSurfaceTemperature.RearRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearRight]);
 
-                if (currentCarStatus != null)
-                {
-                    CurrentTelemetry.FuelRemainingLap = currentCarStatus.FuelRemainingLaps;
-                }
-
-                CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
-                CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);
-                CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft]);
-                CurrentTelemetry.TyreSurfaceTemperature.RearRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearRight]);
-
-                CurrentTelemetry.TyreCarcassTemperature.FrontLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontLeft]);
-                CurrentTelemetry.TyreCarcassTemperature.FrontRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontRight]);
-                CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
-                CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
-            }
+            CurrentTelemetry.TyreCarcassTemperature.FrontLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontLeft]);
+            CurrentTelemetry.TyreCarcassTemperature.FrontRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontRight]);
+            CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
+            CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
         }
 
         private void UpdateLiveTelemetry(CarTelemetryData currentTelemetry, LapData currentLapData)
