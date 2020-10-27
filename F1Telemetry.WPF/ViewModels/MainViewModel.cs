@@ -427,6 +427,7 @@ namespace F1Telemetry.WPF.ViewModels
                 UpdateCurrentTelemetry(currentTelemetry, currentLapData, currentCarStatus);
             }
         }
+
         private void UpdateCurrentTelemetry(CarTelemetryData currentTelemetry, LapData currentLapData, CarStatusData currentCarStatus)
         {
             CurrentTelemetry.LapNumber = currentLapData.CurrentLapNum;
@@ -443,15 +444,8 @@ namespace F1Telemetry.WPF.ViewModels
                 CurrentTelemetry.FuelRemainingLap = currentCarStatus.FuelRemainingLaps;
             }
 
-            CurrentTelemetry.TyreSurfaceTemperature.FrontLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontLeft]);
-            CurrentTelemetry.TyreSurfaceTemperature.FrontRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.FrontRight]);
-            CurrentTelemetry.TyreSurfaceTemperature.RearLeft.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearLeft]);
-            CurrentTelemetry.TyreSurfaceTemperature.RearRight.Update(currentTelemetry.TyresSurfaceTemperature[(int)WheelPositions.RearRight]);
-
-            CurrentTelemetry.TyreCarcassTemperature.FrontLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontLeft]);
-            CurrentTelemetry.TyreCarcassTemperature.FrontRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.FrontRight]);
-            CurrentTelemetry.TyreCarcassTemperature.RearLeft.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearLeft]);
-            CurrentTelemetry.TyreCarcassTemperature.RearRight.Update(currentTelemetry.TyresInnerTemperature[(int)WheelPositions.RearRight]);
+            CurrentTelemetry.TyreSurfaceTemperature.UpdateAllTyres(currentTelemetry.TyresSurfaceTemperature);
+            CurrentTelemetry.TyreCarcassTemperature.UpdateAllTyres(currentTelemetry.TyresInnerTemperature);
         }
 
         private void UpdateLiveTelemetry(CarTelemetryData currentTelemetry, LapData currentLapData)
