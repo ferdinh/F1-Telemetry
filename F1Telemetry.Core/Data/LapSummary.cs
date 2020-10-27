@@ -24,6 +24,7 @@ namespace F1Telemetry.Core.Data
         public float TotalERSHarvestedPercentage => TotalERSHarvested / CarInfo.F1.MaxDeployableERS;
         public float ERSDeployed { get; set; }
         public float ERSDeployedPercentage => ERSDeployed / CarInfo.F1.MaxDeployableERS;
+        public ErsDeployMode ErsDeployMode { get; }
         public float FuelUsed => CalculateFuelUsage();
         public float TyreWearPercentage { get; }
 
@@ -57,8 +58,13 @@ namespace F1Telemetry.Core.Data
                 SectorTime = new SectorTime(sector1, sector2, sector3);
             }
 
-            var initialCarStatus = carStatusDatas.FirstOrDefault() ?? new Data.CarStatusData(0, 0);
+            var initialCarStatus = carStatusDatas.FirstOrDefault() ?? new CarStatusData(0, 0);
             var endingCarStatus = carStatusDatas.LastOrDefault();
+
+            if (carStatusDatas.Count > 1)
+            {
+                ErsDeployMode = DetermineErsDeployMode(carStatusDatas);
+            }
 
             if (endingCarStatus != null)
             {
@@ -100,6 +106,15 @@ namespace F1Telemetry.Core.Data
             }
 
             return fuelUsed;
+        }
+
+        /// <summary>
+        /// Determines the highest ers deploy mode used during the lap.
+        /// </summary>
+        /// <returns>Highest Ers Deploy Mode</returns>
+        private ErsDeployMode DetermineErsDeployMode(List<CarStatusData> carStatusDatas)
+        {
+            return (ErsDeployMode)carStatusDatas.Select(x => x.ErsDeployMode).Max();
         }
     }
 }
