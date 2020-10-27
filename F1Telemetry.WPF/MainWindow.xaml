@@ -35,13 +35,12 @@
                 <Menu Grid.Row="0">
                     <MenuItem Header="_Export As">
                         <MenuItem Header="CSV" Command="{Binding ExportLapSummaryAsCsvCommand}" />
+                        <MenuItem Header="JSON" />
                     </MenuItem>
-
                 </Menu>
                 <Separator />
             </ui:SimpleStackPanel>
-            
-            
+
             <StackPanel Grid.Row="1">
                 <WrapPanel DataContext="{Binding SessionInfo}">
                     <Label Content="Session Type: " />
@@ -140,33 +139,28 @@
                                 Header="Tyre"
                                 Binding="{Binding TyreCompoundUsed}"
                                 IsReadOnly="True"
-                                ElementStyle="{StaticResource CenterDataGridCell}"
-                                />
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
                             <DataGridTextColumn
                                 Header="Tyre Wear"
                                 Binding="{Binding TyreWearPercentage, Converter={StaticResource ToPercentageConverter}}"
                                 IsReadOnly="True"
-                                ElementStyle="{StaticResource CenterDataGridCell}"
-                                />
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
                             <DataGridTextColumn
                                 Header="Fuel Used (kg)"
                                 Binding="{Binding FuelUsed, StringFormat=N2}"
-                                ElementStyle="{StaticResource CenterDataGridCell}"
-                                />
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
                             <DataGridTextColumn
                                 Header="ERS Dep."
                                 Binding="{Binding ERSDeployedPercentage, Converter={StaticResource ToPercentageConverter}}"
-                                ElementStyle="{StaticResource CenterDataGridCell}"
-                                />
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
                             <DataGridTextColumn
                                 Header="ERS Harv."
                                 Binding="{Binding TotalERSHarvestedPercentage, Converter={StaticResource ToPercentageConverter}}"
-                                ElementStyle="{StaticResource CenterDataGridCell}"
-                                />
-                            <DataGridTextColumn 
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
+                            <DataGridTextColumn
                                 Header="Delta Time"
                                 Binding="{Binding DeltaToBestTime, Converter={StaticResource ToDeltaTimeString}}"
-                                ElementStyle="{StaticResource CenterDataGridCell}"/>
+                                ElementStyle="{StaticResource CenterDataGridCell}" />
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -181,7 +175,7 @@
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Margin="3" Text="Lap:" />
                                     <TextBlock Margin="3" Text="Time:" />
-                                    <TextBlock Margin="3" Text="Best:"/>
+                                    <TextBlock Margin="3" Text="Best:" />
                                     <TextBlock Margin="3" Text="Spd:" />
                                     <TextBlock Margin="3" Text="RPM:" />
                                     <TextBlock Margin="3" Text="Fuel (lap):" />
@@ -215,7 +209,7 @@
 
                                 <ui:SimpleStackPanel Grid.Column="0" Spacing="5">
                                     <TextBlock Text="Tyre" />
-                                    
+
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -235,7 +229,6 @@
                                         </ui:SimpleStackPanel>
                                     </Grid>
 
-                                    
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -259,7 +252,6 @@
                                 <ui:SimpleStackPanel Grid.Column="1" Spacing="5">
                                     <TextBlock Text="{Binding TyreCompound}" />
 
-                                    
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -273,13 +265,12 @@
                                         </ui:SimpleStackPanel>
                                     </Grid>
 
-                                    
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        
+
                                         <ui:SimpleStackPanel Grid.Column="1">
                                             <TextBlock Text="RR" />
                                             <TextBlock x:Name="RearRightCarcass" Text="{Binding TyreCarcassTemperature.RearRight.Current, UpdateSourceTrigger=PropertyChanged}" />
