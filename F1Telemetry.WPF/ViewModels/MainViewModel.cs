@@ -421,10 +421,7 @@ namespace F1Telemetry.WPF.ViewModels
                 {
                     ResetCurrentTelemetryIndexCursor();
                 }
-                else if (currentLapData.DriverStatus == DriverStatus.InLap || currentLapData.DriverStatus == DriverStatus.OutLap)
-                {
-                }
-                else
+                else if (currentLapData.DriverStatus == DriverStatus.FlyingLap || currentLapData.DriverStatus == DriverStatus.OnTrack)
                 {
                     if (IsLiveTelemetryEnabled)
                     {
