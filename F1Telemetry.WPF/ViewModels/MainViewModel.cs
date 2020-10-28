@@ -123,56 +123,12 @@ namespace F1Telemetry.WPF.ViewModels
                 SessionInfo.SessionType = Manager.Session != null ? Manager.Session.SessionType.GetDisplayName() : "";
                 SessionInfo.TrackLength = (ushort)(Manager.Session != null ? Manager.Session.TrackLength : 0);
 
+                ConfigureManager(manager);
+
                 UpdateGraphXAxisToTrackLength();
                 LimitGraphAxisBound();
 
                 ResetRenderCursor();
-
-                manager.GetPlayerInfo().NewLap += (s, e) =>
-                {
-                    if (IsLiveTelemetryEnabled)
-                    {
-                        ResetRenderCursor();
-                        CurrentLapCursor = (CurrentLapCursor + 1) % LiveLapData.Length;
-                        LiveLapData[CurrentLapCursor].Clear();
-                        ResetCurrentTelemetryIndexCursor();
-                    }
-
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var lapSummary = e.LapSummary;
-
-                        var deltaToFastestTime = 0.0f;
-
-                        foreach (var lapSum in LapSummaries)
-                        {
-                            var updatedDeltaTime = lapSum.LapTime - lapSummary.BestLapTime;
-                            lapSum.DeltaToBestTime = updatedDeltaTime;
-                        }
-
-                        deltaToFastestTime = lapSummary.LapTime - lapSummary.BestLapTime;
-
-                        LapSummaries.Add(new LapSummaryModel
-                        {
-                            LapNumber = lapSummary.LapNumber,
-                            LapTime = lapSummary.LapTime,
-                            SectorTime = lapSummary.SectorTime,
-                            DeltaToBestTime = deltaToFastestTime,
-                            TyreCompoundUsed = lapSummary.TyreCompoundUsed,
-                            ERSDeployed = lapSummary.ERSDeployed,
-                            TotalERSHarvestedPercentage = lapSummary.TotalERSHarvestedPercentage,
-                            ERSDeployedPercentage = lapSummary.ERSDeployedPercentage,
-                            ERSDeployMode = lapSummary.ErsDeployMode,
-                            FuelUsed = lapSummary.FuelUsed,
-                            TyreWearPercentage = lapSummary.TyreWearPercentage
-                        });
-                    });
-                };
-
-                manager.GetPlayerInfo().Pitting += (s, e) =>
-                {
-                    manager.GetPlayerInfo().RemoveOngoingLapData(CurrentTelemetry.LapNumber);
-                };
             }
 
             Application.Current.Dispatcher.Invoke(() =>
@@ -181,6 +137,58 @@ namespace F1Telemetry.WPF.ViewModels
             });
 
             ClearPlottedLapData();
+        }
+
+        /// <summary>
+        /// Configures the telemetry manager.
+        /// </summary>
+        private void ConfigureManager(TelemetryManager manager)
+        {
+            manager.GetPlayerInfo().NewLap += (s, e) =>
+            {
+                if (IsLiveTelemetryEnabled)
+                {
+                    ResetRenderCursor();
+                    CurrentLapCursor = (CurrentLapCursor + 1) % LiveLapData.Length;
+                    LiveLapData[CurrentLapCursor].Clear();
+                    ResetCurrentTelemetryIndexCursor();
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var lapSummary = e.LapSummary;
+
+                    var deltaToFastestTime = 0.0f;
+
+                    foreach (var lapSum in LapSummaries)
+                    {
+                        var updatedDeltaTime = lapSum.LapTime - lapSummary.BestLapTime;
+                        lapSum.DeltaToBestTime = updatedDeltaTime;
+                    }
+
+                    deltaToFastestTime = lapSummary.LapTime - lapSummary.BestLapTime;
+
+                    LapSummaries.Add(new LapSummaryModel
+                    {
+                        LapNumber = lapSummary.LapNumber,
+                        LapTime = lapSummary.LapTime,
+                        SectorTime = lapSummary.SectorTime,
+                        DeltaToBestTime = deltaToFastestTime,
+                        TyreCompoundUsed = lapSummary.TyreCompoundUsed,
+                        ERSDeployed = lapSummary.ERSDeployed,
+                        TotalERSHarvestedPercentage = lapSummary.TotalERSHarvestedPercentage,
+                        ERSDeployedPercentage = lapSummary.ERSDeployedPercentage,
+                        ERSDeployMode = lapSummary.ErsDeployMode,
+                        FuelUsed = lapSummary.FuelUsed,
+                        TyreWearPercentage = lapSummary.TyreWearPercentage
+                    });
+                });
+            };
+
+            manager.GetPlayerInfo().Pitting += (s, e) =>
+            {
+                manager.GetPlayerInfo().RemoveOngoingLapData(CurrentTelemetry.LapNumber);
+            };
         }
 
         private void LimitGraphAxisBound()
