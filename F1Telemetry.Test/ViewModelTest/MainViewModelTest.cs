@@ -119,7 +119,7 @@ namespace F1Telemetry.Test.ViewModelTest
         {
             var viewModel = new MainViewModel();
 
-            viewModel.LapData = new WPF.Model.CurrentLapDataModel[1];
+            viewModel.LiveLapData = new WPF.Model.CurrentLapDataModel[1];
 
             var actual = viewModel.ClearAllGraphCommand.CanExecute(null);
 

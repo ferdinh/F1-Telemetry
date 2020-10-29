@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using F1Telemetry.Core.Data;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace F1Telemetry.WPF.Model
@@ -9,6 +10,18 @@ namespace F1Telemetry.WPF.Model
         public TyreTemperature FrontRight { get; set; } = new TyreTemperature();
         public TyreTemperature RearLeft { get; set; } = new TyreTemperature();
         public TyreTemperature RearRight { get; set; } = new TyreTemperature();
+
+        /// <summary>
+        /// Updates all car tyre temperature.
+        /// </summary>
+        /// <param name="tyreTemperatures">The tyre temperatures.</param>
+        public void UpdateAllTyres(byte[] tyreTemperatures)
+        {
+            FrontLeft.Update(tyreTemperatures[(int)WheelPositions.FrontLeft]);
+            FrontRight.Update(tyreTemperatures[(int)WheelPositions.FrontRight]);
+            RearLeft.Update(tyreTemperatures[(int)WheelPositions.RearLeft]);
+            RearRight.Update(tyreTemperatures[(int)WheelPositions.RearRight]);
+        }
     }
 
     public class TyreTemperature : INotifyPropertyChanged
@@ -28,18 +41,17 @@ namespace F1Telemetry.WPF.Model
             Current = temperature;
             OnPropertyChanged(nameof(Current));
 
-            if(IsMax(temperature))
+            if (IsMax(temperature))
             {
                 Max = temperature;
                 OnPropertyChanged(nameof(Max));
             }
 
-            if(IsMin(temperature) || Min == 0)
+            if (IsMin(temperature) || Min == 0)
             {
                 Min = temperature;
                 OnPropertyChanged(nameof(Min));
             }
-
 
             bool IsMax(byte temperature)
             {
