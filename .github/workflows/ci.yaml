@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs: 
+  windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet-version: ['3.1']
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      
+      - name: Display dotnet version
+        run: dotnet --version
+      
+      # See https://github.com/actions/setup-dotnet/issues/155
+      - name: Clean
+        run: | 
+          dotnet clean --configuration Release
+          dotnet nuget locals all --clear
+
+      - name: Restore packages
+        run: dotnet restore
+
+      - name: Build Project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test Project
+        run: dotnet test --configuration Release --no-restore
